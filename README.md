@@ -129,7 +129,7 @@ cd docker-compose-webui-llm-examples
 **2) Копирование файла `.env` с переменными окружения**
 ```ps1
 cp env.example .env
-cp data/anythingllm/env.example data/anythingllm/env
+cp data/anythingllm/env.example data/anythingllm/.env
 ```
 Редактировать переменные окружения в файле `.env` при необходимости  
 Внутри каждого `.env` находятся ссылки на документации по переменным окружения и аргументам CLI  

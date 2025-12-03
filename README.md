@@ -11,13 +11,13 @@ https://github.com/sergey21000/ml-dl-notebooks
 <details>
 <summary><b>Скриншот использования MCP + RAG в Open WebUI</b></summary>
 
-![Главная страница](./mcp_server/screenshots/openwebui_mcp_2.png)
+![Open WebUI MCP + RAG](./mcp_server/screenshots/openwebui_mcp_2.png)
 </details>
 
 <details>
 <summary><b>Скриншот использования MCP + RAG в AnythingLLM</b></summary>
 
-![Главная страница](./mcp_server/screenshots/anythingllm_mcp_1.png)
+![AnythingLLM MCP + RAG](./mcp_server/screenshots/anythingllm_mcp_1.png)
 </details>
 
 
@@ -45,14 +45,14 @@ https://github.com/sergey21000/ml-dl-notebooks
   - [MCP + Open WebUI](#mcp--open-webui)
   - [MCP + AnythingLLM](#mcp--anythingllm)
   - [Скрипты для проверки MCP сервера](#скрипты-для-проверки-mcp-сервера)
-- ⚠️ [Решение проблем](#-решение-проблем)
+- ⚠️ [Решение проблем](#--решение-проблем)
 - 📁 [Структура данных](#-структура-данных)
 - ▶️ [Команды Docker Compose](#-команды-docker-compose)
 - 🔗 [Различные ссылки](#-различные-ссылки)
   - [vLLM](#vllm-1)
   - [Qdrant](#qdrant-1)
   - [Infinity](#infinity-1)
-  - [MCP](#mcp-1)
+  - [MCP](#mcp)
 
 
 ## 🏗 Стек технологий

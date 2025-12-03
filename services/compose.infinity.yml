@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile.infinity
       args:
         BASE_IMAGE: michaelf34/infinity:latest-cpu
-    image: infinity-updated:latest-cpu
+    image: local/infinity-updated:latest-cpu
     container_name: infinity
     restart: unless-stopped
     ports:

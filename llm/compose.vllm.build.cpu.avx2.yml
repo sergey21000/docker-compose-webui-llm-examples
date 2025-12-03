@@ -12,4 +12,4 @@ services:
         - VLLM_CPU_AVX512VNNI=false
         - VLLM_CPU_AMXBF16=false
       target: vllm-openai
-    image: vllm-cpu-avx2:latest
+    image: local/vllm-cpu-avx2:latest

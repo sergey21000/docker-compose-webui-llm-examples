@@ -6,5 +6,5 @@ services:
     build:
       args:
         BASE_IMAGE: michaelf34/infinity:latest
-    image: infinity-updated:latest
+    image: local/infinity-updated:latest
     gpus: all

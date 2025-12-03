@@ -2,7 +2,7 @@
 
 # Docker Compose WebUI LLM Examples
 
-Примеры запуска LLM с веб-интерфейсом через Docker Compose  
+**Примеры запуска библиотек для инференса LLM в связке с веб-интерфейсами через Docker Compose**  
 
 Репозиторий является дополнением к Google Colab ноутбуку `Docker Compose, LLM, WebUI` <a href="https://colab.research.google.com/drive/1P3rB1s_bvUe7Zf3VE_IOTInH67N4i5b9"><img src="https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=b3771e&label=%20" alt="Open in Colab"></a> репозитория  
 https://github.com/sergey21000/ml-dl-notebooks
@@ -36,8 +36,8 @@ https://github.com/sergey21000/ml-dl-notebooks
 - 📁 [Структура данных](#-структура-данных)
 - ▶️ [Команды Docker Compose](#-команды-docker-compose)
 - 🔗 [Различные ссылки](#-различные-ссылки)
-  - [vLLM](#vllm-1)
-  - [Qdrant](#qdrant-1)
+  - [vLLM](#vllm)
+  - [Qdrant](#qdrant)
   - [Infinity](#infinity-1)
   - [MCP](#mcp-1)
 

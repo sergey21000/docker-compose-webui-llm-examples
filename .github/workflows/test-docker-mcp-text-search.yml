@@ -1,4 +1,4 @@
-name: Test Docker MCP RAG
+name: Test Docker MCP Text Search
 
 on:
   workflow_dispatch:

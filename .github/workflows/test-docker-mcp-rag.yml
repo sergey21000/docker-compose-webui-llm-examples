@@ -20,35 +20,38 @@ jobs:
           cp env.example .env
           cp data/anythingllm/env.example data/anythingllm/.env
 
-      - name: Start containers
-        run: |
-          docker compose \
-            -f llm/compose.ollama.yml \
-            -f services/compose.qdrant.yml \
-            -f services/compose.infinity.yml \
-            -f services/compose.mcp.yml \
-            up -d
+      # - name: Start containers
+        # run: |
+          # docker compose \
+            # -f llm/compose.ollama.yml \
+            # -f services/compose.qdrant.yml \
+            # -f services/compose.infinity.yml \
+            # -f services/compose.mcp.yml \
+            # up -d
 
-      - name: Wait for services to be ready
-        run: |
-          sleep 60
+      # - name: Wait for services to be ready
+        # run: |
+          # sleep 60
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-          
+
+      - name: Set up Python
+        run: uv python install 3.12
+
       - name: Install Python deps
         run: |
           uv pip install -r mcp_server/requirements.txt
 
       - name: Run MCP tests
         run: |
-          python mcp_server/scripts/mcp_get_tools.py
+          uv run python mcp_server/scripts/mcp_get_tools.py
 
       - name: Run RAG tests
         run: |
-          python -m mcp_server.scripts.upload_texts_and_search
+          uv run python -m mcp_server.scripts.upload_texts_and_search
     
       - name: Stop services
         if: always()

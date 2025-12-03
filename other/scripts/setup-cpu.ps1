@@ -1,2 +1,0 @@
-$env:COMPOSE_FILE = "ui/compose.openwebui.yml:llm/compose.ollama.yml:services/compose.qdrant.yml:services/compose.infinity.yml:services/compose.mcp.yml"
-Write-Host "CPU stack configured. Run: docker compose up"

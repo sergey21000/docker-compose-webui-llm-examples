@@ -1052,11 +1052,12 @@ docker compose up --build
 Ссылки по AnythingLLM, Open WebUI, Ollama, llama.cpp находятся в основном ноутбуке  
 `Docker Compose, LLM, WebUI` <a href="https://colab.research.google.com/drive/1P3rB1s_bvUe7Zf3VE_IOTInH67N4i5b9"><img src="https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=b3771e&label=%20" alt="Open in Colab"></a>
 
+Документация по работе с несколькими compose файлами  
+https://docs.docker.com/compose/how-tos/multiple-compose-files/  
+
 
 ### vLLM
 
-Документация по работе с несколькими compose файлами  
-https://docs.docker.com/compose/how-tos/multiple-compose-files/  
 Cтраница vLLM на GitHub  
 https://github.com/vllm-project/vllm  
 Документация vLLM  

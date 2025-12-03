@@ -663,6 +663,9 @@ Infinity API: http://127.0.0.1:7997/v1
 
 Переменные окружения MCP сервера можно настроить в `.env` и в `./services/compose.mcp.yml`
 
+> [!NOTE]
+> У библиотек Open WebUI и AnythingLLM есть встроенная поддержка RAG, данный пример с каcтомным мини RAG сделан для демонcтрации MCP
+
 Подключение MCP сервера в AnythingLLM  
 https://docs.useanything.com/mcp-compatibility/overview  
 

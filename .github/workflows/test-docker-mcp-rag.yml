@@ -1,0 +1,64 @@
+name: Test Docker Services
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-services:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      
+      - name: Set Env
+        run: |
+          cp env.example .env
+          cp data/anythingllm/env.example data/anythingllm/env
+
+      # - name: Set up Docker Buildx
+        # uses: docker/setup-buildx-action@v3
+
+      # - name: Install Docker Compose
+        # run: |
+          # sudo apt-get update
+          # sudo apt-get install -y docker-compose-plugin
+
+      - name: Start containers
+        run: |
+          docker compose \
+            -f ui/compose.anythingllm.yml \
+            -f llm/compose.ollama.yml \
+            -f services/compose.qdrant.yml \
+            -f services/compose.infinity.yml \
+            -f services/compose.mcp.yml \
+            up -d
+
+      - name: Wait for services to be ready
+        run: |
+          sleep 60
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install uv
+          python -m uv pip install -r mcp_server/requirements.txt
+
+      - name: Run tests
+        run: |
+          python mcp_server/scripts/mcp_get_tools.py
+
+      # - name: Run RAG tests
+        # run: |
+          # pytest tests/test_rag.py -v
+    
+      - name: Stop services
+        if: always()
+        run: |
+          docker compose \
+            -f ui/compose.anythingllm.yml \
+            -f llm/compose.ollama.yml \
+            -f services/compose.qdrant.yml \
+            -f services/compose.infinity.yml \
+            -f services/compose.mcp.yml \
+            down -v

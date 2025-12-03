@@ -301,6 +301,9 @@ cd docker-compose-webui-llm-examples
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.llamacpp.cuda.yml up
   ```
 
+В настройках AnythingLLM необходимо указать Поставщик LLM Generic OpenAI, Base URL http://llamacpp:8080/v1  
+(подробности в разделе конфигурации [AnythingLLM](#anythingllm))
+
 По умолчанию сервисы доступны по адресам:
 - AnythingLLM WebUI: http://127.0.0.1:3001
 - llama.cpp WebUI: http://127.0.0.1:8080
@@ -324,7 +327,7 @@ cd docker-compose-webui-llm-examples
 - Ollama BASE URL: http://127.0.0.1:11434
 
 В настройках AnythingLLM необходимо указать Поставщик LLM Ollama
-(подробности в разделе [Конфигурация библиотек](#-конфигурация-библиотек))
+(подробности в разделе конфигурации [AnythingLLM](#anythingllm))
 
 Документация по запуску AnythingLLM + Ollama  
 https://docs.useanything.com/setup/llm-configuration/local/ollama
@@ -359,7 +362,7 @@ https://docs.useanything.com/setup/llm-configuration/local/ollama
 - vLLM Models http://127.0.0.1:8000/v1/models
 
 В настройках AnythingLLM необходимо указать Поставщик LLM Generic OpenAI, Base URL http://vllm:8000/v1, название и параметры модели  
-(подробности в разделе [Конфигурация библиотек](#-конфигурация-библиотек))
+(подробности в разделе конфигурации [AnythingLLM](#anythingllm))
 
 Документация по запуску AnythingLLM + vLLM  
 https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
@@ -383,7 +386,7 @@ https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
 - llama.cpp API: http://127.0.0.1:8080/v1
 
 В настройках Open WebUI необходимо чтобы в Настройках администратора в Подключениях был добавлен URL http://llamacpp:8080/v1 в рзделе API OpenAI  
-(подробности в разделе [Конфигурация библиотек](#-конфигурация-библиотек))
+(подробности в разделе конфигурации [Open WebUI](#open-webui))
 
 Документация по запуску Open WebUI + llama.cpp  
 https://docs.openwebui.com/getting-started/quick-start/starting-with-llama-cpp
@@ -406,7 +409,7 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-llama-cpp
 - Ollama BASE URL: http://127.0.0.1:11434
 
 В настройках Open WebUI необходимо чтобы в Настройках администратора в Подключениях был активирован Ollama API и установлен URL http://ollama:11434  
-(подробности в разделе [Конфигурация библиотек](#-конфигурация-библиотек))
+(подробности в разделе конфигурации [Open WebUI](#open-webui))
 
 Документация по запуску Open WebUI + Ollama  
 https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
@@ -441,7 +444,7 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
 - vLLM Models http://127.0.0.1:8000/v1/models
 
 В настройках Open WebUI необходимо чтобы в Настройки -> Настройки администратора -> Подключения был добавлен URL http://vllm:8000/v1 в рзделе API OpenAI  
-(подробности в разделе [Конфигурация библиотек](#-конфигурация-библиотек))
+(подробности в разделе конфигурации [Open WebUI](#open-webui))
 
 Документация по запуску Open WebUI + vLLM  
 https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
@@ -482,7 +485,7 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 
 По умолчанию AnythingLLM WebUI доступен по адресу http://127.0.0.1:3001
 
-Настройка MCP находится в разделе (### MCP)
+Настройка MCP находится в разделе [MCP + AnythingLLM](#mcp--anythingllm)
 
 
 ### Open WebUI
@@ -509,7 +512,7 @@ https://docs.openwebui.com/getting-started/env-configuration/
 
 По умолчанию Open WebUI доступен по адресу http://127.0.0.1:3000
 
-Настройка MCP находится в разделе (### MCP)
+Настройка MCP находится в разделе [MCP + Open WebUI](#mcp--open-webui)
 
 
 ### llama.cpp

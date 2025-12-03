@@ -1,0 +1,19 @@
+services:
+  openwebui:
+    extends:
+      file: compose.yml
+      service: openwebui
+
+  vllm:
+    extends:
+      file: compose.yml
+      service: vllm
+    image: ghcr.io/sergey21000/vllm-docker:latest-cpu-avx2
+
+volumes:
+  open-webui:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOCKER_VOLUME_STORAGE:-../data}/openwebui

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp-examples": {
+      "type": "streamable",
+      "url": "http://mcp-server:9000/mcp",
+      "description": "Examples of MCP",
+      "anythingllm": {
+        "autoStart": true
+      }
+    }
+  }
+}

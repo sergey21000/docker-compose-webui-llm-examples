@@ -1,0 +1,10 @@
+services:
+  vllm:
+    extends:
+      file: ../llm/compose.vllm.yml
+      service: vllm
+    image: vllm/vllm-openai:latest
+    command:
+      - --config
+      - /workspace/configs/vllm_config_cuda.yml
+    gpus: all

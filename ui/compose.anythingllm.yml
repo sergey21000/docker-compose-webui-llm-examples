@@ -1,0 +1,13 @@
+services:
+  anythingllm:
+    image: mintplexlabs/anythingllm
+    container_name: anythingllm
+    restart: unless-stopped
+    ports:
+      - ${ANYTHINGLLM_PORT:-3001}:3001
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-../data}/anythingllm:/app/server/storage
+      - ${DOCKER_VOLUME_STORAGE:-../data}/anythingllm/.env:/app/server/.env
+    environment:
+      - STORAGE_DIR=/app/server/storage
+      - OLLAMA_BASE_URL=http://ollama:11434

@@ -1,0 +1,29 @@
+services:
+  openwebui:
+    extends:
+      file: compose.yml
+      service: openwebui
+      
+  vllm:
+    extends:
+      file: compose.yml
+      service: vllm
+    image: vllm/vllm-openai:latest
+    command:
+      - --config
+      - /workspace/configs/vllm_config_cuda.yml
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  open-webui:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOCKER_VOLUME_STORAGE:-../data}/openwebui

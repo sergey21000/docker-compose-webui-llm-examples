@@ -1,0 +1,17 @@
+services:
+  anythingllm:
+    extends:
+      file: compose.yml
+      service: anythingllm
+      
+  ollama:
+    extends:
+      file: compose.yml
+      service: ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

@@ -1,0 +1,12 @@
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - ${OLLAMA_PORT:-11434}:11434
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-../data}/ollama:/root/.ollama
+    env_file:
+      - path: ../.env
+        required: false

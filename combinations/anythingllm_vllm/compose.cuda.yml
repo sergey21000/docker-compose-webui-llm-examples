@@ -1,0 +1,21 @@
+services:
+  anythingllm:
+    extends:
+      file: compose.yml
+      service: anythingllm
+      
+  vllm:
+    extends:
+      file: compose.yml
+      service: vllm
+    image: vllm/vllm-openai:latest
+    command:
+      - --config
+      - /workspace/configs/vllm_config_cuda.yml
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

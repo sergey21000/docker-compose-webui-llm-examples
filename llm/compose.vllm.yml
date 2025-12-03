@@ -1,0 +1,17 @@
+services:
+  vllm:
+    image: public.ecr.aws/q9t5s3a7/vllm-cpu-release-repo:v0.11.1
+    container_name: vllm
+    restart: unless-stopped
+    ports:
+      - ${VLLM_PORT:-8000}:8000
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-../data}/vllm:/root/.cache/huggingface
+      - ${DOCKER_VOLUME_STORAGE:-../data}/vllm/configs:/workspace/configs
+    ipc: host
+    command:
+      - --config
+      - /workspace/configs/vllm_config_cpu.yml
+    env_file:
+      - path: ../.env
+        required: false

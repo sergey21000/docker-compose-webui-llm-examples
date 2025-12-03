@@ -1,0 +1,19 @@
+services:
+  mcp-server:
+    build:
+      context: ${MCP_SERVER_DIR:-../mcp_server}
+      dockerfile: Dockerfile
+    image: local/mcp-server:latest
+    container_name: mcp-server
+    restart: unless-stopped
+    ports:
+      - ${MCP_PORT:-9000}:9000
+    environment:
+      - VECTORSTORE_URL=http://qdrant:6333
+      - EMBEDDINGS_URL=http://infinity:${INFINITY_PORT:-7997}
+    volumes:
+      - ${MCP_SERVER_DIR:-../mcp_server}/app:/app
+      - ${MCP_SERVER_DIR:-../mcp_server}/data:/data
+    env_file:
+      - path: .env
+        required: false

@@ -1,0 +1,6 @@
+services:
+  vllm:
+    extends:
+      file: ../llm/compose.vllm.yml
+      service: vllm
+    image: ghcr.io/sergey21000/vllm-docker:latest-cpu-avx2

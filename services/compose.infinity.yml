@@ -1,0 +1,21 @@
+services:
+  infinity:
+    build:
+      context: ../services
+      dockerfile: Dockerfile.infinity
+      args:
+        BASE_IMAGE: michaelf34/infinity:latest-cpu
+    image: infinity-updated:latest-cpu
+    container_name: infinity
+    restart: unless-stopped
+    ports:
+      - ${INFINITY_PORT:-7997}:${INFINITY_PORT:-7997}
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-../data}/infinity:/app/.cache
+    environment:
+      - HF_HUB_OFFLINE=0
+    env_file:
+      - path: ../.env
+        required: true
+    command:
+      - v2

@@ -1,0 +1,37 @@
+services:
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - ${OPENWEBUI_PORT:-3000}:8080
+    volumes:
+      - open-webui:/app/backend/data
+    env_file:
+      - path: .env
+        required: false
+
+  vllm:
+    image: public.ecr.aws/q9t5s3a7/vllm-cpu-release-repo:v0.11.1
+    container_name: vllm
+    restart: unless-stopped
+    ports:
+      - ${VLLM_PORT:-8000}:8000
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-../../data}/vllm:/root/.cache/huggingface
+      - ${DOCKER_VOLUME_STORAGE:-../../data}/vllm/configs:/workspace/configs
+    ipc: host
+    command:
+      - --config
+      - /workspace/configs/vllm_config_cpu.yml
+    env_file:
+      - path: .env
+        required: false
+        
+volumes:
+  open-webui:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOCKER_VOLUME_STORAGE:-../../data}/openwebui

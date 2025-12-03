@@ -1,0 +1,4 @@
+fastmcp
+qdrant-client
+openai
+loguru

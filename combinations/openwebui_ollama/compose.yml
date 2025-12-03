@@ -1,0 +1,34 @@
+services:
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - ${OPENWEBUI_PORT:-3000}:8080
+    volumes:
+      - open-webui:/app/backend/data
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    env_file:
+      - path: .env
+        required: false
+    
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - ${OLLAMA_PORT:-11434}:11434
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-../data}/ollama:/root/.ollama
+    env_file:
+      - path: .env
+        required: false
+    
+volumes:
+  open-webui:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOCKER_VOLUME_STORAGE:-../../data}/openwebui

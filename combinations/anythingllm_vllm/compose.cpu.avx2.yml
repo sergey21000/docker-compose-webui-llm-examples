@@ -1,0 +1,11 @@
+services:
+  anythingllm:
+    extends:
+      file: compose.yml
+      service: anythingllm
+
+  vllm:
+    extends:
+      file: compose.yml
+      service: vllm
+    image: ghcr.io/sergey21000/vllm-docker:latest-cpu-avx2

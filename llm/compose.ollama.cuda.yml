@@ -1,0 +1,6 @@
+services:
+  ollama:
+    extends:
+      file: ../llm/compose.ollama.yml
+      service: ollama
+    gpus: all

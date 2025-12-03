@@ -1,0 +1,28 @@
+services:
+  openwebui:
+    extends:
+      file: compose.yml
+      service: openwebui
+    
+  vllm:
+    extends:
+      file: compose.yml
+      service: vllm
+    build:
+      context: ./vllm
+      dockerfile: docker/Dockerfile.cpu
+      args:
+        - VLLM_CPU_DISABLE_AVX512=true
+        - VLLM_CPU_AVX512BF16=false
+        - VLLM_CPU_AVX512VNNI=false
+        - VLLM_CPU_AMXBF16=false
+      target: vllm-openai
+    image: vllm-cpu-avx2:latest
+
+volumes:
+  open-webui:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOCKER_VOLUME_STORAGE:-../data}/openwebui

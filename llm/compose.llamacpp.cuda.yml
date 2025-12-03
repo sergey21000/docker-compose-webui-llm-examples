@@ -1,0 +1,7 @@
+services:
+  llamacpp:
+    extends:
+      file: ../llm/compose.llamacpp.yml
+      service: llamacpp
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    gpus: all

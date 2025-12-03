@@ -648,6 +648,8 @@ Infinity API: http://127.0.0.1:7997/v1
 
 Запуск MCP сервера с демонстрацией примера мини RAG и нескольких небольших самописных инструментов
 
+Переменные окружения MCP сервера можно настроить в `.env` и в `./services/compose.mcp.yml`
+
 Подключение MCP сервера в AnythingLLM  
 https://docs.useanything.com/mcp-compatibility/overview  
 

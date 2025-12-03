@@ -1,0 +1,10 @@
+services:
+  infinity:
+    extends:
+      file: ../services/compose.infinity.yml
+      service: infinity
+    build:
+      args:
+        BASE_IMAGE: michaelf34/infinity:latest
+    image: infinity-updated:latest
+    gpus: all

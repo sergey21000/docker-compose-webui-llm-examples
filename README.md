@@ -84,9 +84,9 @@ LLM модели:
 - `Docker Desktop`  
 https://docs.docker.com/get-started/introduction/get-docker-desktop/  
 или
-- `Docker Engine + Docker Compose`
-https://docs.docker.com/engine/install/
-https://docs.docker.com/compose/install/
+- `Docker Engine + Docker Compose`  
+https://docs.docker.com/engine/install/  
+https://docs.docker.com/compose/install/  
 
 Быстрая установка Docker + Docker Compose на Linux
 ```sh

@@ -5,7 +5,6 @@ on:
 
 env:
   PYTHONUTF8: 1
-  # UV_SYSTEM_PYTHON: 1
 
 jobs:
   test-services:
@@ -20,18 +19,18 @@ jobs:
           cp env.example .env
           cp data/anythingllm/env.example data/anythingllm/.env
 
-      # - name: Start containers
-        # run: |
-          # docker compose \
-            # -f llm/compose.ollama.yml \
-            # -f services/compose.qdrant.yml \
-            # -f services/compose.infinity.yml \
-            # -f services/compose.mcp.yml \
-            # up -d
+      - name: Start containers
+        run: |
+          docker compose \
+            -f llm/compose.ollama.yml \
+            -f services/compose.qdrant.yml \
+            -f services/compose.infinity.yml \
+            -f services/compose.mcp.yml \
+            up -d
 
-      # - name: Wait for services to be ready
-        # run: |
-          # sleep 60
+      - name: Wait for services to be ready
+        run: |
+          sleep 60
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7

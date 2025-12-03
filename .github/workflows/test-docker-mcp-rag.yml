@@ -1,7 +1,11 @@
-name: Test Docker Services
+name: Test Docker MCP RAG
 
 on:
   workflow_dispatch:
+
+env:
+  PYTHONUTF8: 1
+  UV_SYSTEM_PYTHON: 1
 
 jobs:
   test-services:

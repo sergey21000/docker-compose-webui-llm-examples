@@ -43,6 +43,8 @@ jobs:
 
       - name: Install Python deps
         run: |
+          uv venv
+          source .venv/bin/activate
           uv pip install -r mcp_server/requirements.txt
 
       - name: Run MCP tests

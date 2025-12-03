@@ -75,7 +75,7 @@ https://docs.docker.com/get-started/introduction/get-docker-desktop/
 https://docs.docker.com/engine/install/
 https://docs.docker.com/compose/install/
 
-Быстрая установка Docker + Docker Compose
+Быстрая установка Docker + Docker Compose на Linux
 ```sh
 sudo apt-get update
 curl -fsSL https://get.docker.com | sudo sh
@@ -89,7 +89,7 @@ newgrp docker
 Для работы контейнеров на видеокартах NVIDIA нужно установить NVIDIA Container Toolkit  
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 
-Быстрая установка NVIDIA Container Toolkit  
+Быстрая установка NVIDIA Container Toolkit на Linux
 ```sh
 sudo apt-get update && sudo apt-get install -y --no-install-recommends curl gnupg2
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
@@ -106,16 +106,16 @@ sudo systemctl restart docker
 ## 🚀 Быстрый старт
 
 ***1) Клонирование репозитория**
-```sh
-git clone https://github.com/sergey21000/docker-compose-webui-llm-examlples
-cd docker-compose-webui-llm-examlples
+```ps1
+git clone https://github.com/sergey21000/docker-compose-webui-llm-examples
+cd docker-compose-webui-llm-examples
 ```
 
 > [!NOTE]
 Все дальнейшие команды этого README вводятся из этой директории, за исключением случаев когда явно указано перейти в другую
 
 **2) Копирование файла `.env` с переменными окружения**
-```sh
+```ps1
 cp env.example .env
 cp data/anythingllm/env.example data/anythingllm/env
 ```
@@ -140,16 +140,16 @@ cp data/anythingllm/env.example data/anythingllm/env
 
 <ins><i>Linux и Windows</i></ins>
  - CPU
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml up
   ```
  - CUDA
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cuda.yml up
   ```
 
 Для остановки или управлением сервисами нужно вводить команду с теми же агрументами `-f`
-```
+```ps1
 docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml down
 ```
 
@@ -177,15 +177,15 @@ docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml down
   ```
 
 Запуск сервисов
-```sh
+```ps1
 docker compose up
 ```
 Запуск сервисов в фоновом режиме
-```sh
+```ps1
 docker compose up -d
 ```
 Проверить статус запущенных сервисов
-```sh
+```ps1
 docker compose ps
 ```
 Просмотр логов запуска сервисов
@@ -193,7 +193,7 @@ docker compose ps
 docker compose logs -f
 ```
 Остановка и удаление сервисов 
-```sh
+```ps1
 docker compose down
 ```
 
@@ -258,7 +258,7 @@ docker compose down
   ```
 
 Запуск сервисов
-```sh
+```ps1
 docker compose up
 ```
 
@@ -267,19 +267,25 @@ docker compose up
 
 Примеры запуска комбинаций сервисов
 
+Команды пишутся из корневой директории проекта
+```ps1
+git clone https://github.com/sergey21000/docker-compose-webui-llm-examples
+cd docker-compose-webui-llm-examples
+```
+
 > [NOTE]
-> В директории [combinations](https://github.com/sergey21000/docker-compose-webui-llm-examlples/tree/main/combinations) также есть некоторые готовые кибинации в одном compose файле, инструкции там же
+> В директории [combinations](https://github.com/sergey21000/docker-compose-webui-llm-examples/tree/main/combinations) также есть некоторые готовые кибинации в одном compose файле, инструкции там же
 
 
 ### AnythingLLM + llama.cpp
 
 Запуск сервисов
 - Запуск с поддержкой CPU
-  ```sh
+  ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.llamacpp.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.llamacpp.cuda.yml up
   ```
 
@@ -296,11 +302,11 @@ https://docs.useanything.com/setup/llm-configuration/local/ollama
 
 Запуск сервисов
 - Запуск с поддержкой CPU
-  ```sh
+  ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.cuda.yml up
   ```
 
@@ -319,20 +325,20 @@ https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
 
 Запуск сервисов
 - Запуск с поддержкой CPU (для процессоров с поддержкой инструкций avx512)
-  ```sh
+  ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.vllm.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f -f ui/compose.anythingllm.yml -f llm/compose.vllm.cuda.yml up
   ```
 - Запуск с поддержкой CPU (для старых процессоров с поддержкой инструкций avx2)
   Вариант с запуском vLLM из готового образа
-  ```sh
+  ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.vllm.cpu.avx2.yml up
   ```
   Вариант со сборкой своего образа
-  ```sh
+  ```ps1
   git clone https://github.com/vllm-project/vllm
   docker compose -f ui/compose.anythingllm.yml  -f llm/compose.vllm.build.cpu.avx2.yml up
   ```
@@ -354,11 +360,11 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-llama-cpp
 
 Запуск сервисов
 - Запуск с поддержкой CPU
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.llamacpp.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.llamacpp.cuda.yml up
   ```
 
@@ -378,11 +384,11 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
 
 Запуск сервисов
 - Запуск с поддержкой CPU
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cuda.yml up
   ```
   
@@ -401,11 +407,11 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 
 Запуск сервисов
 - Запуск с поддержкой CPU
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.vllm.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.vllm.cuda.yml up
   ```
 
@@ -504,11 +510,11 @@ https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md
 
 Запуск llama.cpp
 - Запуск с поддержкой CPU
-  ```sh
+  ```ps1
   docker compose -f llm/compose.llamacpp.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f llm/compose.llamacpp.cuda.yml up
   ```
 
@@ -525,33 +531,33 @@ https://docs.ollama.com/faq
 
 Запуск Ollama
 - Запуск с поддержкой CPU
-  ```sh
+  ```ps1
   docker compose -f llm/compose.ollama.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f llm/compose.ollama.cuda.yml up
   ```
   
 Загрузка моделей для Ollama  
 https://ollama.com/library
-```sh
+```ps1
 docker exec -it ollama ollama pull gemma3:4b
 ```
 Доступные модели
-```sh
+```ps1
 docker exec -it ollama ollama list
 ```
 Проверить какие модели загружены в какую память (CPU/GPU)
-```sh
+```ps1
 docker exec -it ollama ps
 ```
 Проверить статус сервисов
-```sh
+```ps1
 docker compose ps
 ```
 Просмотр логов запуска сервисов
-```sh
+```ps1
 docker compose logs -f
 ```
 
@@ -577,20 +583,20 @@ https://docs.vllm.ai/en/stable/cli/serve/
 
 Запуск vLLM
 - Запуск с поддержкой CPU (для процессоров с поддержкой инструкций avx512)
-  ```sh
+  ```ps1
   docker compose -f llm/compose.vllm.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f llm/compose.vllm.cuda.yml up
   ```
 - Запуск с поддержкой CPU (для старых процессоров с поддержкой инструкций avx2)
   *Вариант с запуском vLLM из готового образа*
-  ```sh
+  ```ps1
   docker compose -f llm/compose.vllm.cpu.avx2.yml up
   ```
   *Вариант со сборкой своего образа*
-  ```sh
+  ```ps1
   git clone https://github.com/vllm-project/vllm
   docker compose -f llm/compose.vllm.build.cpu.avx2.yml up
   ```
@@ -639,11 +645,11 @@ https://docs.openwebui.com/features/plugin/tools/openapi-servers/mcp/
 
 Запуск стека MCP + Open WebUI + Ollama + Qdrant + Infinity
 - Запуск с поддержкой CPU
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cuda.yml -f services/compose.qdrant.yml -f services/compose.infinity.cuda.yml -f services/compose.mcp.yml up
   ```
 
@@ -693,7 +699,7 @@ https://docs.openwebui.com/features/plugin/tools/openapi-servers/mcp/
   ```
 
 Запуск сервисов
-```sh
+```ps1
 docker compose up
 ```
 
@@ -727,11 +733,11 @@ docker compose up
 
 Запуск стека MCP + Open WebUI + Ollama + Qdrant + Infinity
 - Запуск с поддержкой CPU
-  ```sh
+  ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up
   ```
 - Запуск с поддержкой CUDA
-  ```sh
+  ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.cuda.yml -f services/compose.qdrant.yml -f services/compose.infinity.cuda.yml -f services/compose.mcp.yml up
   ```
 
@@ -781,7 +787,7 @@ docker compose up
   ```
 
 Запуск сервисов
-```sh
+```ps1
 docker compose up
 ```
 
@@ -838,19 +844,19 @@ https://docs.useanything.com/mcp-compatibility/overview
 #### Скрипты для проверки MCP сервера
 
 **1)Запуск MCP сервера и вспомогательных сервисов** (на примере MCP + Open WebUI + Ollama + Qdrant + Infinity)
-```
+```ps1
 docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up -d
 ```
   
 **2)Установка зависимостей Python** (пример через [UV](https://docs.astral.sh/uv/getting-started/installation/))
   *Linux*
-  ```
+  ```sh
   uv venv
   source .venv/bin/activate
   uv pip install -r mcp_server/requirements.txt
   ```
   *Windows*
-  ```
+  ```ps1
   uv venv
   .venv\Scripts\activate
   uv pip install -r mcp_server\requirements.txt
@@ -859,23 +865,23 @@ docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml -f services
 **3)Запуск скриптов**
 
 Получение текущих инструментов
-```
+```ps1
 python mcp_server/scripts/mcp_get_tools.py
 ```
 Загрузка текстов и их векторов из файла `/mcp_server/data/documents/documents.txt` в БД Qdrant и поиск релевантных фрагментов текста
-```
+```ps1
 python -m mcp_server.scripts.upload_texts_and_search
 ```
 Загрузка документов в Qdrant через вызов инструмента MCP
-```
+```ps1
 python mcp_server/scripts/mcp_upload_documents_to_db.py
 ```
 Поиск релевантных фрагментов текста через вызов инструмента MCP
-```
+```ps1
 python mcp_server/scripts/mcp_text_search.py
 ```
 Получение эмбеддингов текстов через отправку запроса через OpenAI к серверу Infinity
-```
+```ps1
 python mcp_server/scripts/openai_get_embeddings_request.py
 ```
 
@@ -969,43 +975,43 @@ https://github.com/qdrant/qdrant/issues/5672
 docker compose up
 ```
 Запуск сервисов в фоновом режиме
-```sh
+```ps1
 docker compose up -d
 ```
 Остановить все сервисы
-```
+```ps1
 docker compose stop
 ```
 Запустить остановленные сервисы
-```
+```ps1
 docker compose start
 ```
 Остановить все сервисы и удалить контейнеры
-```
+```ps1
 docker compose down
 ```
 Просмотр логов запуска сервисов
-```
+```ps1
 docker compose logs -f
 ```
 Логи конкретного сервиса
-```
+```ps1
 docker compose logs -f anythingllm
 ```
 Перезапуск конкретного сервиса
-```
+```ps1
 docker compose restart ollama
 ```
 Сборка всех сервисов у которых есть секция `build`
-```
+```ps1
 docker compose build mcp-server
 ```
 Сборка отдельного сервиса
-```
+```ps1
 docker compose build mcp-server
 ```
 Запуск + сборка
-```
+```ps1
 docker compose up --build
 ```
 

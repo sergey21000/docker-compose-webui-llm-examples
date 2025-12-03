@@ -415,14 +415,25 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
 ### Open WebUI + vLLM
 
 Запуск сервисов
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CPU (для процессоров с поддержкой инструкций avx512)
   ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.vllm.yml up
   ```
 - Запуск с поддержкой CUDA
   ```ps1
-  docker compose -f ui/compose.openwebui.yml -f llm/compose.vllm.cuda.yml up
+  docker compose -f -f ui/compose.openwebui.yml -f llm/compose.vllm.cuda.yml up
   ```
+- Запуск с поддержкой CPU (для старых процессоров с поддержкой инструкций avx2)  
+  Вариант с запуском vLLM из готового образа
+  ```ps1
+  docker compose -f ui/compose.openwebui.yml -f llm/compose.vllm.cpu.avx2.yml up
+  ```
+  Вариант со сборкой своего образа
+  ```ps1
+  git clone https://github.com/vllm-project/vllm
+  docker compose -f ui/compose.openwebui.yml  -f llm/compose.vllm.build.cpu.avx2.yml up
+  ```
+  Узнать какие инструкции поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html)
 
 По умолчанию сервисы доступны по адресам:
 - Open WebUI: http://127.0.0.1:3000

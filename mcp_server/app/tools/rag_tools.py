@@ -93,4 +93,7 @@ def upload_texts() -> str:
         text_file_path=text_file_path,
         collection_name=collection_name,
     )
-    
+
+if __name__ == '__main__':
+    port = int(os.getenv('MCP_PORT', '9000'))
+    mcp.run(transport='http', host='127.0.0.1', port=port)

@@ -21,4 +21,5 @@ mcp.mount(report_prompts_mcp, prefix=None)
 
 
 if __name__ == '__main__':
-    mcp.run(transport='http', host='0.0.0.0', port=os.getenv('MCP_PORT', 9000))
+    port = int(os.getenv('MCP_PORT', '9000'))
+    mcp.run(transport='http', host='127.0.0.1', port=port)

@@ -524,8 +524,11 @@ https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md
 - агрументы `LLAMA_ARG_HF_REPO` и `LLAMA_ARG_HF_FILE`
 - агрумент `LLAMA_ARG_MODEL` (путь до локальной модели в формате `GGUF`)
 - агрумент `LLAMA_ARG_MODEL_URL` (ссылка на модель в формате `GGUF`)
+- для мультимодальных моделей в дополнение к основному файл модели указать:
+  - агрумент `LLAMA_ARG_MMPROJ` (путь до локальной модели в формате `GGUF`)
+  - агрумент `LLAMA_ARG_MMPROJ_URL` (ссылка на модель в формате `GGUF`)
 
-Модели хранятся в директории `./data/llamacpp`, заранее скачанная модель для аргумента `LLAMA_ARG_MODEL` должна быть в формате  
+Модели хранятся в директории `./data/llamacpp`, заранее скачанная модель для аргумента `LLAMA_ARG_MODEL_URL` должна быть в формате  
 `репозиторий_файл.gguf`, например  
 `bartowski_Qwen_Qwen3-0.6B-GGUF_Qwen_Qwen3-0.6B-Q4_K_M.gguf` или
 `bartowski_google_gemma-3-4b-it-GGUF_google_gemma-3-4b-it-Q4_K_M.gguf`  

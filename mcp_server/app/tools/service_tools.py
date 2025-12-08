@@ -51,3 +51,7 @@ def calculate_expression(expression: str) -> str:
         logger.error(f'Ошибка при вызове инструмента "calculate_expression": {e}')
         return f'Ошибка при вызове инструмента "calculate_expression":: {e}'
 
+
+if __name__ == '__main__':
+    port = int(os.getenv('MCP_PORT', '9000'))
+    mcp.run(transport='http', host='127.0.0.1', port=port)

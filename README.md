@@ -4,7 +4,8 @@
 
 **Примеры запуска библиотек для инференса LLM в связке с веб-интерфейсами через Docker Compose**  
 
-Репозиторий является дополнением к Google Colab ноутбуку `Docker Compose, LLM, WebUI` <a href="https://colab.research.google.com/drive/1P3rB1s_bvUe7Zf3VE_IOTInH67N4i5b9"><img src="https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=b3771e&label=%20" alt="Open in Colab"></a> репозитория https://github.com/sergey21000/ml-dl-notebooks
+Репозиторий является дополнением к Google Colab ноутбуку `Docker Compose, LLM, WebUI`  
+<a href="https://colab.research.google.com/drive/1P3rB1s_bvUe7Zf3VE_IOTInH67N4i5b9"><img src="https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=b3771e&label=%20" alt="Open in Colab"></a> репозитория https://github.com/sergey21000/ml-dl-notebooks
 
 
 <details>
@@ -520,15 +521,15 @@ https://docs.openwebui.com/getting-started/env-configuration/
 Переменные окружения llama.cpp  
 https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md
 
-Для llama.cpp перед запуском выбрать модель можно несколькими вариантами аргументов
-- агрументы `LLAMA_ARG_HF_REPO` и `LLAMA_ARG_HF_FILE`
+Для llama.cpp перед запуском можно выбрать модель несколькими вариантами аргументов
+- агрументы `LLAMA_ARG_HF_REPO` и `LLAMA_ARG_HF_FILE` (репозиторий и название файла на HF)
 - агрумент `LLAMA_ARG_MODEL` (путь до локальной модели в формате `GGUF`)
 - агрумент `LLAMA_ARG_MODEL_URL` (ссылка на модель в формате `GGUF`)
-- для мультимодальных моделей в дополнение к основному файл модели указать:
-  - агрумент `LLAMA_ARG_MMPROJ` (путь до локальной модели в формате `GGUF`)
-  - агрумент `LLAMA_ARG_MMPROJ_URL` (ссылка на модель в формате `GGUF`)
+- для мультимодальных моделей в дополнение к основному файлу GGUF указать:
+  - агрумент `LLAMA_ARG_MMPROJ` (путь до mmproj локальной модели в формате `GGUF`)
+  - агрумент `LLAMA_ARG_MMPROJ_URL` (ссылка на mmproj модель в формате `GGUF`)
 
-Модели хранятся в директории `./data/llamacpp`, заранее скачанная модель для аргумента `LLAMA_ARG_MODEL_URL` должна быть в формате  
+Модели хранятся в директории `./data/llm_model`, если указана ссылка на модель `LLAMA_ARG_MODEL_URL` то она будет загружена в формате  
 `репозиторий_файл.gguf`, например  
 `bartowski_Qwen_Qwen3-0.6B-GGUF_Qwen_Qwen3-0.6B-Q4_K_M.gguf` или
 `bartowski_google_gemma-3-4b-it-GGUF_google_gemma-3-4b-it-Q4_K_M.gguf`  
@@ -538,6 +539,7 @@ https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md
 - [bartowski](https://huggingface.co/bartowski) 
 - [mradermacher](https://huggingface.co/mradermacher) 
 - [Поиск на HuggingFace](https://huggingface.co/models?pipeline_tag=text-generation&library=gguf&sort=trending)
+- [Зеркало HuggingFace](https://hf-mirror.com/)
 
 Запуск llama.cpp
 - Запуск с поддержкой CPU
@@ -549,7 +551,14 @@ https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md
   docker compose -f llm/compose.llamacpp.cuda.yml up
   ```
 
-По умолчанию llama.cpp WebUI доступен по адресу http://127.0.0.1:8080
+Проверить статус (должен смениться с `(health: starting)` на `(healthy)`)
+```
+docker ps
+```
+
+По умолчанию llama.cpp WebUI доступен по адресу http://127.0.0.1:8080  
+llama.cpp API: http://127.0.0.1:8080/v1  
+
 
 
 ### Ollama

@@ -578,13 +578,17 @@ https://docs.ollama.com/faq
   ```ps1
   docker compose -f llm/compose.ollama.cuda.yml up
   ```
-  
+
 Загрузка моделей для Ollama  
 https://ollama.com/library
 ```ps1
 docker exec -it ollama ollama pull gemma3:4b
 ```
-Доступные модели
+Запуск модели Ollama с терминале
+```ps1
+docker exec -it ollama ollama run gemma3:4b
+```
+Загруженные модели
 ```ps1
 docker exec -it ollama ollama list
 ```

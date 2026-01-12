@@ -584,7 +584,7 @@ https://ollama.com/library
 ```ps1
 docker exec -it ollama ollama pull gemma3:4b
 ```
-Запуск модели Ollama с терминале
+Запуск инференса Ollama с терминале
 ```ps1
 docker exec -it ollama ollama run gemma3:4b
 ```

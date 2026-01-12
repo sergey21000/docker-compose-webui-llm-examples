@@ -588,7 +588,7 @@ docker exec -it ollama ollama pull gemma3:4b
 ```ps1
 docker exec -it ollama ollama run gemma3:4b
 ```
-Загрузка и запуск инференса моделей в формате GGUF с HF
+Загрузка и запуск моделей в формате GGUF с HF  
 https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF?local-app=ollama
 ```
 docker exec -it ollama ollama run hf.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF:Q4_K_M

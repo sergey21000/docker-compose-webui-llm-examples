@@ -593,7 +593,7 @@ https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF?local-app=olla
 ```
 docker exec -it ollama ollama run hf.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF:Q4_K_M
 ```
-Загруженные модели
+Список загруженных моделей
 ```ps1
 docker exec -it ollama ollama list
 ```

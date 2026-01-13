@@ -67,7 +67,7 @@ def get_country_info(country_code: str) -> dict:
         }
 
 
-# получения курса валюты через https://github.com/jsdelivr/api (устаревший, для демонстрации)
+# получения курса валюты через https://github.com/jsdelivr/jsdelivr
 def get_currency_rate(base: str, target: str) -> float:
     """
     Get exchange rate from base currency to target currency.

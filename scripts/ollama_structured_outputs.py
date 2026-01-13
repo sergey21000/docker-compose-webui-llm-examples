@@ -1,3 +1,5 @@
+# https://docs.ollama.com/capabilities/structured-outputs
+
 import requests
 from loguru import logger
 
@@ -49,6 +51,7 @@ response: ChatResponse = chat(
     }
 )
 
+# валидация данных - проверка что в ответе нет лишних полей
 result = ProductList.model_validate_json(response.message.content)
 
 for p in result.products:

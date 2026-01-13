@@ -612,6 +612,34 @@ docker compose logs -f
 
 Адрес Ollama BASE URL http://127.0.0.1:11434
 
+---
+Запуск скриптов Ollama
+
+**Установка библиотек**
+```ps1
+pip install -r scripts/requirements.txt
+```
+
+**Подача изображения на вход модели**
+https://docs.ollama.com/capabilities/vision
+```ps1
+python scripts\ollama_multimodal_input.py
+```
+
+**Structured Outputs - получение структурированного ответа модели** 
+https://docs.ollama.com/capabilities/structured-outputs
+```ps1
+python scripts\ollama_structured_outputs.py
+```
+Данный пример выводит топ-3 продукта по содержанию белка
+
+**Tool calling - вызов внешних инструментов (функций)**
+https://docs.ollama.com/capabilities/tool-calling
+```ps1
+python scripts\ollama_tool_calling.py
+```
+Данный пример выводит инфо о странах и курсы их национальных валют с использованием внешних API
+
 
 ### vLLM
 

@@ -1,0 +1,4 @@
+ollama
+loguru
+requests
+pydantic

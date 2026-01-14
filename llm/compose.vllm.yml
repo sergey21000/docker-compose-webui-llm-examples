@@ -7,7 +7,7 @@ services:
       - ${VLLM_PORT:-8000}:8000
     volumes:
       - ${DOCKER_VOLUME_STORAGE:-../data}/huggingface:/root/.cache/huggingface
-      - ${DOCKER_VOLUME_STORAGE:-../data}/vllm/configs:/workspace/configs
+      - ${CONFIG_DIR:-../configs}/vllm:/workspace/configs
     ipc: host
     command:
       - --config

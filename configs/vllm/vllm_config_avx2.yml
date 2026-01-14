@@ -1,0 +1,16 @@
+host: 0.0.0.0
+port: 8000
+
+model: Qwen/Qwen3-0.6B
+max_model_len: 512
+
+# model: facebook/opt-125m
+# max_model_len: 512
+
+max_num_batched_tokens: 1024
+dtype: auto  # float32, bfloat16
+trust_remote_code: true
+generation_config: auto
+
+uvicorn_log_level: info
+hf_token: none

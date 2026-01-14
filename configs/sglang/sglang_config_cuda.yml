@@ -1,0 +1,7 @@
+model-path: Qwen/Qwen3-0.6B
+tensor-parallel-size: 1
+enable-metrics: true
+log-requests: true
+trust-remote-code: true
+dtype: auto
+device: cuda

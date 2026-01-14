@@ -135,7 +135,7 @@ cd docker-compose-webui-llm-examples
 **2) Копирование файла `.env` с переменными окружения**
 ```ps1
 cp env.example .env
-cp data/anythingllm/env.example data/anythingllm/.env
+cp config/anythingllm/env.example config/anythingllm/.env
 ```
 Редактировать переменные окружения в файле `.env` при необходимости  
 Внутри каждого `.env` находятся ссылки на документации по переменным окружения и аргументам CLI  
@@ -715,11 +715,10 @@ https://github.com/continuedev/continue
 
 Установка модели и прочих параметров производится перед запуском vLLM в соотвествующем конфиге
 ```
-📁 ./data/
-└── 📁 vllm/                      # данные сервиса vLLM
-    └── 📁 configs/               # конфиги CLI аргументов запуска vLLM
-        |── vllm_config_cpu.yml   # конфиг CPU (для запуска `docker compose -f compose.vllm.yml  up`)
-        └── vllm_config_cuda.yml  # конфиг CUDA (для запуска `docker compose -f compose.vllm.cuda.yml up`)
+📁 /configs/                  # конфиги сервисов
+└── 📁 vllm/                  # конфиги CLI аргументов запуска vLLM
+    |── vllm_config_cpu.yml   # конфиг CPU (для запуска `docker compose -f compose.vllm.yml  up`)
+    └── vllm_config_cuda.yml  # конфиг CUDA (для запуска `docker compose -f compose.vllm.cuda.yml up`)
 ```
 
 Документация по файлам конфигурации vLLM  
@@ -755,6 +754,14 @@ https://docs.vllm.ai/en/stable/cli/serve/
 
 ### SGLang
 
+Установка модели и прочих параметров производится перед запуском SGLang в соотвествующем конфиге
+```
+📁 /configs/                   # конфиги сервисов
+└── 📁 sglang/                 # конфиги CLI аргументов запуска SGLang
+    |── sglang_config_cpu.yml   # конфиг CPU (для запуска `docker compose -f compose.sglang.yml  up`)
+    └── sglang_config_cuda.yml  # конфиг CUDA (для запуска `docker compose -f compose.sglang.cuda.yml up`)
+```
+
 Переменные окружения SGLang  
 https://docs.sglang.io/references/environment_variables.html  
 Аргументы сервера которые можно добавлять в конфиг  
@@ -781,13 +788,11 @@ https://docs.sglang.io/advanced_features/server_arguments.html
   docker compose -f llm/compose.sglang.cuda.yml -f services/compose.monitoring.yml up
   ```
 
-
-Default Grafana login credentials:
-
-Username: admin
-Password: admin
-
-
+По умолчанию сервисы доступны по адресам:
+- SGLang API: http://127.0.0.1:30000/v1
+- SGLang Swagger http://127.0.0.1:30000/docs
+- Prometheus: http://127.0.0.1:9090
+- Grafana: http://localhost:3000
 
 
 ### Qdrant
@@ -1134,27 +1139,49 @@ https://github.com/qdrant/qdrant/issues/5672
 
 ## 📁 Структура данных
 
-Данные сервисов по умолчанию хранятся в директории `📁 ./data/`:
+Конфиги vLLM, SGLang, Prometeus, Grafana находятся в директории `📁 /configs/`
 ```
-📁 data/
-├── 📁 huggingface/                 # модели HF для vLLM, SGLang, Infinity
-├── 📁 anythingllm/                 # данные сервиса AnythingLLM
-│   └── .env                        # настройки AnythingLLM, заполняется автоматически
-├── 📁 openwebui/                   # данные сервиса Open WebUI
-├── 📁 vllm/                        # данные сервиса vLLM
-│   └── 📁 configs/                 # конфиги CLI аргументов запуска vLLM
-│       ├── vllm_config_cpu.yml     # конфиг CPU (docker compose -f compose.vllm.yml up)
-│       └── vllm_config_cuda.yml    # конфиг CUDA (docker compose -f compose.vllm.cuda.yml up)
-├── 📁 sglang/                      # данные сервиса SGLang
-│   └── 📁 configs/                 # конфиги CLI аргументов запуска SGLang
-│       ├── sglang_config_cpu.yml   # конфиг CPU (docker compose -f compose.sglang.yml up)
-│       └── sglang_config_cuda.yml  # конфиг CUDA (docker compose -f compose.sglang.cuda.yml up)
-├── 📁 ollama/                      # модели и данные сервиса Ollama
-📁 mcp_server/                      # MCP сервер
-├── 📁 data/                        # данные для MCP сервера и RAG
-│   ├── 📁 documents/               # примеры документов для RAG
-│   └── 📁 images/                  # примеры изображений для мультимодального инференса
-└── .env                            # глобальный файл с настройками всех сервисов
+📁 configs/                         # конфигурационные файлы всех сервисов
+├── 📁 vllm/                        # CLI-конфиги запуска vLLM
+│   ├── vllm_config_cpu.yml         # запуск vLLM на CPU
+│   └── vllm_config_cuda.yml        # запуск vLLM с CUDA (GPU)
+│
+├── 📁 sglang/                      # CLI-конфиги запуска SGLang
+│   ├── sglang_config_cpu.yml       # запуск SGLang на CPU
+│   └── sglang_config_cuda.yml      # запуск SGLang с CUDA (GPU)
+│
+├── 📁 prometheus/                  # конфигурация Prometheus
+│   └── prometheus.yaml             # scrape-конфиг и правила сбора метрик
+│
+├── 📁 grafana/                     # конфигурация Grafana
+│   ├── 📁 dashboards/              # дашборды Grafana
+│   │   ├── 📁 config/              # provisioning-конфиги дашбордов
+│   │   │   └── dashboard.yaml
+│   │   └── 📁 json/                # JSON-описания дашбордов
+│   │       └── sglang-dashboard.json
+│   │
+│   └── 📁 datasources/             # источники данных Grafana (Prometheus и др.)
+│       └── datasource.yaml
+│
+├── 📁 anythingllm/                 # конфиги AnythingLLM
+│   └── .env                        # автогенерируемые настройки сервиса
+│
+└── .env                            # глобальный .env для docker-compose
+
+```
+
+Данные сервисов хранятся в директории `📁 /data/`
+```
+📁 data/                           # runtime-данные сервисов (не коммитятся)
+├── 📁 huggingface/                # модели Hugging Face для vLLM, SGLang, Infinity
+├── 📁 anythingllm/                # данные сервиса AnythingLLM
+├── 📁 openwebui/                  # данные сервиса Open WebUI
+├── 📁 ollama/                     # модели и данные сервиса Ollama
+│
+├── 📁 mcp_server/                 # MCP сервер
+│   └── 📁 data/                   # данные MCP сервера и RAG
+│       ├── 📁 documents/          # примеры документов для RAG
+│       └── 📁 images/             # изображения для мультимодального инференса
 ```
 
 > [!NOTE]

@@ -1,0 +1,6 @@
+model-path: Qwen/Qwen3-0.6B
+enable-metrics: true
+log-requests: true
+trust-remote-code: true
+dtype: auto
+device: cpu

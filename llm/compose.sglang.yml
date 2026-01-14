@@ -2,12 +2,12 @@ services:
   sglang:
     image: ghcr.io/sergey21000/sglang-cpu:latest
     container_name: sglang
-    # restart: unless-stopped
+    restart: unless-stopped
     ports:
       - ${SGLANG_PORT:-30000}:${SGLANG_PORT:-30000}
     volumes:
       - ${DOCKER_VOLUME_STORAGE:-../data}/huggingface:/root/.cache/huggingface
-      - ${DOCKER_VOLUME_STORAGE:-../data}/sglang/configs:/sgl-workspace/configs
+      - ${CONFIG_DIR:-../configs}/sglang:/sgl-workspace/configs
     ipc: host
     env_file:
       - path: ../.env

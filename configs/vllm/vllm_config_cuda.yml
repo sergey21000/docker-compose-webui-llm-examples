@@ -1,0 +1,23 @@
+# ==============================================================
+# vLLM Configuration file:
+# https://docs.vllm.ai/en/stable/configuration/serve_args/#configuration-file
+# vLLM CLI args:
+# https://docs.vllm.ai/en/stable/cli/serve/
+
+model: Qwen/Qwen3-0.6B
+dtype: auto
+max_model_len: 1024
+max_num_batched_tokens: 1024
+gpu_memory_utilization: 0.7
+tensor_parallel_size: 1
+trust_remote_code: true
+uvicorn_log_level: info
+
+# ==============================================================
+# vLLM Reasoning Outputs:
+# https://docs.vllm.ai/en/stable/features/reasoning_outputs/
+# reasoning_parser: qwen3
+
+# hf_token: ""
+# host: 0.0.0.0
+# port: 8000

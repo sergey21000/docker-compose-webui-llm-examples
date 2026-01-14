@@ -4,7 +4,7 @@ services:
       file: ../llm/compose.vllm.yml
       service: vllm
     image: vllm/vllm-openai:latest
+    gpus: all
     command:
       - --config
       - /workspace/configs/vllm_config_cuda.yml
-    gpus: all

@@ -1,0 +1,46 @@
+# https://docs.vllm.ai/en/latest/getting_started/installation/cpu/#set-up-using-docker
+
+name: Build and Push Docker (vLLM CPU AVX2)
+
+on: workflow_dispatch
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  docker-cpu-avx2:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout vLLM source
+        uses: actions/checkout@v6
+        with:
+          repository: vllm-project/vllm
+          ref: main
+          path: .
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push CPU AVX2 image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.cpu
+          push: true
+          pull: true
+          platforms: linux/amd64
+          build-args: |
+            VLLM_CPU_DISABLE_AVX512=true
+            VLLM_CPU_AVX512BF16=false
+            VLLM_CPU_AVX512VNNI=false
+            VLLM_CPU_AMXBF16=false
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/vllm-cpu:latest-avx2

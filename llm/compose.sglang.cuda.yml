@@ -1,0 +1,10 @@
+services:
+  sglang:
+    extends:
+      file: ../llm/compose.sglang.yml
+      service: sglang
+    image: lmsysorg/sglang:latest-runtime
+    gpus: all
+    command:
+      - --config
+      - /sgl-workspace/configs/sglang_config_cuda.yml

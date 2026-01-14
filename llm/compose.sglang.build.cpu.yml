@@ -1,0 +1,9 @@
+services:
+  vllm:
+    extends:
+      file: ../llm/compose.sglang.yml
+      service: sglang
+    build:
+      context: ./sglang
+      dockerfile: docker/xeon.Dockerfile
+    image: local/sglang-cpu:latest

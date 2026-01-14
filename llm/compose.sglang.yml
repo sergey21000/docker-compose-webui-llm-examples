@@ -1,0 +1,25 @@
+services:
+  sglang:
+    image: ghcr.io/sergey21000/sglang-cpu:latest
+    container_name: sglang
+    # restart: unless-stopped
+    ports:
+      - ${SGLANG_PORT:-30000}:${SGLANG_PORT:-30000}
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-../data}/huggingface:/root/.cache/huggingface
+      - ${DOCKER_VOLUME_STORAGE:-../data}/sglang/configs:/sgl-workspace/configs
+    ipc: host
+    env_file:
+      - path: ../.env
+        required: false
+    entrypoint:
+      - python3 
+      - -m 
+      - sglang.launch_server 
+      - --host
+      - 0.0.0.0
+      - --port
+      - ${SGLANG_PORT:-30000}
+    command:
+      - --config
+      - /sgl-workspace/configs/sglang_config_cpu.yml

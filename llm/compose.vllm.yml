@@ -1,12 +1,12 @@
 services:
   vllm:
-    image: public.ecr.aws/q9t5s3a7/vllm-cpu-release-repo:v0.11.1
+    image: public.ecr.aws/q9t5s3a7/vllm-cpu-release-repo:v0.13.0
     container_name: vllm
     restart: unless-stopped
     ports:
       - ${VLLM_PORT:-8000}:8000
     volumes:
-      - ${DOCKER_VOLUME_STORAGE:-../data}/vllm:/root/.cache/huggingface
+      - ${DOCKER_VOLUME_STORAGE:-../data}/huggingface:/root/.cache/huggingface
       - ${DOCKER_VOLUME_STORAGE:-../data}/vllm/configs:/workspace/configs
     ipc: host
     command:

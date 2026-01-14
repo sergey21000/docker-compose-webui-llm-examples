@@ -1,4 +1,7 @@
 ollama
 loguru
+openai
 requests
 pydantic
+python-dotenv
+huggingface_hub

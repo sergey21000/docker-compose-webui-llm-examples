@@ -67,6 +67,7 @@
 - [**llama.cpp**](https://github.com/ggml-org/llama.cpp) - инференс LLM моделей
 - [**Ollama**](https://github.com/ollama/ollama) - инференс LLM моделей
 - [**vLLM**](https://github.com/vllm-project/vllm) - инференс LLM моделей
+- [**SGLang**](https://github.com/sgl-project/sglang) - инференс LLM моделей
 - [**Qdrant**](https://github.com/qdrant/qdrant) - векторная база данных
 - [**Infinity**](https://github.com/michaelfeil/infinity) - инференс моделей для получения эмбеддингов
 - [**FastMCP**](https://github.com/jlowin/fastmcp) - библиотека для создания приложений MCP

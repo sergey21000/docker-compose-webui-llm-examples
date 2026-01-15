@@ -6,5 +6,12 @@ services:
     image: lmsysorg/sglang:latest-runtime
     gpus: all
     command:
+      - python3
+      - -m
+      - sglang.launch_server
+      - --host
+      - 0.0.0.0
+      - --port
+      - ${SGLANG_PORT:-30000}
       - --config
       - /sgl-workspace/configs/sglang_config_cuda.yml

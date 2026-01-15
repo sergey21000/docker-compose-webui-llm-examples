@@ -1,3 +1,5 @@
+# https://github.com/sgl-project/sglang/blob/main/examples/monitoring/grafana/datasources/datasource.yaml
+
 apiVersion: 1
 datasources:
   - name: Prometheus
@@ -5,4 +7,4 @@ datasources:
     access: proxy
     url: http://prometheus:9090
     isDefault: true
-    editable: true
+    editable: false

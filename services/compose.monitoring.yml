@@ -1,3 +1,5 @@
+# https://github.com/sgl-project/sglang/blob/main/examples/monitoring/docker-compose.yaml
+
 services:
   prometheus:
     image: prom/prometheus:latest
@@ -5,11 +7,11 @@ services:
     ports:
       - ${PROMETHEUS_PORT:-9090}:9090
     volumes:
-      - ${CONFIG_DIR:-../configs}/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ${CONFIG_DIR:-../configs}/prometheus:/etc/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
-
+      - '--config.file=/etc/prometheus/prometheus.sglang.yml'
+  
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -25,9 +27,5 @@ services:
       - GF_AUTH_BASIC_ENABLED=false
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/sglang-dashboard.json
-      
-      # - GF_SECURITY_ADMIN_USER=admin
-      # - GF_SECURITY_ADMIN_PASSWORD=admin
-      # - GF_INSTALL_PLUGINS=grafana-piechart-panel
     depends_on:
       - prometheus

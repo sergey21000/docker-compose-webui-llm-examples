@@ -73,6 +73,8 @@
 - [**FastMCP**](https://github.com/jlowin/fastmcp) - библиотека для создания приложений MCP
 - [**OpenAI Python**](https://github.com/openai/openai-python) - отправка запросов к серверам для инференса моделей
 - [**Loguru**](https://github.com/Delgan/loguru) - для вывода логов вместо print()
+- [**Prometheus**](https://github.com/prometheus/prometheus) - сбор метрик
+- [**Grafana**](https://github.com/grafana/grafana) - визуализация метрик
 
 LLM модели:
 - [bartowski/google_gemma-3-4b-it-GGUF](https://huggingface.co/bartowski/google_gemma-3-4b-it-GGUF)  
@@ -220,11 +222,11 @@ docker compose down
 По умолчанию сервисы доступны по адресам:
 - AnythingLLM WebUI: http://127.0.0.1:3001
 - Open WebUI: http://127.0.0.1:3000
-- llama.cpp WebUI: http://127.0.0.1:8080
 - llama.cpp API: http://127.0.0.1:8080/v1
+- llama.cpp WebUI: http://127.0.0.1:8080
 - Ollama BASE URL: http://127.0.0.1:11434
 - vLLM API: http://127.0.0.1:8000/v1
-- vLLM Models http://127.0.0.1:8000/v1/models
+- vLLM Swagger http://127.0.0.1:8000/docs
 - SGLang API: http://127.0.0.1:30000/v1
 - SGLang Swagger http://127.0.0.1:30000/docs
 - Qdrant Dashboard: http://127.0.0.1:6333/dashboard
@@ -368,7 +370,7 @@ https://docs.useanything.com/setup/llm-configuration/local/ollama
 По умолчанию сервисы доступны по адресам:
 - AnythingLLM WebUI: http://127.0.0.1:3001
 - vLLM API: http://127.0.0.1:8000/v1
-- vLLM Models http://127.0.0.1:8000/v1/models
+- vLLM Swagger http://127.0.0.1:8000/docs
 
 В настройках AnythingLLM необходимо указать Поставщик LLM: Generic OpenAI, Base URL: http://vllm:8000/v1, название и параметры модели  
 (подробности в разделе конфигурации [AnythingLLM](#anythingllm))
@@ -478,7 +480,7 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
 По умолчанию сервисы доступны по адресам:
 - Open WebUI: http://127.0.0.1:3000
 - vLLM API: http://127.0.0.1:8000/v1
-- vLLM Models http://127.0.0.1:8000/v1/models
+- vLLM Swagger http://127.0.0.1:8000/docs
 
 В настройках Open WebUI необходимо чтобы в Настройки -> Настройки администратора -> Подключения был добавлен URL http://vllm:8000/v1 в рзделе API OpenAI  
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
@@ -626,7 +628,6 @@ docker ps
 llama.cpp API: http://127.0.0.1:8080/v1  
 
 
-
 ### Ollama
 
 Переменные окружения Ollama (искать поиском по странице "OLLAMA_")  
@@ -749,6 +750,7 @@ https://docs.vllm.ai/en/stable/cli/serve/
   Узнать какие инструкции поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html)
 
 По умолчанию - vLLM API доступен по адресу http://127.0.0.1:8000/v1  
+vLLM Swagger: http://127.0.0.1:8000/docs  
 Текущие модели vLLM: http://127.0.0.1:8000/v1/models
 
 
@@ -783,16 +785,57 @@ https://docs.sglang.io/advanced_features/server_arguments.html
   ```ps1
   docker compose -f llm/compose.sglang.cuda.yml up
   ```
-- Запуск с Prometeus
-  ```ps1
-  docker compose -f llm/compose.sglang.cuda.yml -f services/compose.monitoring.yml up
-  ```
 
 По умолчанию сервисы доступны по адресам:
 - SGLang API: http://127.0.0.1:30000/v1
 - SGLang Swagger http://127.0.0.1:30000/docs
+
+
+### Prometheus + Grafana
+
+Запуск библиотеки для инференса LLM + сбор и визуализация метрик через Prometheus + Grafana
+- *Запуск SGLang + Prometeus + Grafana*
+  ```ps1
+  docker compose -f llm/compose.sglang.cuda.yml -f services/compose.monitoring.yml up
+  ```
+- *Запуск vLLM + Prometeus + Grafana*
+  ```ps1
+  docker compose -f llm/compose.vllm.cuda.yml -f services/compose.monitoring.vllm.yml up
+  ```
+- *Запуск llama.cpp + Prometeus + Grafana*
+  ```ps1
+  docker compose -f llm/compose.llamacpp.cuda.yml -f services/compose.monitoring.llamacpp.yml up
+  ```
+
+По умолчанию сервисы доступны по адресам:
+- SGLang Swagger http://127.0.0.1:30000/docs
+- vLLM Swagger http://127.0.0.1:8000/docs
+- llama.cpp WebUI: http://127.0.0.1:8080
 - Prometheus: http://127.0.0.1:9090
 - Grafana: http://localhost:3000
+
+> [!NOTE]
+> Open WebUI и Grafana по умолчанию запускаются на порту 3000 - при совместном использовании нужно изменить переменную окружения `OPENWEBUI_PORT` или `GRAFANA_PORT` в файле `.env`
+
+Разные файлы `compose.monitoring` отличаются разными прописанными конфигами Prometheus, которые имеют формат `prometheus.lib_name.yaml`, например `prometheus.sglang.yaml` - они отличаются только строкой `target` с названием сервиса и портом
+
+После запуска Prometheus перейти на http://127.0.0.1:9090 -> убедиться что в `Status` -> `Target health` есть Endpoint, например http://sglang:30000/metrics и он имеет статус Up
+
+<ins><i>Как открыть/добавить график метрики в Grafana</i></ins>
+- перейти в Grafana UI по адресу http://localhost:3000
+- в правом верхнем углу нажать `Sign in` - ввести логин и пароль `admin`
+Далее два варианта - открыть существующий дашборд или создать новый
+**1) Открыть существующий дашборд (для SGLang такой есть)**
+- открыть дашборд если он еще не открыт, слева для этого есть меню `Dashboards`
+- добавление графика - в правом верхнем углу нажать `Edit` -> `Add` -> `Visualization` -> выбрать метрику из списка `Metric` -> `Run queries` -> далее или просто `Back to dashboard` чтобы посмотреть дашборд с новым графиком, или сохранить справа вверху через `Save dashboard`
+**2) Создать новый дашборд**
+- нажать слева на `Dashboards` -> справа вверху `New` -> `New Dashboard` -> `Add Visualization`, добавить метрики внизу в меню `Metric` -> `Run queries` -> далее или просто `Back to dashboard` чтобы посмотреть дашборд с новым графиком, или сохранить справа вверху через `Save dashboard`
+
+Документация Grafana  
+https://grafana.com/docs/grafana/latest/fundamentals/getting-started/first-dashboards/  
+Документация по метрикам в SGLang  
+https://docs.sglang.io/references/production_metrics.html
+
 
 
 ### Qdrant

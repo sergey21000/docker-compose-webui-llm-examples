@@ -42,7 +42,7 @@
   - [Ollama](#ollama)
   - [vLLM](#vllm)
   - [SGLang](#sglang)
-  - [Prometheus + Grafana](#prometheus-grafana)
+  - [Prometheus + Grafana](#prometheus--grafana)
   - [Qdrant](#qdrant)
   - [Infinity](#infinity)
 - 🤖 [MCP](#-mcp)

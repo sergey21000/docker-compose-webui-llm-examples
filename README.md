@@ -42,6 +42,7 @@
   - [Ollama](#ollama)
   - [vLLM](#vllm)
   - [SGLang](#sglang)
+  - [Prometheus + Grafana](#prometheus-grafana)
   - [Qdrant](#qdrant)
   - [Infinity](#infinity)
 - 🤖 [MCP](#-mcp)
@@ -806,6 +807,9 @@ https://docs.sglang.io/advanced_features/server_arguments.html
   ```ps1
   docker compose -f llm/compose.llamacpp.cuda.yml -f services/compose.monitoring.llamacpp.yml up
   ```
+
+Чтобы llama.cpp отдавала метрики, нужно чтобы в файле `.env` была прописана переменная окружения `LLAMA_ARG_ENDPOINT_METRICS=1`  
+Чтобы SGLang отдавал метрики, нужно чтобы в конфиге `configs/sglang/sglang_config_cuda.yml` было прописано `enable-metrics: true` (прописано по умолчанию)
 
 По умолчанию сервисы доступны по адресам:
 - SGLang Swagger http://127.0.0.1:30000/docs

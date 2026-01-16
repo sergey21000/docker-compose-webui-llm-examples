@@ -3,8 +3,7 @@
 from pathlib import Path
 from loguru import logger
 
-from ollama import chat
-from ollama import ChatResponse
+import ollama
 
 
 # системный промт (опционально)
@@ -30,12 +29,27 @@ messages.append({'role': 'user', 'content': prompt, 'images': [image_path]})
 # модель из Ollama list
 model = 'gemma3:4b'
 
+# параметры генерации (опционально)
+# https://docs.ollama.com/api/chat
+# https://github.com/ollama/ollama-python/blob/60e7b2f9ce710eeb57ef2986c46ea612ae7516af/ollama/_types.py#L104
+options = ollama.Options(
+    seed=None,
+    top_k=None,
+    top_p=None,
+    min_p=None,
+    temperature=None,
+    repeat_penalty=None,
+    num_ctx=None,
+    num_predict=None,
+)
+
 # генерация ответа модели в режиме стриминга
-stream_chat: ChatResponse = chat(
+stream_chat: ollama.ChatResponse = ollama.chat(
     model=model,
     messages=messages,
     think=False,
     stream=True,
+    options=options,
 )
 
 # получение ответа по одному токену

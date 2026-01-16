@@ -708,6 +708,12 @@ python scripts\ollama_tool_calling.py
 ```
 Данный пример выводит инфо о странах и курсы их национальных валют с использованием внешних API
 
+**Получение эмбеддингов текстов**  
+https://docs.ollama.com/capabilities/embeddings#python
+```ps1
+python scripts\ollama_embeddings.py
+```
+
 Расширения для интерграции Ollama в VS Code   
 https://github.com/cline/cline  
 https://github.com/continuedev/continue  

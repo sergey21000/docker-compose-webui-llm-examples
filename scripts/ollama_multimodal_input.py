@@ -1,5 +1,6 @@
 # https://docs.ollama.com/capabilities/vision#python
 
+import base64
 from pathlib import Path
 from loguru import logger
 
@@ -26,7 +27,8 @@ if system_prompt:
     messages.append({'role': 'system', 'content': system_prompt})
 messages.append({'role': 'user', 'content': prompt, 'images': [image_path]})
 
-# модель из Ollama list
+# модель из ollama list
+# https://ollama.com/
 model = 'gemma3:4b'
 
 # параметры генерации (опционально)

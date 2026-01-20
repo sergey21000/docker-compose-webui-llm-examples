@@ -319,7 +319,7 @@ cd docker-compose-webui-llm-examples
 (подробности в разделе конфигурации [AnythingLLM](#anythingllm))
 
 Установить модель для для llama.cpp можно в файле `.env`  
-(подробности в разделе конфигурации [llama.cpp](#llama.cpp))
+(подробности в разделе конфигурации [llama.cpp](#llamacpp))
 
 По умолчанию сервисы доступны по адресам:
 - AnythingLLM WebUI: http://127.0.0.1:3001
@@ -449,7 +449,7 @@ https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
 
 Установить модель для для llama.cpp можно в файле `.env`  
-(подробности в разделе конфигурации [llama.cpp](#llama.cpp))
+(подробности в разделе конфигурации [llama.cpp](#llamacpp))
 
 Документация по запуску Open WebUI + llama.cpp  
 https://docs.openwebui.com/getting-started/quick-start/starting-with-llama-cpp

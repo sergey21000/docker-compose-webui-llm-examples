@@ -3,6 +3,7 @@
 # https://docs.vllm.ai/en/stable/configuration/serve_args/#configuration-file
 # vLLM CLI args:
 # https://docs.vllm.ai/en/stable/cli/serve/
+# ==============================================================
 
 model: Qwen/Qwen3-0.6B
 dtype: auto
@@ -17,6 +18,7 @@ uvicorn_log_level: info
 # vLLM Reasoning Outputs:
 # https://docs.vllm.ai/en/stable/features/reasoning_outputs/
 # reasoning_parser: qwen3
+# ==============================================================
 
 # hf_token: ""
 # host: 0.0.0.0

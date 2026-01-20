@@ -6,7 +6,7 @@ services:
     ports:
       - ${OPENWEBUI_PORT:-3000}:8080
     volumes:
-      - open-webui:/app/backend/data
+      - openwebui_storage:/app/backend/data
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
     env_file:
@@ -14,7 +14,7 @@ services:
         required: false
 
 volumes:
-  open-webui:
+  openwebui_storage:
     driver: local
     driver_opts:
       type: none

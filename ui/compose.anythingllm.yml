@@ -6,7 +6,7 @@ services:
     ports:
       - ${ANYTHINGLLM_PORT:-3001}:3001
     volumes:
-      - ${DOCKER_VOLUME_STORAGE:-../data}/anythingllm:/app/server/storage
+      - anythingllm_storage:/app/server/storage
       - ${CONFIG_DIR:-../configs}/anythingllm/.env:/app/server/.env
     environment:
       - STORAGE_DIR=/app/server/storage
@@ -14,3 +14,11 @@ services:
     env_file:
       - path: ../.env
         required: false
+
+volumes:
+  anythingllm_storage:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOCKER_VOLUME_STORAGE:-../data}/anythingllm_

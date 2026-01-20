@@ -105,6 +105,9 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
+> [!NOTE]
+> После команды `newgrp docker` нужно или перезайти в систему (или склонировать репозиторий перед установкой Docker), чтобы создаваемые директории принадлежали группе пользователя а не группе docker, иначе например AnythingLLM не запустится
+
 **2) NVIDIA Container Toolkit (опционально)**
 
 Для работы контейнеров на видеокартах NVIDIA нужно установить NVIDIA Container Toolkit  
@@ -135,10 +138,11 @@ cd docker-compose-webui-llm-examples
 > [!NOTE]
 > Все дальнейшие команды этого README вводятся из этой директории, за исключением случаев когда явно указано перейти в другую
 
-**2) Копирование файла `.env` с переменными окружения**
+**2) Копирование файлов `.env` с переменными окружения и создание тома для Open WebUI**
 ```ps1
 cp env.example .env
-cp config/anythingllm/env.example config/anythingllm/.env
+cp configs/anythingllm/env.example configs/anythingllm/.env
+mkdir -p data/openwebui
 ```
 Редактировать переменные окружения в файле `.env` при необходимости  
 Внутри каждого `.env` находятся ссылки на документации по переменным окружения и аргументам CLI  
@@ -146,7 +150,7 @@ cp config/anythingllm/env.example config/anythingllm/.env
 
 Как установить модель в зависимости от выбранной библиотеки для инференса LLM:
 - Ollama - модель устанавливается после запуска сервера командой `docker exec -it ollama ollama pull gemma3:4b`  
-  Модели Ollama: https://ollama.com/library
+  Модели Ollama: https://ollama.com
 - vLLM - в конфиге в директории `📁 ./data/vllm/configs/`
 - SGLang - в конфиге в директории `📁 ./data/sglang/configs/`
 - llama.cpp - в файле `.env`
@@ -316,6 +320,9 @@ cd docker-compose-webui-llm-examples
 В настройках AnythingLLM необходимо указать Поставщик LLM Generic OpenAI, Base URL http://llamacpp:8080/v1  
 (подробности в разделе конфигурации [AnythingLLM](#anythingllm))
 
+Установить модель для для llama.cpp можно в файле `.env`  
+(подробности в разделе конфигурации [llama.cpp](#llama.cpp))
+
 По умолчанию сервисы доступны по адресам:
 - AnythingLLM WebUI: http://127.0.0.1:3001
 - llama.cpp WebUI: http://127.0.0.1:8080
@@ -340,6 +347,15 @@ cd docker-compose-webui-llm-examples
 
 В настройках AnythingLLM необходимо указать Поставщик LLM: Ollama
 (подробности в разделе конфигурации [AnythingLLM](#anythingllm))
+
+Загрузка [моделей](https://ollama.com) для Ollama  
+```ps1
+docker exec -it ollama ollama pull gemma3:4b
+```
+Список загруженных моделей
+```ps1
+docker exec ollama ollama list
+```
 
 Документация по запуску AnythingLLM + Ollama  
 https://docs.useanything.com/setup/llm-configuration/local/ollama
@@ -376,6 +392,9 @@ https://docs.useanything.com/setup/llm-configuration/local/ollama
 В настройках AnythingLLM необходимо указать Поставщик LLM: Generic OpenAI, Base URL: http://vllm:8000/v1, название и параметры модели  
 (подробности в разделе конфигурации [AnythingLLM](#anythingllm))
 
+Установить модель для для vLLM можно в файле `configs/vllm/vllm_config_DEVICE.yml`  
+(подробности в разделе конфигурации [vllm](#vllm))
+
 Документация по запуску AnythingLLM + vLLM  
 https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
 
@@ -407,6 +426,9 @@ https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
 В настройках AnythingLLM необходимо указать Поставщик LLM: Generic OpenAI, Base URL: http://sglang:30000/v1
 (подробности в разделе конфигурации [AnythingLLM](#anythingllm))
 
+Установить модель для для SGLang можно в файле `configs/sglang/sglang_config_DEVICE.yml`  
+(подробности в разделе конфигурации [SGLang](#sglang))
+
 
 ### Open WebUI + llama.cpp
 
@@ -427,6 +449,9 @@ https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
 
 В настройках Open WebUI необходимо чтобы в Настройках администратора в Подключениях был добавлен URL http://llamacpp:8080/v1 в рзделе API OpenAI  
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
+
+Установить модель для для llama.cpp можно в файле `.env`  
+(подробности в разделе конфигурации [llama.cpp](#llama.cpp))
 
 Документация по запуску Open WebUI + llama.cpp  
 https://docs.openwebui.com/getting-started/quick-start/starting-with-llama-cpp
@@ -450,6 +475,15 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-llama-cpp
 
 В настройках Open WebUI необходимо чтобы в Настройках администратора в Подключениях был активирован Ollama API и установлен URL http://ollama:11434  
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
+
+Загрузка [моделей](https://ollama.com) для Ollama  
+```ps1
+docker exec -it ollama ollama pull gemma3:4b
+```
+Список загруженных моделей
+```ps1
+docker exec ollama ollama list
+```
 
 Документация по запуску Open WebUI + Ollama  
 https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
@@ -486,6 +520,9 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
 В настройках Open WebUI необходимо чтобы в Настройки -> Настройки администратора -> Подключения был добавлен URL http://vllm:8000/v1 в рзделе API OpenAI  
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
 
+Установить модель для для vLLM можно в файле `configs/vllm/vllm_config_DEVICE.yml`  
+(подробности в разделе конфигурации [vllm](#vllm))
+
 Документация по запуску Open WebUI + vLLM  
 https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 
@@ -517,6 +554,9 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 В настройках Open WebUI необходимо чтобы в Настройки -> Настройки администратора -> Подключения был добавлен URL http://sglang:30000/v1 в рзделе API OpenAI  
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
 
+Установить модель для для vLLM можно в файле `configs/vllm/vllm_config_DEVICE.yml`  
+(подробности в разделе конфигурации [vllm](#vllm))
+
 
 ## 🛠 Конфигурация библиотек
 
@@ -534,10 +574,12 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 - `Generic OpenAI` для llama.cpp, vLLM, SGLang или прочих OpenAI-Compatible серверов
 - `Ollama` для Ollama  
 
-Для llama.cpp, vLLM или SGLang указать `Base URL` http://vllm:8000/v1, http://llamacpp:8080/v1 или http://sglang:30000/v1 соответственно, для vLLM и llama.cpp указать параметры `Token context window` и `Max Tokens` -> `Save Changes`  
-При этом если их выставить больше чем в конфиге то он выдаст ошибку и напишет об этом, конфиги находятся в
-- `📁 ./data/vllm/configs/` для vLLM
-- в файле `.env` для llama.cpp  
+Для llama.cpp, vLLM или SGLang указать `Base URL` http://vllm:8000/v1, http://llamacpp:8080/v1 или http://sglang:30000/v1 соответственно, для vLLM и llama.cpp указать параметры `Model context window` и `Max Tokens` -> `Save Changes`  
+Конфиги находятся в
+- `📁 ./data/vllm/configs/` для vLLM (параметр `Model context window` соответствует `max_model_len`, например 4096)
+- в файле `.env` для llama.cpp (параметр `Model context window` соответствует `LLAMA_ARG_CTX_SIZE`, например 4096)
+При этом если их выставить больше чем в конфиге то он выдаст ошибку и напишет об этом  
+В конфиге их можно закомментировать чтобы использовать размер контекста модели по умолчанию
 
 Также для vLLM нужно указать модель в `Chat Model Name` из конфига, например `bartowski/Qwen_Qwen3-0.6B-GGUF`  
 Для llama.cpp можно указать любое название модели  
@@ -647,8 +689,7 @@ https://docs.ollama.com/faq
   docker compose -f llm/compose.ollama.cuda.yml up
   ```
 
-Загрузка моделей для Ollama  
-https://ollama.com/library
+Загрузка [моделей](https://ollama.com) для Ollama  
 ```ps1
 docker exec -it ollama ollama pull gemma3:4b
 ```
@@ -663,11 +704,11 @@ docker exec -it ollama ollama run hf.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GG
 ```
 Список загруженных моделей
 ```ps1
-docker exec -it ollama ollama list
+docker exec ollama ollama list
 ```
 Проверить какие модели загружены в какую память (CPU/GPU)
 ```ps1
-docker exec -it ollama ps
+docker exec ollama ps
 ```
 Проверить статус сервисов
 ```ps1
@@ -728,6 +769,8 @@ https://github.com/continuedev/continue
     |── vllm_config_cpu.yml   # конфиг CPU (для запуска `docker compose -f compose.vllm.yml  up`)
     └── vllm_config_cuda.yml  # конфиг CUDA (для запуска `docker compose -f compose.vllm.cuda.yml up`)
 ```
+Узнать какой конфиг используется можно в соответствующем файле `llm/compose.vllm.yml`  
+(который выбран при запуске, например `docker compose -f llm/compose.vllm.cuda.yml up`)
 
 Документация по файлам конфигурации vLLM  
 https://docs.vllm.ai/en/stable/configuration/serve_args/#configuration-file  
@@ -770,6 +813,8 @@ vLLM Swagger: http://127.0.0.1:8000/docs
     |── sglang_config_cpu.yml   # конфиг CPU (для запуска `docker compose -f compose.sglang.yml  up`)
     └── sglang_config_cuda.yml  # конфиг CUDA (для запуска `docker compose -f compose.sglang.cuda.yml up`)
 ```
+Узнать какой конфиг используется можно в соответствующем файле `llm/compose.sglang.yml`  
+(который выбран при запуске, например `docker compose -f llm/compose.sglang.cuda.yml up`)
 
 Переменные окружения SGLang  
 https://docs.sglang.io/references/environment_variables.html  
@@ -845,7 +890,6 @@ https://docs.sglang.io/advanced_features/server_arguments.html
 https://grafana.com/docs/grafana/latest/fundamentals/getting-started/first-dashboards/  
 Документация по метрикам в SGLang  
 https://docs.sglang.io/references/production_metrics.html
-
 
 
 ### Qdrant
@@ -1190,6 +1234,17 @@ https://github.com/qdrant/qdrant/issues/5672
 - Редактировать документацию к инструменту, сделать ее понятной и подходящей под входные запросы, редактировать сами запросы, изменить параметры сеплирования (например уменьшить температуру), изменить системный промт, выбрать модель побольше
 
 
+---
+**Проблема:**
+AnythingLLM не запускается, пишет `unable to open database file: ../storage/anythingllm.db`
+
+**Решение:**
+Проверить `ls -l data` - папки должны принадлежать группе пользователя, но не `docker`
+
+
+
+
+
 ## 📁 Структура данных
 
 Конфиги vLLM, SGLang, Prometeus, Grafana находятся в директории `📁 /configs/`
@@ -1226,15 +1281,15 @@ https://github.com/qdrant/qdrant/issues/5672
 Данные сервисов хранятся в директории `📁 /data/`
 ```
 📁 data/                           # runtime-данные сервисов (не коммитятся)
-├── 📁 huggingface/                # модели Hugging Face для vLLM, SGLang, Infinity
+├── 📁 huggingface/                # модели Hugging Face для vLLM, llama.cpp, SGLang, Infinity
 ├── 📁 anythingllm/                # данные сервиса AnythingLLM
 ├── 📁 openwebui/                  # данные сервиса Open WebUI
 ├── 📁 ollama/                     # модели и данные сервиса Ollama
 │
-├── 📁 mcp_server/                 # MCP сервер
-│   └── 📁 data/                   # данные MCP сервера и RAG
-│       ├── 📁 documents/          # примеры документов для RAG
-│       └── 📁 images/             # изображения для мультимодального инференса
+📁 mcp_server/                     # MCP сервер
+└── 📁 data/                       # данные MCP сервера и RAG
+    ├── 📁 documents/              # примеры документов для RAG
+    └── 📁 images/                 # изображения для мультимодального инференса
 ```
 
 > [!NOTE]

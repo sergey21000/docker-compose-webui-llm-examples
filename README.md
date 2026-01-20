@@ -525,7 +525,7 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
 https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 
 
-### Open WebUI + vLLM
+### Open WebUI + SGLang
 
 Запуск сервисов
 - Запуск с поддержкой CPU (для старых процессоров с поддержкой инструкций avx2)  
@@ -552,8 +552,8 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 В настройках Open WebUI необходимо чтобы в Настройки -> Настройки администратора -> Подключения был добавлен URL http://sglang:30000/v1 в рзделе API OpenAI  
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
 
-Установить модель для для vLLM можно в файле `configs/vllm/vllm_config_DEVICE.yml`  
-(подробности в разделе конфигурации [vllm](#vllm))
+Установить модель для для SGLang можно в файле `configs/sglang/sglang_config_DEVICE.yml`  
+(подробности в разделе конфигурации [SGLang](#sglang))
 
 
 ## 🛠 Конфигурация библиотек

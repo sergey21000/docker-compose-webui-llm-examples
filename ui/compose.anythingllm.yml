@@ -21,4 +21,4 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ${DOCKER_VOLUME_STORAGE:-../data}/anythingllm_
+      device: ${DOCKER_VOLUME_STORAGE:-../data}/anythingllm

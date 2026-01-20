@@ -138,11 +138,12 @@ cd docker-compose-webui-llm-examples
 > [!NOTE]
 > Все дальнейшие команды этого README вводятся из этой директории, за исключением случаев когда явно указано перейти в другую
 
-**2) Копирование файлов `.env` с переменными окружения и создание тома для Open WebUI**
+**2) Копирование файлов `.env` с переменными окружения и создание томом для Web UI**
 ```ps1
 cp env.example .env
 cp configs/anythingllm/env.example configs/anythingllm/.env
 mkdir -p data/openwebui
+mkdir -p data/anythingllm
 ```
 Редактировать переменные окружения в файле `.env` при необходимости  
 Внутри каждого `.env` находятся ссылки на документации по переменным окружения и аргументам CLI  

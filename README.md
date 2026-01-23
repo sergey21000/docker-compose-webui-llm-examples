@@ -148,7 +148,7 @@ mkdir -p data/anythingllm
 
 Как установить модель в зависимости от выбранной библиотеки для инференса LLM:
 - Ollama - модель устанавливается после запуска сервера командой `docker exec -it ollama ollama pull gemma3:4b`  
-  Модели Ollama: https://ollama.com
+  Модели Ollama: https://ollama.com/search
 - vLLM - в конфиге в директории `📁 ./data/vllm/configs/`
 - SGLang - в конфиге в директории `📁 ./data/sglang/configs/`
 - llama.cpp - в файле `.env`
@@ -346,7 +346,7 @@ cd docker-compose-webui-llm-examples
 В настройках AnythingLLM необходимо указать Поставщик LLM: Ollama
 (подробности в разделе конфигурации [AnythingLLM](#anythingllm))
 
-Загрузка [моделей](https://ollama.com) для Ollama  
+Загрузка [моделей](https://ollama.com/search) для Ollama  
 ```ps1
 docker exec -it ollama ollama pull gemma3:4b
 ```
@@ -474,7 +474,7 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-llama-cpp
 В настройках Open WebUI необходимо чтобы в Настройках администратора в Подключениях был активирован Ollama API и установлен URL http://ollama:11434  
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
 
-Загрузка [моделей](https://ollama.com) для Ollama  
+Загрузка [моделей](https://ollama.com/search) для Ollama  
 ```ps1
 docker exec -it ollama ollama pull gemma3:4b
 ```
@@ -687,7 +687,7 @@ https://docs.ollama.com/faq
   docker compose -f llm/compose.ollama.cuda.yml up
   ```
 
-Загрузка [моделей](https://ollama.com) для Ollama  
+Загрузка [моделей](https://ollama.com/search) для Ollama  
 ```ps1
 docker exec -it ollama ollama pull gemma3:4b
 ```

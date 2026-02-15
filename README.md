@@ -1477,8 +1477,10 @@ MCP в Gradio
 https://www.gradio.app/guides/building-mcp-server-with-gradio  
 https://www.gradio.app/guides/building-an-mcp-client-with-gradio  
 Объяснение MCP  
-https://habr.com/ru/articles/914768/  
 https://habr.com/ru/articles/879970/  
+МСР: Трое в лодке, не считая контекста - простая реализация с агентом оркестратором  
+https://habr.com/ru/articles/986798/  
+https://habr.com/ru/articles/995574/  
 Простой пример MCP с кодом  
 https://habr.com/ru/articles/918390/  
 Объяснение работы MCP с блоками кода + ссылки на гитхаб  

@@ -1347,6 +1347,8 @@ Cтраница vLLM на GitHub
 https://github.com/vllm-project/vllm  
 Документация vLLM  
 https://docs.vllm.ai/en/stable/getting_started/quickstart/  
+Документации установкам vLLM на различные системы
+https://github.com/vllm-project/vllm/tree/main/docs/getting_started/installation  
 Установка vLLM на CPU  
 https://docs.vllm.ai/en/stable/getting_started/installation/cpu  
 Установка vLLM на CUDA + готовые колеса  

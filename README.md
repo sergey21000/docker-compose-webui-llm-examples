@@ -137,8 +137,8 @@ cd docker-compose-webui-llm-examples
 
 **2) Копирование файлов `.env` с переменными окружения и создание томом для Web UI**
 ```ps1
-cp env.example .env
-cp configs/anythingllm/env.example configs/anythingllm/.env
+cp .env.example .env
+cp configs/anythingllm/.env.example configs/anythingllm/.env
 mkdir -p data/openwebui
 mkdir -p data/anythingllm
 ```

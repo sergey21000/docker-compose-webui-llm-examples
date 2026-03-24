@@ -1,8 +1,5 @@
-import os
-from typing import Any
 from pathlib import Path
 
-from fastmcp import FastMCP
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from qdrant_client.http.models.models import ScoredPoint

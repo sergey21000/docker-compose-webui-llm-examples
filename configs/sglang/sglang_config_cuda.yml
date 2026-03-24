@@ -5,3 +5,8 @@ log-requests: true
 trust-remote-code: true
 dtype: auto
 device: cuda
+
+# для видеокарт Blackwell на момент тестирования поддерживаются только бэкенды triton or trtllm_mha
+# https://docs.sglang.io/advanced_features/server_arguments.html#kernel-backends-attention-sampling-grammar-gemm
+# https://docs.sglang.io/advanced_features/attention_backend.html
+attention-backend: triton

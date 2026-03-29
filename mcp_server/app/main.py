@@ -5,10 +5,10 @@ from fastmcp import FastMCP
 from logging_config import setup_logging
 setup_logging()
 
-from tools.rag_tools import mcp as rag_tools_mcp
-from tools.service_tools import mcp as service_tools_mcp
-from resources.project_resources import mcp as project_resources_mcp
-from prompts.report_prompts import mcp as report_prompts_mcp
+from tools.rag import mcp as rag_tools_mcp
+from tools.service import mcp as service_tools_mcp
+from resources.project import mcp as project_resources_mcp
+from prompts.report import mcp as report_prompts_mcp
 
 
 mcp = FastMCP('MCP examples')

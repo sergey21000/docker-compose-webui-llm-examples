@@ -1,13 +1,13 @@
 # https://github.com/sgl-project/sglang/blob/main/examples/monitoring/grafana/dashboards/config/dashboard.yaml
 
-apiVersion: 1
+apiVersion: 1  # версия API конфигурации провайдеров Grafana
 providers:
-  - name: 'SGLang'
-    orgId: 1
-    folder: 'SGLang Monitoring'
-    type: file
-    disableDeletion: false
-    updateIntervalSeconds: 10
-    allowUiUpdates: false
+  - name: 'LLM Monitoring'  # уникальное имя провайдера (можете добавить 'SGLang', 'vLLM', 'TGI' и т.д.)
+    orgId: 1  # ID организации Grafana (обычно 1 - основная)
+    folder: 'LLM Monitoring'  # все дашборды этого провайдера попадут в общую папку для LLM сервисов
+    type: file  # тип источника - чтение дашбордов из файлов
+    disableDeletion: false  # false = удалять дашборд из Grafana при удалении файла (синхронизация)
+    updateIntervalSeconds: 10  # проверять изменения в файлах каждые 10 секунд
+    allowUiUpdates: false  # запретить сохранение правок через веб-интерфейс (только через файлы)
     options:
-      path: /var/lib/grafana/dashboards
+      path: /var/lib/grafana/dashboards  # путь к папке с JSON-файлами дашбордов - будут прочитаны все

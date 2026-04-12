@@ -1,0 +1,59 @@
+# vLLM metrics:
+# https://docs.vllm.ai/en/latest/serving/metrics.html
+
+# группа правил для мониторинга vLLM сервера
+groups:
+- name: vllm.rules
+  rules:
+  # алерт: vLLM сервер недоступен
+  - alert: VLLMServerDown
+    expr: up{job="llm"} == 0  # статус эндпоинта /metrics (job переименован в llm)
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "vLLM server is down"
+      description: "vLLM server has been down for more than 1 minute."
+
+  # алерт: низкая скорость генерации токенов (меньше 10 токенов/сек)
+  - alert: LowTokenGenerationRate
+    expr: rate(vllm:generation_tokens_total[1m]) < 10  # rate() вычисляет скорость увеличения счетчика токенов за 1 минуту
+    for: 3m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Low token generation rate"
+      description: "Token generation rate is {{ $value }} tokens/second"
+
+  # алерт: большое количество запросов в очереди (ожидают обработки)
+  - alert: HighRequestQueue
+    expr: vllm:num_requests_waiting > 5  # количество запросов в состоянии WAITING (ожидают свободных слотов)
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High number of waiting requests"
+      description: "{{ $value }} requests are waiting in queue"
+
+  # алерт: медленный Time To First Token (TTFT) - задержка до первого токена
+  - alert: SlowTimeToFirstToken
+    expr: histogram_quantile(0.95, rate(vllm:time_to_first_token_seconds_bucket[5m])) > 5
+    # histogram_quantile(0.95) - вычисляет 95-й перцентиль (95% запросов медленнее этого значения)
+    # rate(...[5m]) - скорость увеличения счетчиков за 5 минут
+    # > 5 - порог: 5 секунд до первого токена
+    for: 3m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Slow Time To First Token (TTFT)"
+      description: "95th percentile TTFT is {{ $value }} seconds"
+
+  # алерт: высокое использование KV кэша (более 90%)
+  - alert: HighKVCacheUsage
+    expr: vllm:kv_cache_usage_perc > 0.9  # значение от 0 до 1 (0.9 = 90% заполнения)
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High KV cache usage"
+      description: "KV cache usage is {{ $value | humanizePercentage }}"  # humanizePercentage преобразует 0.95 → "95%"

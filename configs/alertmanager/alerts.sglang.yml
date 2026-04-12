@@ -1,0 +1,90 @@
+# sglang metrics:
+# https://docs.sglang.io/references/production_metrics.html
+
+# группа правил для мониторинга SGLang сервера
+groups:
+- name: sglang.rules
+  rules:
+  # алерт: SGLang сервер недоступен
+  - alert: SGLangServerDown
+    expr: up{job="llm"} == 0  # статус эндпоинта /metrics (job переименован в llm)
+    for: 1m  # ждем 1 минуту перед срабатыванием
+    labels:
+      severity: critical  # критический уровень - сервер не отвечает
+    annotations:
+      summary: "SGLang server is down"
+      description: "SGLang server has been down for more than 1 minute."
+
+  # алерт: низкая скорость генерации токенов (меньше 10 токенов/сек)
+  - alert: LowTokenGenerationRate
+    expr: sglang:gen_throughput < 10  # текущая throughput генерации токенов (токенов/сек)
+    for: 3m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Low token generation rate"
+      description: "Token generation rate is {{ $value }} tokens/second"
+
+  # алерт: большое количество запросов в очереди (ожидают обработки)
+  - alert: HighRequestQueue
+    expr: sglang:num_queue_reqs > 5  # количество запросов в очереди ожидания
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High number of queued requests"
+      description: "{{ $value }} requests are waiting in queue"
+
+  # алерт: медленный Time To First Token (TTFT) - задержка до первого токена
+  - alert: SlowTimeToFirstToken
+    expr: histogram_quantile(0.95, rate(sglang:time_to_first_token_seconds_bucket[5m])) > 5
+    # histogram_quantile(0.95) - вычисляет 95-й перцентиль (95% запросов медленнее этого значения)
+    # rate(...[5m]) - скорость увеличения счетчиков за 5 минут
+    # > 5 - порог: 5 секунд до первого токена
+    for: 3m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Slow Time To First Token (TTFT)"
+      description: "95th percentile TTFT is {{ $value }} seconds"
+
+  # алерт: высокое использование KV кэша (более 90%)
+  - alert: HighKVCacheUsage
+    expr: sglang:token_usage > 0.9  # использование токенов в кэше (значение от 0 до 1)
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High KV cache usage"
+      description: "KV cache usage is {{ $value | humanizePercentage }}" # humanizePercentage преобразует 0.95 → "95%"
+
+  # алерт: низкая точность попадания в кэш (меньше 50%)
+  - alert: LowCacheHitRate
+    expr: sglang:cache_hit_rate < 0.5  # Cache hit rate (значение от 0 до 1)
+    for: 5m
+    labels:
+      severity: info  # информационный уровень - может указывать на неэффективное использование кэша
+    annotations:
+      summary: "Low cache hit rate"
+      description: "Cache hit rate is {{ $value | humanizePercentage }}"
+
+  # алерт: высокая задержка ответа (E2E latency больше 30 секунд)
+  - alert: HighE2ELatency
+    expr: histogram_quantile(0.95, rate(sglang:e2e_request_latency_seconds_bucket[5m])) > 30
+    # End-to-end latency - полное время обработки запроса от получения до последнего токена
+    for: 3m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High end-to-end request latency"
+      description: "95th percentile E2E latency is {{ $value }} seconds"
+
+  # алерт: большое количество запущенных запросов (может указывать на перегрузку)
+  - alert: HighRunningRequests
+    expr: sglang:num_running_reqs > 200  # количество одновременно обрабатываемых запросов
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High number of running requests"
+      description: "{{ $value }} requests are currently running"

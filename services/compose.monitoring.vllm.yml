@@ -1,8 +1,14 @@
+# https://github.com/vllm-project/vllm/tree/main/examples/online_serving/prometheus_grafana
+
 services:
   prometheus:
     extends:
       file: ../services/compose.monitoring.yml
       service: prometheus
+      
+    environment:
+      - RRR=4
+      
     command:
       - '--storage.tsdb.path=/prometheus'
       - '--config.file=/etc/prometheus/prometheus.vllm.yml'
@@ -11,10 +17,15 @@ services:
     extends:
       file: ../services/compose.monitoring.yml
       service: grafana
+    volumes:
+      - ${CONFIG_DIR:-../configs}/grafana/dashboards/config/vllm:/etc/grafana/provisioning/dashboards
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
       - GF_AUTH_BASIC_ENABLED=false
       - GF_USERS_ALLOW_SIGN_UP=false
-    # depends_on:
-      # - prometheus
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/vllm.json
+      # - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      # - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+    depends_on:
+      - prometheus

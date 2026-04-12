@@ -42,7 +42,7 @@
   - [Ollama](#ollama)
   - [vLLM](#vllm)
   - [SGLang](#sglang)
-  - [Prometheus + Grafana](#prometheus--grafana)
+  - [Prometheus + Grafana + Node Exporter + Alertmanager ](#prometheus--grafana--node-exporter--alertmanager)
   - [Qdrant](#qdrant)
   - [Infinity](#infinity)
 - 🤖 [MCP](#-mcp)
@@ -841,23 +841,29 @@ https://docs.sglang.io/advanced_features/server_arguments.html
 - SGLang Swagger http://127.0.0.1:30000/docs
 
 
-### Prometheus + Grafana
+### Prometheus + Grafana + Node Exporter + Alertmanager 
 
-Запуск библиотеки для инференса LLM + сбор и визуализация метрик через Prometheus + Grafana
-- *Запуск SGLang + Prometeus + Grafana*
+Запуск библиотеки для инференса LLM + сбор и визуализация метрик через Prometheus + Grafana + Node Exporter + метрики через  Alertmanager 
+- *Запуск SGLang + Prometeus + Grafana*  
+  https://docs.sglang.io/references/production_metrics.html  
+  https://github.com/sgl-project/sglang/tree/main/examples/monitoring  
   ```ps1
-  docker compose -f llm/compose.sglang.cuda.yml -f services/compose.monitoring.yml up
+  docker compose -f llm/compose.sglang.cuda.yml -f services/compose.monitoring.yml --env-file configs/env/.sglang.env up
   ```
-- *Запуск vLLM + Prometeus + Grafana*
+- *Запуск vLLM + Prometeus + Grafana*  
+  https://docs.vllm.ai/en/latest/design/metrics/  
+  https://github.com/vllm-project/vllm/tree/main/examples/online_serving/prometheus_grafana  
   ```ps1
-  docker compose -f llm/compose.vllm.cuda.yml -f services/compose.monitoring.vllm.yml up
+  docker compose -f llm/compose.vllm.cuda.yml -f services/compose.monitoring.yml --env-file configs/env/.vllm.env up
   ```
-- *Запуск llama.cpp + Prometeus + Grafana*
+- *Запуск llama.cpp + Prometeus + Grafana*  
+  https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md#get-metrics-prometheus-compatible-metrics-exporter  
+  https://github.com/art-vish/llamacpp-llm-observer  
   ```ps1
-  docker compose -f llm/compose.llamacpp.cuda.yml -f services/compose.monitoring.llamacpp.yml up
+  docker compose -f llm/compose.llamacpp.cuda.yml -f services/compose.monitoring.yml --env-file configs/env/.llamacpp.env up
   ```
 
-Чтобы llama.cpp отдавала метрики, нужно чтобы в файле `.env` была прописана переменная окружения `LLAMA_ARG_ENDPOINT_METRICS=1`  
+Чтобы llama.cpp отдавала метрики, нужно чтобы в файле `.env` была прописана переменная окружения `LLAMA_ARG_ENDPOINT_METRICS=1` (прописано по умолчанию)  
 Чтобы SGLang отдавал метрики, нужно чтобы в конфиге `configs/sglang/sglang_config_cuda.yml` было прописано `enable-metrics: true` (прописано по умолчанию)
 
 По умолчанию сервисы доступны по адресам:
@@ -866,30 +872,61 @@ https://docs.sglang.io/advanced_features/server_arguments.html
 - llama.cpp WebUI: http://127.0.0.1:8080
 - Prometheus: http://127.0.0.1:9090
 - Grafana: http://localhost:3000
+- Alertmanager: http://127.0.0.1:9093
+- Prometheus Alertmanager Alerts http://127.0.0.1:9090/alerts
+- Node Exporter: http://127.0.0.1:9100
 
 > [!NOTE]
 > Open WebUI и Grafana по умолчанию запускаются на порту 3000 - при совместном использовании нужно изменить переменную окружения `OPENWEBUI_PORT` или `GRAFANA_PORT` в файле `.env`
 
-Разные файлы `compose.monitoring` отличаются разными прописанными конфигами Prometheus, которые имеют формат `prometheus.lib_name.yaml`, например `prometheus.sglang.yaml` - они отличаются только строкой `target` с названием сервиса и портом
+Разные файлы `compose.monitoring` отличаются разными прописанными конфигами Prometheus, которые имеют формат `prometheus.lib_name.yaml`, например `prometheus.sglang.yaml`
 
 После запуска Prometheus перейти на http://127.0.0.1:9090 -> убедиться что в `Status` -> `Target health` есть Endpoint, например http://sglang:30000/metrics и он имеет статус Up
 
+---
 <ins><i>Как открыть/добавить график метрики в Grafana</i></ins>
 - перейти в Grafana UI по адресу http://localhost:3000
-- в правом верхнем углу нажать `Sign in` - ввести логин и пароль `admin`
+- если в правом верхнем углу нет кнопки `Edit` - нажать `Sign in` - ввести логин и пароль `admin`
 Далее два варианта - открыть существующий дашборд или создать новый  
 
-**1) Открыть существующий дашборд (для SGLang он уже есть)**
+**1) Открыть существующий дашборд**
 - открыть дашборд если он еще не открыт, слева для этого есть меню `Dashboards`
 - добавление графика - в правом верхнем углу нажать `Edit` -> `Add` -> `Visualization` -> выбрать метрику из списка `Metric` -> `Run queries` -> далее или просто `Back to dashboard` чтобы посмотреть дашборд с новым графиком, или сохранить справа вверху через `Save dashboard`  
+
+Если после открытия дашборда в графиках написано `No data`
+- сделать запрос на модель / обновить страницу / немного подождать
+- в поле `model_name` над графиками выбрать модель
 
 **2) Создать новый дашборд**
 - нажать слева на `Dashboards` -> справа вверху `New` -> `New Dashboard` -> `Add Visualization`, добавить метрики внизу в меню `Metric` -> `Run queries` -> далее или просто `Back to dashboard` чтобы посмотреть дашборд с новым графиком, или сохранить справа вверху через `Save dashboard`
 
 Документация Grafana  
 https://grafana.com/docs/grafana/latest/fundamentals/getting-started/first-dashboards/  
-Документация по метрикам в SGLang  
-https://docs.sglang.io/references/production_metrics.html
+
+---
+<ins><i>Как отправить тестовый Alert на сервис Alertmanager</i></ins>
+
+**Linux**
+```sh
+curl -X POST -H "Content-Type: application/json" -d '[{
+  "labels": {
+    "alertname": "DirectTest",
+    "severity": "test"
+  },
+  "annotations": {
+    "summary": "Direct API test",
+    "description": "This alert was sent directly to Alertmanager"
+  }
+}]' http://localhost:9093/api/v2/alerts
+```
+
+**Windows**
+```powershell
+Invoke-RestMethod -Uri "http://localhost:9093/api/v2/alerts" -Method Post -ContentType "application/json" -Body '[{"labels": {"alertname": "DirectTest", "severity": "test"}, "annotations": {"summary": "Direct API test", "description": "This alert was sent directly to Alertmanager"}}]'
+```
+
+Код для интеграции Node Exporter + Alertmanager взят отсюда  
+https://github.com/art-vish/llamacpp-llm-observer
 
 
 ### Qdrant

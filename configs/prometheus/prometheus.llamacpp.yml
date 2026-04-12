@@ -1,9 +1,40 @@
+# https://github.com/art-vish/llamacpp-llm-observer/blob/main/configs/prometheus.yml
+
 global:
-  scrape_interval: 5s
-  evaluation_interval: 30s
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "/etc/alertmanager/alerts.system.yml"
+  - "/etc/alertmanager/alerts.llamacpp.yml" 
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
 
 scrape_configs:
-  - job_name: llamacpp
+  # llama.cpp server metrics
+  - job_name: 'llamacpp'
     static_configs:
-      - targets:
-          - llamacpp:8080
+      - targets: ['llamacpp:8080']
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    scrape_timeout: 10s
+
+  # Node Exporter system metrics
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 5s
+    
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  # Alertmanager monitoring
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets: ['alertmanager:9093']

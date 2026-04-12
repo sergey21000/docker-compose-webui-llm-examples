@@ -2,7 +2,7 @@ services:
   infinity:
     build:
       context: ../services
-      dockerfile: Dockerfile.infinity
+      dockerfile: infinity.Dockerfile
       args:
         BASE_IMAGE: michaelf34/infinity:latest-cpu
     image: local/infinity-updated:latest-cpu

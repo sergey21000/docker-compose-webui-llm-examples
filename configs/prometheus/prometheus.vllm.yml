@@ -1,9 +1,34 @@
 global:
-  scrape_interval: 5s
-  evaluation_interval: 30s
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "../alertmanager/alerts.system.yml"
+  - "../alertmanager/alerts.vllm.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
 
 scrape_configs:
-  - job_name: vllm
+  - job_name: 'vllm'
     static_configs:
-      - targets:
-          - vllm:8000
+      - targets: ['vllm:8000']
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    scrape_timeout: 10s
+
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 5s
+    
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets: ['alertmanager:9093']

@@ -1,0 +1,61 @@
+# llama.cpp metrics:
+# https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md#get-metrics-prometheus-compatible-metrics-exporter
+# source:
+# https://github.com/art-vish/llamacpp-llm-observer/blob/main/configs/alerting-rules.yml
+# https://github.com/art-vish/llamacpp-llm-observer?tab=readme-ov-file#%D0%B0%D0%BB%D0%B5%D1%80%D1%82%D1%8B
+
+# группа правил для мониторинга llama.cpp сервера
+groups:
+- name: llamacpp.rules
+  rules:
+  # алерт: сервер llama.cpp недоступен
+  - alert: LlamaServerDown
+    expr: up{job="llamacpp"} == 0  # проверяет статус эндпоинта /metrics (1 - жив, 0 - мертв)
+    for: 1m  # ждем 1 минуту перед срабатыванием (избегаем ложных срабатываний)
+    labels:
+      severity: critical  # критический уровень - требует немедленного вмешательства
+    annotations:
+      summary: "LLama.cpp server is down"
+      description: "LLama.cpp server has been down for more than 1 minute."
+
+  # алерт: низкая скорость генерации токенов (ниже 10 токенов/сек)
+  - alert: LowTokenGenerationRate
+    expr: llamacpp:predicted_tokens_seconds < 10  # значение меньше 10 токенов в секунду
+    for: 3m  # проверяем в течение 3 минут
+    labels:
+      severity: warning  # предупреждение - проблема не критична, но требует внимания
+    annotations:
+      summary: "Low token generation rate"
+      description: "Token generation rate is {{ $value }} tokens/second"
+
+  # алерт: большое количество отложенных запросов (очередь > 5)
+  - alert: HighRequestQueue
+    expr: llamacpp:requests_deferred > 5  # хапросы, ожидающие обработки
+    for: 2m  # проверяем в течение 2 минут
+    labels:
+      severity: warning
+    annotations:
+      summary: "High number of deferred requests"
+      description: "{{ $value }} requests are deferred"
+
+  # алерт: медленная обработка промптов (меньше 1 токена/сек)
+  - alert: SlowPromptProcessing
+    expr: llamacpp:prompt_tokens_seconds < 1  # скорость обработки входного промпта
+    for: 3m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Slow prompt processing"
+      description: "Prompt processing rate is {{ $value }} tokens/second"
+
+# алерт: для тестов который всегда выдает true каждые 10 сек
+# - name: test.rules
+  # rules:
+  # - alert: TestAlert
+    # expr: 1 == 1 bool
+    # for: 10s
+    # labels:
+      # severity: test
+    # annotations:
+      # summary: "Test alert"
+      # description: "This is a test alert"

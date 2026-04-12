@@ -876,18 +876,19 @@ https://docs.sglang.io/advanced_features/server_arguments.html
 - Prometheus Alertmanager Alerts http://127.0.0.1:9090/alerts
 - Node Exporter: http://127.0.0.1:9100
 
+После запуска Prometheus перейти на http://127.0.0.1:9090 -> убедиться что в `Status` -> `Target health` есть Endpoint, например http://sglang:30000/metrics и он имеет статус Up
+
 > [!NOTE]
 > Open WebUI и Grafana по умолчанию запускаются на порту 3000 - при совместном использовании нужно изменить переменную окружения `OPENWEBUI_PORT` или `GRAFANA_PORT` в файле `.env`
 
-Разные файлы `compose.monitoring` отличаются разными прописанными конфигами Prometheus, которые имеют формат `prometheus.lib_name.yaml`, например `prometheus.sglang.yaml`
-
-После запуска Prometheus перейти на http://127.0.0.1:9090 -> убедиться что в `Status` -> `Target health` есть Endpoint, например http://sglang:30000/metrics и он имеет статус Up
+В файлах `.sglang.env`, `.vllm.env`, `.llamacpp.env` прописано название текущего сервиса - чтобы нужная переменная оружения подставлась в compose файл
 
 ---
 <ins><i>Как открыть/добавить график метрики в Grafana</i></ins>
 - перейти в Grafana UI по адресу http://localhost:3000
 - если в правом верхнем углу нет кнопки `Edit` - нажать `Sign in` - ввести логин и пароль `admin`
-Далее два варианта - открыть существующий дашборд или создать новый  
+
+*Далее два варианта - открыть существующий дашборд или создать новый*  
 
 **1) Открыть существующий дашборд**
 - открыть дашборд если он еще не открыт, слева для этого есть меню `Dashboards`
@@ -1275,33 +1276,44 @@ https://github.com/qdrant/qdrant/issues/5672
 
 Конфиги vLLM, SGLang, Prometeus, Grafana находятся в директории `📁 /configs/`
 ```
-📁 configs/                         # конфигурационные файлы всех сервисов
+📁 configs/                         # корневая директория всех конфигурационных файлов
 ├── 📁 vllm/                        # CLI-конфиги запуска vLLM
-│   ├── vllm_config_cpu.yml         # запуск vLLM на CPU
-│   └── vllm_config_cuda.yml        # запуск vLLM с CUDA (GPU)
+│   ├── vllm_config_cpu.yml         # конфиг для запуска vLLM на CPU (без GPU)
+│   └── vllm_config_cuda.yml        # конфиг для запуска vLLM с поддержкой CUDA (GPU)
 │
 ├── 📁 sglang/                      # CLI-конфиги запуска SGLang
-│   ├── sglang_config_cpu.yml       # запуск SGLang на CPU
-│   └── sglang_config_cuda.yml      # запуск SGLang с CUDA (GPU)
+│   ├── sglang_config_cpu.yml       # конфиг для запуска SGLang на CPU (без GPU)
+│   └── sglang_config_cuda.yml      # конфиг для запуска SGLang с поддержкой CUDA (GPU)
 │
-├── 📁 prometheus/                  # конфигурация Prometheus
-│   └── prometheus.yaml             # scrape-конфиг и правила сбора метрик
+├── 📁 prometheus/                  # конфигурация Prometheus (сбор метрик)
+│   ├── prometheus.sglang.yml       # scrape-конфиг для SGLang (таргеты, интервалы сбора)
+│   ├── prometheus.vllm.yml         # scrape-конфиг для vLLM (таргеты, интервалы сбора)
+│   └── prometheus.llamacpp.yml     # scrape-конфиг для llama.cpp (таргеты, интервалы сбора)
 │
-├── 📁 grafana/                     # конфигурация Grafana
+├── 📁 alertmanager/                # конфигурация Alertmanager (обработка алертов)
+│   ├── alertmanager.yml            # основной конфиг Alertmanager (маршрутизация, получатели)
+│   ├── alerts.system.yml           # правила алертов для системных метрик (CPU, RAM, Disk)
+│   ├── alerts.sglang.yml           # правила алертов для SGLang (доступность, метрики)
+│   ├── alerts.vllm.yml             # правила алертов для vLLM (доступность, метрики)
+│   └── alerts.llamacpp.yml         # правила алертов для llama.cpp (доступность, метрики)
+│
+├── 📁 grafana/                     # конфигурация Grafana (визуализация)
 │   ├── 📁 dashboards/              # дашборды Grafana
-│   │   ├── 📁 config/              # provisioning-конфиги дашбордов
-│   │   │   └── dashboard.yaml
-│   │   └── 📁 json/                # JSON-описания дашбордов
-│   │       └── sglang-dashboard.json
+│   │   ├── 📁 config/              # Provisioning-конфиги дашбордов (автозагрузка)
+│   │   │   └── dashboard.yaml      # указывает Grafana откуда читать JSON дашбордов
+│   │   └── 📁 json/                # JSON-описания дашбордов (сами дашборды)
+│   │       ├── sglang.json         # дашборд для мониторинга SGLang
+│   │       ├── vllm.json           # дашборд для мониторинга vLLM
+│   │       ├── llamacpp.json       # дашборд для мониторинга llama.cpp
+│   │       └── system.json         # дашборд системных метрик (CPU, RAM, Disk)
 │   │
-│   └── 📁 datasources/             # источники данных Grafana (Prometheus и др.)
-│       └── datasource.yaml
+│   └── 📁 datasources/             # источники данных Grafana
+│       └── datasource.yaml         # настройка подключения к Prometheus
 │
-├── 📁 anythingllm/                 # конфиги AnythingLLM
-│   └── .env                        # автогенерируемые настройки сервиса
+├── 📁 anythingllm/                 # еонфигурация AnythingLLM (RAG сервис)
+│   └── .env                        # переменные окружения для AnythingLLM
 │
-└── .env                            # глобальный .env для docker-compose
-
+└── .env                            # глобальный .env для docker-compose (общие переменные)
 ```
 
 Данные сервисов хранятся в директории `📁 /data/`

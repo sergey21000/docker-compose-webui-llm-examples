@@ -76,6 +76,8 @@
 - [**Loguru**](https://github.com/Delgan/loguru) - для вывода логов вместо print()
 - [**Prometheus**](https://github.com/prometheus/prometheus) - сбор метрик
 - [**Grafana**](https://github.com/grafana/grafana) - визуализация метрик
+- [**Node exporter**](https://github.com/prometheus/node_exporter) - сбор метрик ОС
+- [**Alertmanager**](https://github.com/prometheus/alertmanager) - оповещения
 
 LLM модели:
 - [bartowski/google_gemma-3-4b-it-GGUF](https://huggingface.co/bartowski/google_gemma-3-4b-it-GGUF)  
@@ -236,7 +238,11 @@ docker compose down
 - Infinity Embeddings Swagger: http://127.0.0.1:7997/docs
 - Infinity API: http://127.0.0.1:7997/v1
 - MCP Server API: http://127.0.0.1:9000/v1
-
+- Prometheus: http://127.0.0.1:9090
+- Grafana: http://localhost:3000
+- Alertmanager: http://127.0.0.1:9093
+- Prometheus Alertmanager Alerts http://127.0.0.1:9090/alerts
+- Node Exporter: http://127.0.0.1:9100
 
 ---
 Пример с бОльшим кол-вом сервисов (Open WebUI + Ollama + Qdrant + Infinity + MCP)

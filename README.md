@@ -1390,6 +1390,8 @@ docker compose up --build
 
 Документация по работе с несколькими compose файлами  
 https://docs.docker.com/compose/how-tos/multiple-compose-files/  
+Готовые дашборды для Grafana  
+https://grafana.com/grafana/dashboards/
 
 
 ### vLLM

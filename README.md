@@ -144,6 +144,19 @@ cp configs/anythingllm/.env.example configs/anythingllm/.env
 mkdir -p data/openwebui
 mkdir -p data/anythingllm
 ```
+
+Затем установить переменную окружения для env файла, чтобы файлы `compose.yml` видели переменные из файла `.env`
+
+<ins><i>Linux</i></ins>
+```
+export COMPOSE_ENV_FILES=.env
+```
+
+<ins><i>Windows PowerShell</i></ins>
+```
+$env:COMPOSE_ENV_FILES=".env"
+```
+
 Редактировать переменные окружения в файле `.env` при необходимости  
 Внутри каждого `.env` находятся ссылки на документации по переменным окружения и аргументам CLI  
 Подробнее про настройки каждого сервиса перед запуском смотреть в разделе [Конфигурация библиотек](#-конфигурация-библиотек)
@@ -644,11 +657,9 @@ https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md
   - агрумент `LLAMA_ARG_MMPROJ` (путь до mmproj локальной модели в формате `GGUF`)
   - агрумент `LLAMA_ARG_MMPROJ_URL` (ссылка на mmproj модель в формате `GGUF`)
 
-Модели хранятся в директории `./data/llm_model`, если указана ссылка на модель `LLAMA_ARG_MODEL_URL` то она будет загружена в формате  
-`репозиторий_файл.gguf`, например  
-`bartowski_Qwen_Qwen3-0.6B-GGUF_Qwen_Qwen3-0.6B-Q4_K_M.gguf` или
-`bartowski_google_gemma-3-4b-it-GGUF_google_gemma-3-4b-it-Q4_K_M.gguf`  
-(резделитель `репозиторий_файл` стоит после GGUF)
+Модели хранятся в директории `./data/huggingface/hub`, загрузка происходит следующим образом
+- если указана ссылка на модель `LLAMA_ARG_MODEL_URL` то модель будет загружена в директорию `/root/.cache/llama.cpp/` внутри контейнера в формате `название_файла.gguf`, например `Qwen_Qwen3.5-0.8B-Q8_0.gguf`
+- если указан параметр `LLAMA_ARG_HF_REPO` то модель будет загружена в директорию `/root/.cache/huggingface/hub` внутри контейнера в папку `models--репо-файл-GGUF`, например `models--bartowski--Qwen_Qwen3.5-0.8B-GGUF` (при этом модель будет видна не в формате GGUF, а в формате HF)
 
 Где искать LLM модели в формате GGUF
 - [bartowski](https://huggingface.co/bartowski) 
@@ -1397,7 +1408,8 @@ docker compose up --build
 Документация по работе с несколькими compose файлами  
 https://docs.docker.com/compose/how-tos/multiple-compose-files/  
 Готовые дашборды для Grafana  
-https://grafana.com/grafana/dashboards/
+https://grafana.com/grafana/dashboards/  
+Статья "Open WebUI (с веб-поиском) + llama.cpp" + как использовать конфиги в llama.cpp (флаг `--models-preset`)
 
 
 ### vLLM

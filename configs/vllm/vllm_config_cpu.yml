@@ -10,7 +10,7 @@ dtype: auto
 max_model_len: 4096
 max_num_batched_tokens: 1024
 trust_remote_code: true
-uvicorn_log_level: info
+
 
 # ==============================================================
 # vLLM Reasoning Outputs:

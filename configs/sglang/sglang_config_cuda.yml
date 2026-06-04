@@ -1,3 +1,9 @@
+# ==============================================================
+# SGLang server arguments:
+# https://docs.sglang.io/advanced_features/server_arguments.html
+# ==============================================================
+
+# model-path: Qwen/Qwen3.5-2B
 model-path: Qwen/Qwen3.5-0.8B
 tensor-parallel-size: 1
 enable-metrics: true
@@ -5,8 +11,9 @@ log-requests: true
 trust-remote-code: true
 dtype: auto
 device: cuda
+# context_length: 4096
 
-# для видеокарт Blackwell на момент тестирования поддерживаются только бэкенды triton or trtllm_mha
+# для видеокарт Blackwell на момент тестирования поддерживаются только бэкенды "triton" или "trtllm_mha"
 # https://docs.sglang.io/advanced_features/server_arguments.html#kernel-backends-attention-sampling-grammar-gemm
 # https://docs.sglang.io/advanced_features/attention_backend.html
 attention-backend: triton

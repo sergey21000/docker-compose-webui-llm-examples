@@ -1,6 +1,12 @@
+# ==============================================================
+# SGLang server arguments:
+# https://docs.sglang.io/advanced_features/server_arguments.html
+# ==============================================================
+
 model-path: Qwen/Qwen3.5-0.8B
 enable-metrics: true
 log-requests: true
 trust-remote-code: true
 dtype: auto
 device: cpu
+# context_length: 4096

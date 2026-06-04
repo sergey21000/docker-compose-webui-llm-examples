@@ -1,0 +1,14 @@
+services:
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    command: gateway run
+    ports:
+      - ${HERMES_DASHBOARD_PORT:-9119}:9119
+      - 8642:8642
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-../data}/hermes:/opt/data
+    env_file:
+      - path: ../.env
+        required: true

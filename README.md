@@ -26,6 +26,7 @@
 - 🏗 [Стек технологий](#-стек-технологий)
 - 🐳 [Требования](#-требования)
 - 🚀 [Быстрый старт](#-быстрый-старт)
+- 🌐 [URL Адреса сервисов](#-url-адреса-сервисов)
 - 📖 [Примеры запуска](#-примеры-запуска)
   - [AnythingLLM + llama.cpp](#anythingllm--llamacpp)
   - [AnythingLLM + Ollama](#anythingllm--ollama)
@@ -35,6 +36,10 @@
   - [Open WebUI + Ollama](#open-webui--ollama)
   - [Open WebUI + vLLM](#open-webui--vllm)
   - [Open WebUI + SGLang](#open-webui--sglang)
+  - [Hermes + llama.cpp](#open-webui--llamacpp)
+  - [Hermes + Ollama](#open-webui--ollama)
+  - [Hermes + vLLM](#open-webui--vllm)
+  - [Hermes + SGLang](#open-webui--sglang)
 - 🛠 [Конфигурация библиотек](#-конфигурация-библиотек)
   - [AnythingLLM](#anythingllm)
   - [Open WebUI](#open-webui)
@@ -65,6 +70,7 @@
 Список используемых библиотек:
 - [**AnythingLLM**](https://github.com/Mintplex-Labs/anything-llm) - веб-интерфейс для работы с LLM
 - [**Open WebUI**](https://github.com/open-webui/open-webui) - веб-интерфейс для работы с LLM
+- [**Hermes Agent**](https://github.com/NousResearch/hermes-agent) - веб-интерфейс / агент для работы с LLM
 - [**llama.cpp**](https://github.com/ggml-org/llama.cpp) - инференс LLM моделей
 - [**Ollama**](https://github.com/ollama/ollama) - инференс LLM моделей
 - [**vLLM**](https://github.com/vllm-project/vllm) - инференс LLM моделей
@@ -81,9 +87,11 @@
 
 LLM модели:
 - [bartowski/google_gemma-3-4b-it-GGUF](https://huggingface.co/bartowski/google_gemma-3-4b-it-GGUF)  
-- [Qwen/Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B)  
+- [Qwen/Qwen3.5-0.8B](https://huggingface.co/Qwen/Qwen3.5-0.8B)  
+- [Qwen/Qwen3.5-2B](https://huggingface.co/Qwen/Qwen3.5-2B)  
+- [qwen3.5:4b](https://ollama.com/library/qwen3.5:4b)
 
-Модель эмбедингов: 
+Модель эмбедингов:
 - [Alibaba-NLP/gte-multilingual-base](https://huggingface.co/Alibaba-NLP/gte-multilingual-base)  
 
 
@@ -137,7 +145,7 @@ cd docker-compose-webui-llm-examples
 > [!NOTE]
 > Все дальнейшие команды этого README вводятся из этой директории, за исключением случаев когда явно указано перейти в другую
 
-**2) Копирование файлов `.env` с переменными окружения и создание томом для Web UI**
+**2) Копирование файлов `.env` с переменными окружения и создание томов для Web UI**
 ```ps1
 cp .env.example .env
 cp configs/anythingllm/.env.example configs/anythingllm/.env
@@ -145,7 +153,9 @@ mkdir -p data/openwebui
 mkdir -p data/anythingllm
 ```
 
-Затем установить переменную окружения для env файла, чтобы файлы `compose.yml` видели переменные из файла `.env`
+**3) Установка пути до файла .env**
+
+Установить переменную окружения для env файла, чтобы файлы `compose.yml` видели переменные из файла `.env`
 
 <ins><i>Linux</i></ins>
 ```
@@ -162,7 +172,8 @@ $env:COMPOSE_ENV_FILES=".env"
 Подробнее про настройки каждого сервиса перед запуском смотреть в разделе [Конфигурация библиотек](#-конфигурация-библиотек)
 
 Как установить модель в зависимости от выбранной библиотеки для инференса LLM:
-- Ollama - модель устанавливается после запуска сервера командой `docker exec -it ollama ollama pull gemma3:4b`  
+- Ollama - модель устанавливается после запуска сервера, пример команды:    
+  `docker exec -it ollama ollama pull gemma3:4b`  
   Модели Ollama: https://ollama.com/search
 - vLLM - в конфиге в директории `📁 ./data/vllm/configs/`
 - SGLang - в конфиге в директории `📁 ./data/sglang/configs/`
@@ -170,7 +181,7 @@ $env:COMPOSE_ENV_FILES=".env"
 
 Подробности в разделе [Конфигурация библиотек](#-конфигурация-библиотек)
 
-**3) Объединение compose файлов и запус сервисов**
+**4) Объединение compose файлов и запус сервисов**
 
 Пример запуска моделей Ollama с веб-интерфейсом через Open WebUI
 
@@ -237,27 +248,6 @@ docker compose down
 ```
 
 ---
-По умолчанию сервисы доступны по адресам:
-- AnythingLLM WebUI: http://127.0.0.1:3001
-- Open WebUI: http://127.0.0.1:3000
-- llama.cpp API: http://127.0.0.1:8080/v1
-- llama.cpp WebUI: http://127.0.0.1:8080
-- Ollama BASE URL: http://127.0.0.1:11434
-- vLLM API: http://127.0.0.1:8000/v1
-- vLLM Swagger http://127.0.0.1:8000/docs
-- SGLang API: http://127.0.0.1:30000/v1
-- SGLang Swagger http://127.0.0.1:30000/docs
-- Qdrant Dashboard: http://127.0.0.1:6333/dashboard
-- Infinity Embeddings Swagger: http://127.0.0.1:7997/docs
-- Infinity API: http://127.0.0.1:7997/v1
-- MCP Server API: http://127.0.0.1:9000/v1
-- Prometheus: http://127.0.0.1:9090
-- Grafana: http://localhost:3000
-- Alertmanager: http://127.0.0.1:9093
-- Prometheus Alertmanager Alerts http://127.0.0.1:9090/alerts
-- Node Exporter: http://127.0.0.1:9100
-
----
 Пример с бОльшим кол-вом сервисов (Open WebUI + Ollama + Qdrant + Infinity + MCP)
 
 <ins><i>Linux</i></ins>
@@ -306,6 +296,32 @@ docker compose down
 ```ps1
 docker compose up
 ```
+
+## 🌐 URL Адреса сервисов
+
+По умолчанию сервисы доступны по адресам:
+- AnythingLLM WebUI: http://127.0.0.1:3001
+- Open WebUI: http://127.0.0.1:3000
+- Hermes WebUI: http://127.0.0.1:9119
+- Hermes API: http://127.0.0.1:8642
+- llama.cpp API: http://127.0.0.1:8080/v1
+- llama.cpp WebUI: http://127.0.0.1:8080
+- Ollama BASE URL: http://127.0.0.1:11434 или http://127.0.0.1:11434/v1
+- vLLM API: http://127.0.0.1:8000/v1
+- vLLM Swagger http://127.0.0.1:8000/docs
+- SGLang API: http://127.0.0.1:30000/v1
+- SGLang Swagger http://127.0.0.1:30000/docs
+- Qdrant Dashboard: http://127.0.0.1:6333/dashboard
+- Infinity Embeddings Swagger: http://127.0.0.1:7997/docs
+- Infinity API: http://127.0.0.1:7997/v1
+- MCP Server API: http://127.0.0.1:9000/v1
+- Prometheus: http://127.0.0.1:9090
+- Grafana: http://localhost:3000
+- Alertmanager: http://127.0.0.1:9093
+- Prometheus Alertmanager Alerts http://127.0.0.1:9090/alerts
+- Node Exporter: http://127.0.0.1:9100
+
+Порты настраиваются в конце файла `.env`
 
 
 ## 📖 Примеры запуска
@@ -575,9 +591,250 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 (подробности в разделе конфигурации [SGLang](#sglang))
 
 
+### Hermes + llama.cpp
+
+Запуск сервисов
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.llamacpp.yml up
+  ```
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.llamacpp.cuda.yml up
+  ```
+
+Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
+```yml
+model:
+  default: "anthropic/claude-opus-4.6"
+  provider: "auto"
+  base_url: "https://openrouter.ai/api/v1"
+```
+на
+```yml
+model:
+  default: "none"
+  provider: "custom"
+  base_url: "http://llamacpp:8080/v1"
+  api_key: "none"
+```
+при необходимости вписать в `default:` название модели  
+и нажать `Сохранить`  
+(подробности в разделе конфигурации [Hermes](#hermes))
+
+Установить модель для для llama.cpp можно в файле `.env`  
+(подробности в разделе конфигурации [llama.cpp](#llamacpp))
+
+По умолчанию сервисы доступны по адресам:
+- Hermes WebUI: http://127.0.0.1:9119
+- Hermes API: http://127.0.0.1:8642
+- llama.cpp WebUI: http://127.0.0.1:8080
+- llama.cpp API: http://127.0.0.1:8080/v1
+
+
+### Hermes + Ollama
+
+Запуск сервисов
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.ollama.yml up
+  ```
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.ollama.cuda.yml up
+  ```
+
+Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
+```yml
+model:
+  default: "anthropic/claude-opus-4.6"
+  provider: "auto"
+  base_url: "https://openrouter.ai/api/v1"
+```
+на
+```yml
+model:
+  default: "qwen3.5:4b"
+  provider: "custom"
+  base_url: "http://ollama:11434/v1"
+  api_key: "none"
+```
+заменить `qwen3.5:4b` на значение из команды `docker exec ollama ollama list`  
+и нажать `Сохранить`  
+(подробности в разделе конфигурации [Hermes](#hermes))
+
+Загрузка [моделей](https://ollama.com/search) для Ollama  
+```ps1
+docker exec -it ollama ollama pull qwen3.5:4b
+```
+Список загруженных моделей
+```ps1
+docker exec ollama ollama list
+```
+
+По умолчанию сервисы доступны по адресам:
+- Hermes WebUI: http://127.0.0.1:9119
+- Hermes API: http://127.0.0.1:8642
+- Ollama API: http://127.0.0.1:11434/v1
+
+
+### Hermes + vLLM
+
+Запуск сервисов
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.vllm.yml up
+  ```
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.vllm.cuda.yml up
+  ```
+
+Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
+```yml
+model:
+  default: "anthropic/claude-opus-4.6"
+  provider: "auto"
+  base_url: "https://openrouter.ai/api/v1"
+```
+на
+```yml
+model:
+  default: "Qwen/Qwen3.5-0.8B"
+  provider: "custom"
+  base_url: "http://vllm:8000/v1"
+  api_key: "none"
+```
+изменить название модели `Qwen/Qwen3.5-0.8B` на то что в конфиге vLLM `configs/vllm/vllm_config_DEVICE.yml`  
+и нажать `Сохранить`  
+(подробности в разделе конфигурации [Hermes](#hermes))
+
+Установить модель для для vLLM можно в файле `configs/vllm/vllm_config_DEVICE.yml`  
+(подробности в разделе конфигурации [vllm](#vllm))
+
+По умолчанию сервисы доступны по адресам:
+- Hermes WebUI: http://127.0.0.1:9119
+- Hermes API: http://127.0.0.1:8642
+- vLLM API: http://127.0.0.1:8000/v1
+- vLLM Swagger http://127.0.0.1:8000/docs
+
+
+### Hermes + SGLang
+
+Запуск сервисов
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.sglang.yml up
+  ```
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.sglang.cuda.yml up
+  ```
+
+Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
+```yml
+model:
+  default: "anthropic/claude-opus-4.6"
+  provider: "auto"
+  base_url: "https://openrouter.ai/api/v1"
+```
+на
+```yml
+model:
+  default: "Qwen/Qwen3.5-0.8B"
+  provider: "custom"
+  base_url: "http://sglang:30000/v1"
+  api_key: "none"
+```
+изменить название модели `Qwen/Qwen3.5-0.8B` на то что в конфиге SGLang `configs/sglang/sglang_config_DEVICE.yml`   
+и нажать `Сохранить`  
+(подробности в разделе конфигурации [Hermes](#hermes))
+
+Установить модель для для SGLang можно в файле `configs/sglang/sglang_config_DEVICE.yml`  
+(подробности в разделе конфигурации [SGLang](#sglang))
+
+По умолчанию сервисы доступны по адресам:
+- Hermes WebUI: http://127.0.0.1:9119
+- Hermes API: http://127.0.0.1:8642
+- SGLang API: http://127.0.0.1:30000/v1
+- SGLang Swagger http://127.0.0.1:30000/docs
+- SGLang Server Info: http://127.0.0.1:30000/get_server_info
+
+
 ## 🛠 Конфигурация библиотек
 
 Настройка биллиотек до и после запуска сответствующих сервисов, а так же запуск этих библиотек отдельно
+
+
+### Hermes
+
+Документация по запуску Hermes через Docker  
+https://hermes-agent.nousresearch.com/docs/user-guide/docker  
+Переменные окружения Hermes  
+https://hermes-agent.nousresearch.com/docs/reference/environment-variables  
+https://github.com/NousResearch/hermes-agent/blob/main/.env.example  
+
+При первом запуске сервис стартует не сразу - необходимо дождаться надписи `⚕ Hermes Gateway Starting...` в терминале  
+Все настройки хранятся в файле `data/hermes/config.yaml`, который автоматически создается при первом запуске, и который можно редактировать как вручную, так и в интерфейсе Hermes  
+Файл `config.yaml` можно редактировать в `Конфигурация` (меню слева) - `<> YAML` (справа вверху)  
+Язык можно сменить в интерфейсе слева внизу  
+Переменные окружения можно прописать как в корневом `.env` так и в `data/hermes/.env`  
+
+Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
+```yml
+model:
+  default: "anthropic/claude-opus-4.6"
+  provider: "auto"
+  base_url: "https://openrouter.ai/api/v1"
+```
+на:
+- для llama.cpp
+```yml
+model:
+  default: "none"
+  provider: "custom"
+  base_url: "http://llamacpp:8080/v1"
+  api_key: "none"
+```
+при необходимости вписать в `default:` название модели (необязательно)
+- для vLLM:
+```yml
+model:
+  default: "Qwen/Qwen3.5-0.8B"
+  provider: "custom"
+  base_url: "http://vllm:8000/v1"
+  api_key: "none"
+```
+- для SGLang
+```yml
+model:
+  default: "Qwen/Qwen3.5-0.8B"
+  provider: "custom"
+  base_url: "http://sglang:30000/v1"
+  api_key: "none"
+```
+- для Ollama
+```yml
+model:
+  default: "qwen3.5:4b"
+  provider: "custom"
+  base_url: "http://ollama:11434/v1"
+  api_key: "none"
+```
+и нажать `Сохранить`  
+Если при отправке сообщения в чат написано сконфигурировать модель - обновить страницу (также необхолдимо обновлять страницу после применения иных настроек)
+
+Другой способ - сконфигурировать модель прямо в контейнере
+```sh
+docker exec -it hermes bash
+hermes model
+```
+и следовать подсказкам на экране
+
+Пример промта для проверки доступности навыков вгента
+```
+Какие навыки тебе доступны?
+```
 
 
 ### AnythingLLM
@@ -860,7 +1117,7 @@ https://docs.sglang.io/advanced_features/server_arguments.html
 
 ### Prometheus + Grafana + Node Exporter + Alertmanager 
 
-Запуск библиотеки для инференса LLM + сбор и визуализация метрик через Prometheus + Grafana + Node Exporter + метрики через  Alertmanager 
+Запуск библиотеки для инференса LLM + сбор и визуализация метрик через Prometheus + Grafana + Node Exporter + уведомления через  Alertmanager 
 - *Запуск SGLang + Prometeus + Grafana*  
   https://docs.sglang.io/references/production_metrics.html  
   https://github.com/sgl-project/sglang/tree/main/examples/monitoring  
@@ -1327,7 +1584,7 @@ https://github.com/qdrant/qdrant/issues/5672
 │   └── 📁 datasources/             # источники данных Grafana
 │       └── datasource.yaml         # настройка подключения к Prometheus
 │
-├── 📁 anythingllm/                 # еонфигурация AnythingLLM (RAG сервис)
+├── 📁 anythingllm/                 # конфигурация AnythingLLM
 │   └── .env                        # переменные окружения для AnythingLLM
 │
 └── .env                            # глобальный .env для docker-compose (общие переменные)
@@ -1339,6 +1596,7 @@ https://github.com/qdrant/qdrant/issues/5672
 ├── 📁 huggingface/                # модели Hugging Face для vLLM, llama.cpp, SGLang, Infinity
 ├── 📁 anythingllm/                # данные сервиса AnythingLLM
 ├── 📁 openwebui/                  # данные сервиса Open WebUI
+├── 📁 hermes/                     # данные сервиса Hermes
 ├── 📁 ollama/                     # модели и данные сервиса Ollama
 │
 📁 mcp_server/                     # MCP сервер

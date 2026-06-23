@@ -838,6 +838,8 @@ https://hermes-agent.nousresearch.com/docs/user-guide/docker
 Переменные окружения Hermes  
 https://hermes-agent.nousresearch.com/docs/reference/environment-variables  
 https://github.com/NousResearch/hermes-agent/blob/main/.env.example  
+Настройка Hermes Agent Desktop  
+https://habr.com/ru/articles/1044270/  
 
 При первом запуске сервис стартует не сразу - необходимо дождаться надписи `⚕ Hermes Gateway Starting...` в терминале  
 Все настройки хранятся в файле `data/hermes/config.yaml`, который автоматически создается при первом запуске, и который можно редактировать как вручную, так и в интерфейсе Hermes  

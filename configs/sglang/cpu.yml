@@ -9,4 +9,4 @@ log-requests: true
 trust-remote-code: true
 dtype: auto
 device: cpu
-# context_length: 4096
+context_length: 4096

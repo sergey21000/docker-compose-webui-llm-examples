@@ -1,5 +1,5 @@
 services:
-  vllm:
+  sglang:
     extends:
       file: ../llm/compose.sglang.yml
       service: sglang

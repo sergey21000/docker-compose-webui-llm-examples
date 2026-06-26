@@ -12,6 +12,8 @@ services:
       - ${CONFIG_DIR:-../configs}/sglang:/sgl-workspace/configs
     ipc: host
     gpus: all
+    # privileged: true
+    # network_mode: host
     env_file:
       - path: ../.env
         required: false

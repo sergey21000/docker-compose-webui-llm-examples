@@ -10,3 +10,4 @@ trust-remote-code: true
 dtype: auto
 device: cpu
 context_length: 4096
+# disable_overlap_schedule: true

@@ -432,7 +432,7 @@ https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
   ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.sglang.yml up
   ```
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CPU (только процессоры с поддержкой инструкций AVX512)  
   *Вариант с запуском SGLang из готового образа (редко обновляется)*
   ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.sglang.cpu.yml up
@@ -442,6 +442,11 @@ https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
   git clone https://github.com/sgl-project/sglang llm/sglang
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.sglang.build.cpu.yml up
   ```
+  Узнать какие инструкции AVX поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html) (Windows) или  
+  ```sh
+  lscpu | grep -E "avx" | grep -oE '\bavx[^ ]*'
+  ```
+  (Linux)
 
 По умолчанию сервисы доступны по адресам:
 - AnythingLLM WebUI: http://127.0.0.1:3001
@@ -554,15 +559,20 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
   ```ps1
   docker compose -f -f ui/compose.openwebui.yml -f llm/compose.sglang.yml up
   ```
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CPU (только процессоры с поддержкой инструкций AVX512)  
   ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.sglang.cpu.yml up
   ```
-- Запуск с поддержкой CPU - вариант со сборкой своего образа  
+- Запуск с поддержкой CPU (только процессоры с поддержкой инструкций AVX512) - вариант со сборкой своего образа  
   ```ps1
   git clone https://github.com/sgl-project/sglang llm/sglang
   docker compose -f ui/compose.openwebui.yml -f llm/compose.sglang.build.cpu.yml up
   ```
+  Узнать какие инструкции AVX поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html) (Windows) или  
+  ```sh
+  lscpu | grep -E "avx" | grep -oE '\bavx[^ ]*'
+  ```
+  (Linux)
 
 По умолчанию сервисы доступны по адресам:
 - Open WebUI: http://127.0.0.1:3000
@@ -712,10 +722,15 @@ model:
   ```ps1
   docker compose -f ui/compose.hermes.yml -f llm/compose.sglang.yml up
   ```
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CPU (только процессоры с поддержкой инструкций AVX512)  
   ```ps1
   docker compose -f ui/compose.hermes.yml -f llm/compose.sglang.cpu.yml up
   ```
+  Узнать какие инструкции AVX поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html) (Windows) или  
+  ```sh
+  lscpu | grep -E "avx" | grep -oE '\bavx[^ ]*'
+  ```
+  (Linux)
 
 Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
 ```yml
@@ -1082,7 +1097,7 @@ https://docs.sglang.io/advanced_features/server_arguments.html
   ```ps1
   docker compose -f llm/compose.sglang.yml up
   ```
-- Запуск с поддержкой CPU  
+- Запуск с поддержкой CPU (только процессоры с поддержкой инструкций AVX512)  
   *Вариант с запуском SGLang из готового образа (редко обновляется)*
   ```ps1
   docker compose -f llm/compose.sglang.cpu.yml up
@@ -1092,6 +1107,11 @@ https://docs.sglang.io/advanced_features/server_arguments.html
   git clone https://github.com/sgl-project/sglang llm/sglang
   docker compose -f llm/compose.sglang.build.cpu.yml up
   ```
+  Узнать какие инструкции AVX поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html) (Windows) или  
+  ```sh
+  lscpu | grep -E "avx" | grep -oE '\bavx[^ ]*'
+  ```
+  (Linux)
 
 По умолчанию сервисы доступны по адресам:
 - SGLang API: http://127.0.0.1:30000/v1

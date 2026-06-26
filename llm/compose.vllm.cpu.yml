@@ -1,0 +1,13 @@
+# https://docs.vllm.ai/en/latest/getting_started/installation/gpu/#set-up-using-docker
+# https://docs.vllm.ai/en/latest/deployment/docker/
+
+services:
+  vllm:
+    extends:
+      file: ../llm/compose.vllm.yml
+      service: vllm
+    image: vllm/vllm-openai-cpu:latest-x86_64
+    gpus: !reset null
+    command:
+      - --config
+      - /workspace/configs/cpu.yml

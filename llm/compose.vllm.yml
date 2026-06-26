@@ -1,6 +1,9 @@
+# https://docs.vllm.ai/en/latest/getting_started/installation/gpu/#set-up-using-docker
+# https://docs.vllm.ai/en/latest/deployment/docker/
+
 services:
   vllm:
-    image: public.ecr.aws/q9t5s3a7/vllm-cpu-release-repo:latest
+    image: vllm/vllm-openai:latest
     container_name: vllm
     restart: unless-stopped
     ports:
@@ -9,9 +12,10 @@ services:
       - ${DOCKER_VOLUME_STORAGE:-../data}/huggingface:/root/.cache/huggingface
       - ${CONFIG_DIR:-../configs}/vllm:/workspace/configs
     ipc: host
+    gpus: all
     command:
       - --config
-      - /workspace/configs/vllm_config_cpu.yml
+      - /workspace/configs/cuda.yml
     env_file:
       - path: ../.env
         required: false

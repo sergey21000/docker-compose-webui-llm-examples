@@ -1,6 +1,8 @@
+# https://docs.sglang.io/docs/hardware-platforms/cpu_server
+
 services:
   sglang:
-    image: ghcr.io/sergey21000/sglang-cpu:latest
+    image: lmsysorg/sglang:latest-runtime
     container_name: sglang
     restart: unless-stopped
     ports:
@@ -9,6 +11,7 @@ services:
       - ${DOCKER_VOLUME_STORAGE:-../data}/huggingface:/root/.cache/huggingface
       - ${CONFIG_DIR:-../configs}/sglang:/sgl-workspace/configs
     ipc: host
+    gpus: all
     env_file:
       - path: ../.env
         required: false
@@ -21,4 +24,4 @@ services:
       - --port
       - ${SGLANG_PORT:-30000}
       - --config
-      - /sgl-workspace/configs/sglang_config_cpu.yml
+      - /sgl-workspace/configs/cuda.yml

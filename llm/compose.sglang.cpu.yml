@@ -1,10 +1,12 @@
+# https://docs.sglang.io/docs/get-started/install#method-5-using-docker-compose
+
 services:
   sglang:
     extends:
       file: ../llm/compose.sglang.yml
       service: sglang
-    image: lmsysorg/sglang:latest-runtime
-    gpus: all
+    image: ghcr.io/sergey21000/sglang-cpu:latest
+    gpus: !reset null
     command:
       - python3
       - -m
@@ -14,4 +16,4 @@ services:
       - --port
       - ${SGLANG_PORT:-30000}
       - --config
-      - /sgl-workspace/configs/sglang_config_cuda.yml
+      - /sgl-workspace/configs/cpu.yml

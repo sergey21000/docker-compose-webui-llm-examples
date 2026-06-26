@@ -3,4 +3,4 @@ services:
     extends:
       file: ../llm/compose.ollama.yml
       service: ollama
-    gpus: all
+    gpus: !reset null

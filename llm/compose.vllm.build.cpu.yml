@@ -1,0 +1,14 @@
+# https://docs.vllm.ai/en/latest/getting_started/installation/cpu/#set-up-using-docker
+
+services:
+  vllm:
+    extends:
+      file: ../llm/compose.vllm.cpu.yml
+      service: vllm
+    build:
+      context: ../llm/vllm
+      dockerfile: docker/Dockerfile.cpu
+      args:
+        VLLM_CPU_X86: "false"
+      target: vllm-openai
+    image: local/vllm-cpu:latest

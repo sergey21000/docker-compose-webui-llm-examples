@@ -3,5 +3,5 @@ services:
     extends:
       file: ../llm/compose.llamacpp.yml
       service: llamacpp
-    image: ghcr.io/ggml-org/llama.cpp:server-cuda
-    gpus: all
+    image: ghcr.io/ggml-org/llama.cpp:server
+    gpus: !reset null

@@ -1,9 +1,11 @@
+# https://docs.sglang.io/docs/hardware-platforms/cpu_server
+
 services:
   sglang:
     extends:
-      file: ../llm/compose.sglang.yml
+      file: ../llm/compose.sglang.cpu.yml
       service: sglang
     build:
-      context: ./sglang
+      context: ../llm/sglang
       dockerfile: docker/xeon.Dockerfile
     image: local/sglang-cpu:latest

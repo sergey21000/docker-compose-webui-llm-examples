@@ -5,6 +5,6 @@ services:
       service: infinity
     build:
       args:
-        BASE_IMAGE: michaelf34/infinity:latest
+        BASE_IMAGE: michaelf34/infinity:latest-cpu
     image: local/infinity-updated:latest
-    gpus: all
+    gpus: !reset null

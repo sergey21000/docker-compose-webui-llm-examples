@@ -190,13 +190,13 @@ $env:COMPOSE_ENV_FILES=".env"
 <ins><b>Способ 1 - объединение непостредственно при запуске сервисов</b></ins>
 
 <ins><i>Linux и Windows</i></ins>
- - CPU
+ - CUDA
   ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml up
   ```
- - CUDA
+ - CPU
   ```ps1
-  docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cuda.yml up
+  docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cpu.yml up
   ```
 
 Для остановки или управлением сервисами нужно вводить команду с теми же агрументами `-f`
@@ -204,27 +204,26 @@ $env:COMPOSE_ENV_FILES=".env"
 docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml down
 ```
 
-
 <ins><b>Способ 2 - объединение через переменные окружения и последующий запуск</b></ins>
 
 <ins><i>Linux</i></ins>
- - CPU
+ - CUDA
   ```sh
   export COMPOSE_FILE=ui/compose.openwebui.yml:llm/compose.ollama.yml
   ```
- - CUDA
+ - CPU
   ```sh
-  export COMPOSE_FILE=ui/compose.openwebui.yml:llm/compose.ollama.cuda.yml
+  export COMPOSE_FILE=ui/compose.openwebui.yml:llm/compose.ollama.cpu.yml
   ```
 
 <ins><i>Windows PowerShell</i></ins>
- - CPU
+ - CUDA
   ```ps1
   $env:COMPOSE_FILE="ui/compose.openwebui.yml;llm/compose.ollama.yml"
   ```
- - CUDA
+ - CPU
   ```ps1
-  $env:COMPOSE_FILE="ui/compose.openwebui.yml;llm/compose.ollama.cuda.yml"
+  $env:COMPOSE_FILE="ui/compose.openwebui.yml;llm/compose.ollama.cpu.yml"
   ```
 
 Запуск сервисов
@@ -252,7 +251,7 @@ docker compose down
 Пример с бОльшим кол-вом сервисов (Open WebUI + Ollama + Qdrant + Infinity + MCP)
 
 <ins><i>Linux</i></ins>
- - CPU
+ - CUDA
   ```sh
   export COMPOSE_FILE=\
     ui/compose.openwebui.yml:\
@@ -261,13 +260,13 @@ docker compose down
     services/compose.infinity.yml:\
     services/compose.mcp.yml
   ```
- - CUDA
+ - CPU
   ```sh
   export COMPOSE_FILE=\
     ui/compose.openwebui.yml:\
-    llm/compose.ollama.cuda.yml:\
+    llm/compose.ollama.cpu.yml:\
     services/compose.qdrant.yml:\
-    services/compose.infinity.cuda.yml:\
+    services/compose.infinity.cpu.yml:\
     services/compose.mcp.yml
   ```
 
@@ -276,9 +275,9 @@ docker compose down
   ```ps1
   $env:COMPOSE_FILE = `
     "ui/compose.openwebui.yml;" + `
-    "llm/compose.ollama.yml;" + `
+    "llm/compose.ollama.cpu.yml;" + `
     "services/compose.qdrant.yml;" + `
-    "services/compose.infinity.yml;" + `
+    "services/compose.infinity.cpu.yml;" + `
     "services/compose.mcp.yml"
 
   ```
@@ -286,11 +285,10 @@ docker compose down
   ```ps1
   $env:COMPOSE_FILE = `
     "ui/compose.openwebui.yml;" + `
-    "llm/compose.ollama.cuda.yml;" + `
+    "llm/compose.ollama.yml;" + `
     "services/compose.qdrant.yml;" + `
-    "services/compose.infinity.cuda.yml;" + `
+    "services/compose.infinity.yml;" + `
     "services/compose.mcp.yml"
-
   ```
 
 Запуск сервисов
@@ -342,13 +340,13 @@ cd docker-compose-webui-llm-examples
 ### AnythingLLM + llama.cpp
 
 Запуск сервисов
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.llamacpp.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.anythingllm.yml -f llm/compose.llamacpp.cuda.yml up
+  docker compose -f ui/compose.anythingllm.yml -f llm/compose.llamacpp.cpu.yml up
   ```
 
 В настройках AnythingLLM необходимо указать Поставщик LLM Generic OpenAI, Base URL http://llamacpp:8080/v1  
@@ -366,13 +364,13 @@ cd docker-compose-webui-llm-examples
 ### AnythingLLM + Ollama
 
 Запуск сервисов
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.cuda.yml up
+  docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.cpu.yml up
   ```
 
 По умолчанию сервисы доступны по адресам:
@@ -398,25 +396,19 @@ https://docs.useanything.com/setup/llm-configuration/local/ollama
 ### AnythingLLM + vLLM
 
 Запуск сервисов
-- Запуск с поддержкой CPU (для процессоров с поддержкой инструкций avx512)
-  ```ps1
-  docker compose -f ui/compose.anythingllm.yml -f llm/compose.vllm.yml up
-  ```
 - Запуск с поддержкой CUDA
   ```ps1
-  docker compose -f -f ui/compose.anythingllm.yml -f llm/compose.vllm.cuda.yml up
+  docker compose -f -f ui/compose.anythingllm.yml -f llm/compose.vllm.yml up
   ```
-- Запуск с поддержкой CPU (для старых процессоров с поддержкой инструкций avx2)  
-  *Вариант с запуском vLLM из готового образа*
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.anythingllm.yml -f llm/compose.vllm.cpu.avx2.yml up
+  docker compose -f ui/compose.anythingllm.yml -f llm/compose.vllm.cpu.yml up
   ```
-  *Вариант со сборкой своего образа*
+- Запуск с поддержкой CPU - вариант со сборкой своего образа  
   ```ps1
-  git clone https://github.com/vllm-project/vllm
-  docker compose -f ui/compose.anythingllm.yml  -f llm/compose.vllm.build.cpu.avx2.yml up
+  git clone https://github.com/vllm-project/vllm llm/vllm
+  docker compose -f ui/compose.anythingllm.yml -f llm/compose.vllm.build.cpu.yml up
   ```
-  Узнать какие инструкции поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html)
 
 По умолчанию сервисы доступны по адресам:
 - AnythingLLM WebUI: http://127.0.0.1:3001
@@ -426,7 +418,7 @@ https://docs.useanything.com/setup/llm-configuration/local/ollama
 В настройках AnythingLLM необходимо указать Поставщик LLM: Generic OpenAI, Base URL: http://vllm:8000/v1, название и параметры модели  
 (подробности в разделе конфигурации [AnythingLLM](#anythingllm))
 
-Установить модель для для vLLM можно в файле `configs/vllm/vllm_config_DEVICE.yml`  
+Установить модель для для vLLM можно в файле `configs/vllm/<DEVICE.yml`  
 (подробности в разделе конфигурации [vllm](#vllm))
 
 Документация по запуску AnythingLLM + vLLM  
@@ -436,19 +428,19 @@ https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
 ### AnythingLLM + SGLang
 
 Запуск сервисов
-- Запуск с поддержкой CPU (для старых процессоров с поддержкой инструкций avx2)  
-  *Вариант с запуском SGLang из готового образа*
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.sglang.yml up
   ```
+- Запуск с поддержкой CPU
+  *Вариант с запуском SGLang из готового образа (редко обновляется)*
+  ```ps1
+  docker compose -f ui/compose.anythingllm.yml -f llm/compose.sglang.cpu.yml up
+  ```
   *Вариант со сборкой своего образа*
   ```ps1
-  git clone https://github.com/sgl-project/sglang
-  docker compose -f ui/compose.anythingllm.yml  -f llm/compose.sglang.build.cpu.yml up
-  ```
-- Запуск с поддержкой CUDA
-  ```ps1
-  docker compose -f ui/compose.anythingllm.yml -f llm/compose.sglang.cuda.yml up
+  git clone https://github.com/sgl-project/sglang llm/sglang
+  docker compose -f ui/compose.anythingllm.yml -f llm/compose.sglang.build.cpu.yml up
   ```
 
 По умолчанию сервисы доступны по адресам:
@@ -460,20 +452,20 @@ https://docs.vllm.ai/en/stable/deployment/frameworks/anything-llm/
 В настройках AnythingLLM необходимо указать Поставщик LLM: Generic OpenAI, Base URL: http://sglang:30000/v1
 (подробности в разделе конфигурации [AnythingLLM](#anythingllm))
 
-Установить модель для для SGLang можно в файле `configs/sglang/sglang_config_DEVICE.yml`  
+Установить модель для для SGLang можно в файле `configs/sglang/<DEVICE>.yml`  
 (подробности в разделе конфигурации [SGLang](#sglang))
 
 
 ### Open WebUI + llama.cpp
 
 Запуск сервисов
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.llamacpp.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.openwebui.yml -f llm/compose.llamacpp.cuda.yml up
+  docker compose -f ui/compose.openwebui.yml -f llm/compose.llamacpp.cpu.yml up
   ```
 
 По умолчанию сервисы доступны по адресам:
@@ -494,15 +486,15 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-llama-cpp
 ### Open WebUI + Ollama
 
 Запуск сервисов
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cuda.yml up
+  docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cpu.yml up
   ```
-  
+
 По умолчанию сервисы доступны по адресам:
 - Open WebUI: http://127.0.0.1:3000
 - Ollama BASE URL: http://127.0.0.1:11434
@@ -526,25 +518,19 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
 ### Open WebUI + vLLM
 
 Запуск сервисов
-- Запуск с поддержкой CPU (для процессоров с поддержкой инструкций avx512)
-  ```ps1
-  docker compose -f ui/compose.openwebui.yml -f llm/compose.vllm.yml up
-  ```
 - Запуск с поддержкой CUDA
   ```ps1
-  docker compose -f -f ui/compose.openwebui.yml -f llm/compose.vllm.cuda.yml up
+  docker compose -f -f ui/compose.openwebui.yml -f llm/compose.vllm.yml up
   ```
-- Запуск с поддержкой CPU (для старых процессоров с поддержкой инструкций avx2)  
-  *Вариант с запуском vLLM из готового образа*
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.openwebui.yml -f llm/compose.vllm.cpu.avx2.yml up
+  docker compose -f ui/compose.openwebui.yml -f llm/compose.vllm.cpu.yml up
   ```
-  *Вариант со сборкой своего образа*
+- Запуск с поддержкой CPU - вариант со сборкой своего образа  
   ```ps1
-  git clone https://github.com/vllm-project/vllm
-  docker compose -f ui/compose.openwebui.yml  -f llm/compose.vllm.build.cpu.avx2.yml up
+  git clone https://github.com/vllm-project/vllm llm/vllm
+  docker compose -f ui/compose.openwebui.yml -f llm/compose.vllm.build.cpu.yml up
   ```
-  Узнать какие инструкции поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html)
 
 По умолчанию сервисы доступны по адресам:
 - Open WebUI: http://127.0.0.1:3000
@@ -554,7 +540,7 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama
 В настройках Open WebUI необходимо чтобы в Настройки -> Настройки администратора -> Подключения был добавлен URL http://vllm:8000/v1 в рзделе API OpenAI  
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
 
-Установить модель для для vLLM можно в файле `configs/vllm/vllm_config_DEVICE.yml`  
+Установить модель для для vLLM можно в файле `configs/vllm/<DEVICE>.yml`  
 (подробности в разделе конфигурации [vllm](#vllm))
 
 Документация по запуску Open WebUI + vLLM  
@@ -564,19 +550,18 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 ### Open WebUI + SGLang
 
 Запуск сервисов
-- Запуск с поддержкой CPU (для старых процессоров с поддержкой инструкций avx2)  
-  *Вариант с запуском SGLang из готового образа*
-  ```ps1
-  docker compose -f ui/compose.openwebui.yml -f llm/compose.sglang.yml up
-  ```
-  *Вариант со сборкой своего образа*
-  ```ps1
-  git clone https://github.com/sgl-project/sglang
-  docker compose -f ui/compose.openwebui.yml  -f llm/compose.sglang.build.cpu.yml up
-  ```
 - Запуск с поддержкой CUDA
   ```ps1
-  docker compose -f ui/compose.openwebui.yml -f llm/compose.sglang.cuda.yml up
+  docker compose -f -f ui/compose.openwebui.yml -f llm/compose.sglang.yml up
+  ```
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.openwebui.yml -f llm/compose.sglang.cpu.yml up
+  ```
+- Запуск с поддержкой CPU - вариант со сборкой своего образа  
+  ```ps1
+  git clone https://github.com/sgl-project/sglang llm/sglang
+  docker compose -f ui/compose.openwebui.yml -f llm/compose.sglang.build.cpu.yml up
   ```
 
 По умолчанию сервисы доступны по адресам:
@@ -588,20 +573,20 @@ https://docs.openwebui.com/getting-started/quick-start/starting-with-vllm
 В настройках Open WebUI необходимо чтобы в Настройки -> Настройки администратора -> Подключения был добавлен URL http://sglang:30000/v1 в рзделе API OpenAI  
 (подробности в разделе конфигурации [Open WebUI](#open-webui))
 
-Установить модель для для SGLang можно в файле `configs/sglang/sglang_config_DEVICE.yml`  
+Установить модель для для SGLang можно в файле `configs/sglang/<DEVICE>.yml`  
 (подробности в разделе конфигурации [SGLang](#sglang))
 
 
 ### Hermes + llama.cpp
 
 Запуск сервисов
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.hermes.yml -f llm/compose.llamacpp.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.hermes.yml -f llm/compose.llamacpp.cuda.yml up
+  docker compose -f ui/compose.hermes.yml -f llm/compose.llamacpp.cpu.yml up
   ```
 
 Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
@@ -636,13 +621,13 @@ model:
 ### Hermes + Ollama
 
 Запуск сервисов
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.hermes.yml -f llm/compose.ollama.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.hermes.yml -f llm/compose.ollama.cuda.yml up
+  docker compose -f ui/compose.hermes.yml -f llm/compose.ollama.cpu.yml up
   ```
 
 Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
@@ -682,13 +667,13 @@ docker exec ollama ollama list
 ### Hermes + vLLM
 
 Запуск сервисов
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.hermes.yml -f llm/compose.vllm.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.hermes.yml -f llm/compose.vllm.cuda.yml up
+  docker compose -f ui/compose.hermes.yml -f llm/compose.vllm.cpu.yml up
   ```
 
 Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
@@ -706,11 +691,11 @@ model:
   base_url: "http://vllm:8000/v1"
   api_key: "none"
 ```
-изменить название модели `Qwen/Qwen3.5-0.8B` на то что в конфиге vLLM `configs/vllm/vllm_config_DEVICE.yml`  
+изменить название модели `Qwen/Qwen3.5-0.8B` на то что в конфиге vLLM `configs/vllm/<DEVICE>.yml`  
 и нажать `Сохранить`  
 (подробности в разделе конфигурации [Hermes](#hermes))
 
-Установить модель для для vLLM можно в файле `configs/vllm/vllm_config_DEVICE.yml`  
+Установить модель для для vLLM можно в файле `configs/vllm/<DEVICE>.yml`  
 (подробности в разделе конфигурации [vllm](#vllm))
 
 По умолчанию сервисы доступны по адресам:
@@ -723,13 +708,13 @@ model:
 ### Hermes + SGLang
 
 Запуск сервисов
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.hermes.yml -f llm/compose.sglang.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.hermes.yml -f llm/compose.sglang.cuda.yml up
+  docker compose -f ui/compose.hermes.yml -f llm/compose.sglang.cpu.yml up
   ```
 
 Для установки модели в интерфейсе Hermes (http://127.0.0.1:9119) перейти в `Конфигурация` (меню слева) - `<> YAML` (справа вверху) и заменить
@@ -747,11 +732,11 @@ model:
   base_url: "http://sglang:30000/v1"
   api_key: "none"
 ```
-изменить название модели `Qwen/Qwen3.5-0.8B` на то что в конфиге SGLang `configs/sglang/sglang_config_DEVICE.yml`   
+изменить название модели `Qwen/Qwen3.5-0.8B` на то что в конфиге SGLang `configs/sglang/<DEVICE>.yml`   
 и нажать `Сохранить`  
 (подробности в разделе конфигурации [Hermes](#hermes))
 
-Установить модель для для SGLang можно в файле `configs/sglang/sglang_config_DEVICE.yml`  
+Установить модель для для SGLang можно в файле `configs/sglang/<DEVICE>.yml`  
 (подробности в разделе конфигурации [SGLang](#sglang))
 
 По умолчанию сервисы доступны по адресам:
@@ -928,13 +913,13 @@ https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md
 - [Зеркало HuggingFace](https://hf-mirror.com/)
 
 Запуск llama.cpp
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f llm/compose.llamacpp.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f llm/compose.llamacpp.cuda.yml up
+  docker compose -f llm/compose.llamacpp.cpu.yml up
   ```
 
 Проверить статус (должен смениться с `(health: starting)` на `(healthy)`)
@@ -955,13 +940,13 @@ https://docs.ollama.com/faq
 Модели и данные Ollama хранятся в директории `./data/ollama`
 
 Запуск Ollama
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f llm/compose.ollama.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f llm/compose.ollama.cuda.yml up
+  docker compose -f llm/compose.ollama.cpu.yml up
   ```
 
 Загрузка [моделей](https://ollama.com/search) для Ollama  
@@ -1041,11 +1026,11 @@ https://github.com/continuedev/continue
 ```
 📁 /configs/                  # конфиги сервисов
 └── 📁 vllm/                  # конфиги CLI аргументов запуска vLLM
-    |── vllm_config_cpu.yml   # конфиг CPU (для запуска `docker compose -f compose.vllm.yml  up`)
-    └── vllm_config_cuda.yml  # конфиг CUDA (для запуска `docker compose -f compose.vllm.cuda.yml up`)
+    |── cpu.yml                # конфиг CPU (для запуска `docker compose -f compose.vllm.cpu.yml  up`)
+    └── cuda.yml               # конфиг CUDA (для запуска `docker compose -f compose.vllm.yml up`)
 ```
 Узнать какой конфиг используется можно в соответствующем файле `llm/compose.vllm.yml`  
-(который выбран при запуске, например `docker compose -f llm/compose.vllm.cuda.yml up`)
+(который выбран при запуске, например `docker compose -f llm/compose.vllm.cpu.yml up`)
 
 Документация по файлам конфигурации vLLM  
 https://docs.vllm.ai/en/stable/configuration/serve_args/#configuration-file  
@@ -1054,25 +1039,20 @@ https://docs.vllm.ai/en/stable/cli/serve/
 
 
 Запуск vLLM
-- Запуск с поддержкой CPU (для процессоров с поддержкой инструкций avx512)
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f llm/compose.vllm.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU 
   ```ps1
-  docker compose -f llm/compose.vllm.cuda.yml up
+  docker compose -f llm/compose.vllm.cpu.yml up
   ```
-- Запуск с поддержкой CPU (для старых процессоров с поддержкой инструкций avx2)  
-  *Вариант с запуском vLLM из готового образа*
+- Запуск с поддержкой CPU - вариант со сборкой своего образа
   ```ps1
-  docker compose -f llm/compose.vllm.cpu.avx2.yml up
+  git clone https://github.com/vllm-project/vllm llm/vllm
+  docker compose -f llm/compose.vllm.build.cpu.yml up
   ```
-  *Вариант со сборкой своего образа*
-  ```ps1
-  git clone https://github.com/vllm-project/vllm
-  docker compose -f llm/compose.vllm.build.cpu.avx2.yml up
-  ```
-  Узнать какие инструкции поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html)
+  Флаги сборки настраиваются в файле `llm/compose.vllm.build.cpu.yml`
 
 По умолчанию - vLLM API доступен по адресу http://127.0.0.1:8000/v1  
 vLLM Swagger: http://127.0.0.1:8000/docs  
@@ -1085,11 +1065,11 @@ vLLM Swagger: http://127.0.0.1:8000/docs
 ```
 📁 /configs/                   # конфиги сервисов
 └── 📁 sglang/                 # конфиги CLI аргументов запуска SGLang
-    |── sglang_config_cpu.yml   # конфиг CPU (для запуска `docker compose -f compose.sglang.yml  up`)
-    └── sglang_config_cuda.yml  # конфиг CUDA (для запуска `docker compose -f compose.sglang.cuda.yml up`)
+    |── cpu.yml                 # конфиг CPU (для запуска `docker compose -f compose.sglang.cpu.yml  up`)
+    └── cuda.yml                # конфиг CUDA (для запуска `docker compose -f compose.sglang.yml up`)
 ```
 Узнать какой конфиг используется можно в соответствующем файле `llm/compose.sglang.yml`  
-(который выбран при запуске, например `docker compose -f llm/compose.sglang.cuda.yml up`)
+(который выбран при запуске, например `docker compose -f llm/compose.sglang.yml up`)
 
 Переменные окружения SGLang  
 https://docs.sglang.io/references/environment_variables.html  
@@ -1098,19 +1078,19 @@ https://docs.sglang.io/advanced_features/server_arguments.html
 
 
 Запуск SGLang
-- Запуск с поддержкой CPU со сборкой образа
-  *Вариант с запуском SGLang из готового образа*
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f llm/compose.sglang.yml up
   ```
+- Запуск с поддержкой CPU  
+  *Вариант с запуском SGLang из готового образа (редко обновляется)*
+  ```ps1
+  docker compose -f llm/compose.sglang.cpu.yml up
+  ```
   *Вариант со сборкой своего образа*
   ```ps1
-  git clone https://github.com/sgl-project/sglang
+  git clone https://github.com/sgl-project/sglang llm/sglang
   docker compose -f llm/compose.sglang.build.cpu.yml up
-  ```
-- Запуск с поддержкой CUDA
-  ```ps1
-  docker compose -f llm/compose.sglang.cuda.yml up
   ```
 
 По умолчанию сервисы доступны по адресам:
@@ -1121,27 +1101,27 @@ https://docs.sglang.io/advanced_features/server_arguments.html
 ### Prometheus + Grafana + Node Exporter + Alertmanager 
 
 Запуск библиотеки для инференса LLM + сбор и визуализация метрик через Prometheus + Grafana + Node Exporter + уведомления через  Alertmanager 
-- *Запуск SGLang + Prometeus + Grafana*  
+- *Запуск SGLang + Prometeus + Grafana + Node Exporter + Alertmanager*  
   https://docs.sglang.io/references/production_metrics.html  
   https://github.com/sgl-project/sglang/tree/main/examples/monitoring  
   ```ps1
-  docker compose -f llm/compose.sglang.cuda.yml -f services/compose.monitoring.yml --env-file configs/env/.sglang.env up
+  docker compose -f llm/compose.sglang.yml -f services/compose.monitoring.yml --env-file configs/env/.sglang.env up
   ```
-- *Запуск vLLM + Prometeus + Grafana*  
+- *Запуск vLLM + Prometeus + Grafana + Node Exporter + Alertmanager**  
   https://docs.vllm.ai/en/latest/design/metrics/  
   https://github.com/vllm-project/vllm/tree/main/examples/online_serving/prometheus_grafana  
   ```ps1
-  docker compose -f llm/compose.vllm.cuda.yml -f services/compose.monitoring.yml --env-file configs/env/.vllm.env up
+  docker compose -f llm/compose.vllm.yml -f services/compose.monitoring.yml --env-file configs/env/.vllm.env up
   ```
-- *Запуск llama.cpp + Prometeus + Grafana*  
+- *Запуск llama.cpp + Prometeus + Grafana + Node Exporter + Alertmanager**  
   https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md#get-metrics-prometheus-compatible-metrics-exporter  
   https://github.com/art-vish/llamacpp-llm-observer  
   ```ps1
-  docker compose -f llm/compose.llamacpp.cuda.yml -f services/compose.monitoring.yml --env-file configs/env/.llamacpp.env up
+  docker compose -f llm/compose.llamacpp.yml -f services/compose.monitoring.yml --env-file configs/env/.llamacpp.env up
   ```
 
 Чтобы llama.cpp отдавала метрики, нужно чтобы в файле `.env` была прописана переменная окружения `LLAMA_ARG_ENDPOINT_METRICS=1` (прописано по умолчанию)  
-Чтобы SGLang отдавал метрики, нужно чтобы в конфиге `configs/sglang/sglang_config_cuda.yml` было прописано `enable-metrics: true` (прописано по умолчанию)
+Чтобы SGLang отдавал метрики, нужно чтобы в конфиге `configs/sglang/cuda.yml` было прописано `enable-metrics: true` (прописано по умолчанию)
 
 По умолчанию сервисы доступны по адресам:
 - SGLang Swagger http://127.0.0.1:30000/docs
@@ -1158,7 +1138,7 @@ https://docs.sglang.io/advanced_features/server_arguments.html
 > [!NOTE]
 > Open WebUI и Grafana по умолчанию запускаются на порту 3000 - при совместном использовании нужно изменить переменную окружения `OPENWEBUI_PORT` или `GRAFANA_PORT` в файле `.env`
 
-В файлах `.sglang.env`, `.vllm.env`, `.llamacpp.env` прописано название текущего сервиса - чтобы нужная переменная оружения подставлась в compose файл
+В файлах `.sglang.env`, `.vllm.env`, `.llamacpp.env` прописано название текущего сервиса - чтобы нужная переменная оружения подставилась в compose файл
 
 ---
 <ins><i>Как открыть/добавить график метрики в Grafana</i></ins>
@@ -1250,20 +1230,20 @@ https://docs.openwebui.com/features/plugin/tools/openapi-servers/mcp/
 #### MCP + Open WebUI
 
 Запуск стека MCP + Open WebUI + Ollama + Qdrant + Infinity
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cuda.yml -f services/compose.qdrant.yml -f services/compose.infinity.cuda.yml -f services/compose.mcp.yml up
+  docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cpu.yml -f services/compose.qdrant.yml -f services/compose.infinity.cpu.yml -f services/compose.mcp.yml up
   ```
 
 ---
 Вариант запуска с объединением compose файлов и запуск сервисоов
 
 <ins><i>Linux</i></ins>
- - CPU
+ - CUDA
   ```sh
   export COMPOSE_FILE=\
     ui/compose.openwebui.yml:\
@@ -1272,18 +1252,18 @@ https://docs.openwebui.com/features/plugin/tools/openapi-servers/mcp/
     services/compose.infinity.yml:\
     services/compose.mcp.yml
   ```
- - CUDA
+ - CPU
   ```sh
   export COMPOSE_FILE=\
     ui/compose.openwebui.yml:\
-    llm/compose.ollama.cuda.yml:\
+    llm/compose.ollama.cpu.yml:\
     services/compose.qdrant.yml:\
-    services/compose.infinity.cuda.yml:\
+    services/compose.infinity.cpu.yml:\
     services/compose.mcp.yml
   ```
 
 <ins><i>Windows PowerShell</i></ins>
- - CPU
+ - CUDA
   ```ps1
   $env:COMPOSE_FILE = `
     "ui/compose.openwebui.yml;" + `
@@ -1293,13 +1273,13 @@ https://docs.openwebui.com/features/plugin/tools/openapi-servers/mcp/
     "services/compose.mcp.yml"
 
   ```
- - CUDA
+ - CPU
   ```ps1
   $env:COMPOSE_FILE = `
     "ui/compose.openwebui.yml;" + `
-    "llm/compose.ollama.cuda.yml;" + `
+    "llm/compose.ollama.cpu.yml;" + `
     "services/compose.qdrant.yml;" + `
-    "services/compose.infinity.cuda.yml;" + `
+    "services/compose.infinity.cpu.yml;" + `
     "services/compose.mcp.yml"
 
   ```
@@ -1338,20 +1318,20 @@ docker compose up
 #### MCP + AnythingLLM
 
 Запуск стека MCP + Open WebUI + Ollama + Qdrant + Infinity
-- Запуск с поддержкой CPU
+- Запуск с поддержкой CUDA
   ```ps1
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up
   ```
-- Запуск с поддержкой CUDA
+- Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.cuda.yml -f services/compose.qdrant.yml -f services/compose.infinity.cuda.yml -f services/compose.mcp.yml up
+  docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.cpu.yml -f services/compose.qdrant.yml -f services/compose.infinity.cpu.yml -f services/compose.mcp.yml up
   ```
 
 ---
 Вариант запуска с объединением compose файлов и запуск сервисоов
 
 <ins><i>Linux</i></ins>
- - CPU
+ - CUDA
   ```sh
   export COMPOSE_FILE=\
     ui/compose.anythingllm.yml:\
@@ -1360,18 +1340,18 @@ docker compose up
     services/compose.infinity.yml:\
     services/compose.mcp.yml
   ```
- - CUDA
+ - CPU
   ```sh
   export COMPOSE_FILE=\
     ui/compose.anythingllm.yml:\
-    llm/compose.ollama.cuda.yml:\
+    llm/compose.ollama.cpu.yml:\
     services/compose.qdrant.yml:\
-    services/compose.infinity.cuda.yml:\
+    services/compose.infinity.cpu.yml:\
     services/compose.mcp.yml
   ```
 
 <ins><i>Windows PowerShell</i></ins>
- - CPU
+ - CUDA
   ```ps1
   $env:COMPOSE_FILE = `
     "ui/compose.anythingllm.yml;" + `
@@ -1381,13 +1361,13 @@ docker compose up
     "services/compose.mcp.yml"
 
   ```
- - CUDA
+ - CPU
   ```ps1
   $env:COMPOSE_FILE = `
     "ui/compose.anythingllm.yml;" + `
-    "llm/compose.ollama.cuda.yml;" + `
+    "llm/compose.ollama.cpu.yml;" + `
     "services/compose.qdrant.yml;" + `
-    "services/compose.infinity.cuda.yml;" + `
+    "services/compose.infinity.cpu.yml;" + `
     "services/compose.mcp.yml"
 
   ```
@@ -1555,12 +1535,12 @@ https://github.com/qdrant/qdrant/issues/5672
 ```
 📁 configs/                         # корневая директория всех конфигурационных файлов
 ├── 📁 vllm/                        # CLI-конфиги запуска vLLM
-│   ├── vllm_config_cpu.yml         # конфиг для запуска vLLM на CPU (без GPU)
-│   └── vllm_config_cuda.yml        # конфиг для запуска vLLM с поддержкой CUDA (GPU)
+│   ├── cpu.yml                      # конфиг для запуска vLLM на CPU (без GPU)
+│   └── cuda.yml                     # конфиг для запуска vLLM с поддержкой CUDA (GPU)
 │
 ├── 📁 sglang/                      # CLI-конфиги запуска SGLang
-│   ├── sglang_config_cpu.yml       # конфиг для запуска SGLang на CPU (без GPU)
-│   └── sglang_config_cuda.yml      # конфиг для запуска SGLang с поддержкой CUDA (GPU)
+│   ├── cpu.yml                      # конфиг для запуска SGLang на CPU (без GPU)
+│   └── cuda.yml                     # конфиг для запуска SGLang с поддержкой CUDA (GPU)
 │
 ├── 📁 prometheus/                  # конфигурация Prometheus (сбор метрик)
 │   ├── prometheus.sglang.yml       # scrape-конфиг для SGLang (таргеты, интервалы сбора)
@@ -1681,17 +1661,15 @@ https://github.com/vllm-project/vllm
 https://docs.vllm.ai/en/stable/getting_started/quickstart/  
 Документации установкам vLLM на различные системы
 https://github.com/vllm-project/vllm/tree/main/docs/getting_started/installation  
-Установка vLLM на CPU  
+Установка vLLM на CPU + Docker  
 https://docs.vllm.ai/en/stable/getting_started/installation/cpu  
-Установка vLLM на CUDA + готовые колеса  
-https://docs.vllm.ai/en/stable/getting_started/installation/gpu/index.html#pre-built-wheels  
-Инструкции по Docker  
-https://docs.vllm.ai/en/stable/getting_started/installation/cpu/#set-up-using-docker  
-https://docs.vllm.ai/en/stable/getting_started/installation/gpu/#set-up-using-docker
-https://docs.vllm.ai/en/stable/deployment/docker/  
-Образы докер на DockerHub  
+Установка vLLM на CUDA + Docker  
+https://docs.vllm.ai/en/stable/getting_started/installation/gpu
+Образы Docker на DockerHub  
 https://hub.docker.com/r/vllm/vllm-openai/tags  
-Образы для CPU  
+Образы для CPU (new)  
+https://hub.docker.com/r/vllm/vllm-openai-cpu/tags  
+Образы для CPU (old)  
 https://gallery.ecr.aws/q9t5s3a7  
 Документация по переменным окружения ENV  
 https://docs.vllm.ai/en/stable/configuration/env_vars/  

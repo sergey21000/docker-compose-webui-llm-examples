@@ -18,3 +18,6 @@ generation_config: auto
 
 uvicorn_log_level: info
 hf_token: none
+
+# kv_cache_memory_bytes: 2G
+# kv_cache_dtype: auto

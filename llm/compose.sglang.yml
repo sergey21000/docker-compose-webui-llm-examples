@@ -1,4 +1,4 @@
-# https://docs.sglang.io/docs/hardware-platforms/cpu_server
+# https://docs.sglang.io/docs/get-started/install#method-5-using-docker-compose
 
 services:
   sglang:
@@ -12,15 +12,11 @@ services:
       - ${CONFIG_DIR:-../configs}/sglang:/sgl-workspace/configs
     ipc: host
     gpus: all
-    # privileged: true
-    # network_mode: host
     env_file:
       - path: ../.env
         required: false
+    entrypoint: python3 -m sglang.launch_server
     command:
-      - /opt/.venv/bin/python3
-      - -m
-      - sglang.launch_server
       - --host
       - 0.0.0.0
       - --port

@@ -6,7 +6,7 @@ services:
     extends:
       file: ../llm/compose.vllm.yml
       service: vllm
-    image: vllm/vllm-openai-cpu:latest-x86_64
+    image: vllm/vllm-openai-cpu:latest
     gpus: !reset null
     command:
       - --config

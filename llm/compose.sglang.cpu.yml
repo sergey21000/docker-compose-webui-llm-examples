@@ -1,4 +1,4 @@
-# https://docs.sglang.io/docs/get-started/install#method-5-using-docker-compose
+# https://docs.sglang.io/docs/hardware-platforms/cpu_server
 
 services:
   sglang:
@@ -8,9 +8,6 @@ services:
     image: ghcr.io/sergey21000/sglang-cpu:latest
     gpus: !reset null
     command:
-      - python3
-      - -m
-      - sglang.launch_server
       - --host
       - 0.0.0.0
       - --port

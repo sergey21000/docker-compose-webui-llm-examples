@@ -16,6 +16,7 @@ enable_prefix_caching: false
 trust_remote_code: true
 
 enforce_eager: true
+# max_num_seqs: none
 # language_model_only: true
 # kv_cache_memory_bytes: 2G
 # kv_cache_dtype: bfloat16

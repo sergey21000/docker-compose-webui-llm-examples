@@ -9,5 +9,15 @@ log-requests: true
 trust-remote-code: true
 dtype: auto
 device: cpu
-context_length: 4096
-# disable_overlap_schedule: true
+context-length: 4096
+
+# tensor-parallel-size: 1
+# mem-fraction-static: 0.7
+# max-total-tokens: none
+# chunked-prefill-size: -1
+# kv-cache-dtype: auto
+# quantization: none
+# cpu-offload-gb: 0
+
+# enable-metrics: true
+# log-requests: true

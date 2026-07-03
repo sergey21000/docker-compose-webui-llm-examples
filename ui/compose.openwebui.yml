@@ -1,3 +1,5 @@
+# https://docs.openwebui.com/getting-started/quick-start/
+
 services:
   openwebui:
     image: ghcr.io/open-webui/open-webui:main

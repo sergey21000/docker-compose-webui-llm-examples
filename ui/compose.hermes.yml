@@ -1,3 +1,5 @@
+# https://hermes-agent.nousresearch.com/docs/user-guide/docker
+
 services:
   hermes:
     image: nousresearch/hermes-agent:latest

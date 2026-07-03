@@ -1,3 +1,5 @@
+# https://github.com/ggml-org/llama.cpp/blob/master/docs/docker.md
+
 services:
   llamacpp:
     image: ghcr.io/ggml-org/llama.cpp:server-cuda

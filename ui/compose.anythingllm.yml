@@ -1,3 +1,5 @@
+# https://docs.anythingllm.com/installation-docker/local-docker
+
 services:
   anythingllm:
     image: mintplexlabs/anythingllm

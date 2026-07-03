@@ -1,3 +1,5 @@
+# https://docs.ollama.com/docker
+
 services:
   ollama:
     image: ollama/ollama

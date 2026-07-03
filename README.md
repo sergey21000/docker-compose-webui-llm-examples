@@ -927,8 +927,7 @@ TELEGRAM_OBSERVE_UNMENTIONED_GROUP_MESSAGES=true
 Для просмотра доступных команд отправить в лс боту команду /help
 
 > [!NOTE]
-> Для того чтобы бот видел все сообщения группы в моем случае было недостаточно дать боту админа - пришлось еще отключить `Privacy Mode` - как сделать это описано в документации  
-> https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram#how-to-disable-privacy-mode
+> Для того чтобы бот видел все сообщения группы в моем случае было недостаточно дать боту админа - пришлось еще отключить `Privacy Mode` - как это сделать описано в [документации](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram#how-to-disable-privacy-mode)  
 
 
 ### llama.cpp

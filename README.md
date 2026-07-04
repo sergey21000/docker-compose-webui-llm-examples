@@ -52,7 +52,7 @@
   - [Qdrant](#qdrant)
   - [Infinity](#infinity)
 - 🤖 [MCP](#-mcp)
-  - [MCP + llama.cpp](#mcp--llama-cpp)
+  - [MCP + llama.cpp](#mcp--llama--cpp)
   - [MCP + Open WebUI](#mcp--open-webui)
   - [MCP + AnythingLLM](#mcp--anythingllm)
   - [MCP + Hermes](#mcp--hermes)

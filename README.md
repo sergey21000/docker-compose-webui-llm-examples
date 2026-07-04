@@ -1286,8 +1286,9 @@ Infinity API: http://127.0.0.1:7997/v1
   ```
 - Запуск с поддержкой CPU
   ```ps1
-  docker compose -f ui/compose.llamacpp.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up
+  docker compose -f ui/compose.llamacpp.cpu.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up
   ```
+
 Минимальный пример - запуск только MCP + llama.cpp WebUI
 ```ps1
 docker compose -f ui/compose.llamacpp.yml -f services/compose.mcp.yml up

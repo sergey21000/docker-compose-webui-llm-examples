@@ -1279,10 +1279,26 @@ Infinity API: http://127.0.0.1:7997/v1
 
 #### MCP + llama.cpp
 
-Запуск сервера llama.cpp + MCP сервера
-```powershell
-docker compose -f llm/compose.llamacpp.yml -f services/compose.mcp.yml up
+Запуск стека MCP + llama.cpp WebUI + Qdrant + Infinity
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.llamacpp.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up
+  ```
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.llamacpp.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up
+  ```
+Минимальный пример - запуск только MCP + llama.cpp WebUI
+```ps1
+docker compose -f ui/compose.llamacpp.yml -f services/compose.mcp.yml up
 ```
+
+По умолчанию сервисы доступны по адресам:
+- llama.cpp WebUI: http://127.0.0.1:8080
+- Qdrant Dashboard: http://127.0.0.1:6333/dashboard
+- Infinity Embeddings Swagger: http://127.0.0.1:7997/docs
+- Infinity API: http://127.0.0.1:7997/v1
+- MCP Server API: http://127.0.0.1:9000/mcp
 
 Открыть llama.cpp WebUI по адресу http://127.0.0.1:8080  
 Для подключения MCP раскрыть панель слева - `MCP servers` - `Add New Server` и вписать адрес http://localhost:9000/mcp  

@@ -936,15 +936,16 @@ TELEGRAM_OBSERVE_UNMENTIONED_GROUP_MESSAGES=true
 https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md
 
 Для llama.cpp перед запуском можно выбрать модель несколькими вариантами аргументов
-- агрументы `LLAMA_ARG_HF_REPO` и `LLAMA_ARG_HF_FILE` (репозиторий и название файла на HF)
+- агрумент `LLAMA_ARG_HF_REPO` с указанием квантизации (например `LLAMA_ARG_HF_REPO=bartowski/Qwen_Qwen3.5-0.8B-GGUF:q4_k_m`) или без указания квантизации (например `LLAMA_ARG_HF_REPO=bartowski/Qwen_Qwen3.5-0.8B-GGUF` - будет загружен файл с квантизацией по умолчанию)
+- агрументы `LLAMA_ARG_HF_REPO` и `LLAMA_ARG_HF_FILE` (репозиторий и название конкретного файла на HF)
 - агрумент `LLAMA_ARG_MODEL` (путь до локальной модели в формате `GGUF`)
 - агрумент `LLAMA_ARG_MODEL_URL` (ссылка на модель в формате `GGUF`)
-- для мультимодальных моделей в дополнение к основному файлу GGUF указать:
-  - агрумент `LLAMA_ARG_MMPROJ` (путь до mmproj локальной модели в формате `GGUF`)
-  - агрумент `LLAMA_ARG_MMPROJ_URL` (ссылка на mmproj модель в формате `GGUF`)
+- для мультимодальных моделей указать
+  - аргумент `LLAMA_ARG_HF_REPO` - если в репозитории есть файл MMPROJ то он будет загружен автоматически
+  - агрументы `LLAMA_ARG_MODEL` / `LLAMA_ARG_MODEL_URL` (путь / ссылка на основную модель в формате `GGUF`) и `LLAMA_ARG_MMPROJ` / `LLAMA_ARG_MMPROJ_URL` (путь / на файл MMPROJ)
 
 Модели хранятся в директории `./data/huggingface/hub`, загрузка происходит следующим образом
-- если указана ссылка на модель `LLAMA_ARG_MODEL_URL` то модель будет загружена в директорию `/root/.cache/llama.cpp/` внутри контейнера в формате `название_файла.gguf`, например `Qwen_Qwen3.5-0.8B-Q8_0.gguf`
+- если указана ссылка на модель `LLAMA_ARG_MODEL_URL` то модель будет загружена в директорию `/root/.cache/llama.cpp/`  внутри контейнера в формате `название_файла.gguf`, например `Qwen_Qwen3.5-0.8B-Q8_0.gguf` (в новых версиях возможно путь будет как во втором случае - `/root/.cache/huggingface/hub` - не проверял)
 - если указан параметр `LLAMA_ARG_HF_REPO` то модель будет загружена в директорию `/root/.cache/huggingface/hub` внутри контейнера в папку `models--репо-файл-GGUF`, например `models--bartowski--Qwen_Qwen3.5-0.8B-GGUF` (при этом модель будет видна не в формате GGUF, а в формате HF)
 
 Где искать LLM модели в формате GGUF

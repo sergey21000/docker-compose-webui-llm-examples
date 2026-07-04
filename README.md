@@ -52,8 +52,10 @@
   - [Qdrant](#qdrant)
   - [Infinity](#infinity)
 - 🤖 [MCP](#-mcp)
+  - [MCP + llama.cpp](#mcp--llama-cpp)
   - [MCP + Open WebUI](#mcp--open-webui)
   - [MCP + AnythingLLM](#mcp--anythingllm)
+  - [MCP + Hermes](#mcp--hermes)
   - [Скрипты для проверки MCP сервера](#скрипты-для-проверки-mcp-сервера)
 - ⚠ [Решение проблем](#-решение-проблем)
 - 📁 [Структура данных](#-структура-данных)
@@ -773,12 +775,18 @@ model:
 
 Настроить поставщика LLM можно в 2х местах:
 
-**1) Общие настройки**
+**1) Общие настройки**  
 `Настройки` -> `Предпочтение LLM` -> выбрать `Поставщик LLM`:
 - `Generic OpenAI` для llama.cpp, vLLM, SGLang или прочих OpenAI-Compatible серверов
 - `Ollama` для Ollama  
 
-Для llama.cpp, vLLM или SGLang указать `Base URL` http://vllm:8000/v1, http://llamacpp:8080/v1 или http://sglang:30000/v1 соответственно, для vLLM и llama.cpp указать параметры `Model context window` и `Max Tokens` -> `Save Changes`  
+Заполнить поле `Base URL` 
+- Ollama: http://ollama:11434
+- llama.cpp: http://llamacpp:8080/v1 (дополнительно указать параметры `Model context window` и `Max Tokens`)
+- vLLM: http://vllm:8000/v1 (дополнительно указать параметры `Model context window` и `Max Tokens`)
+- SGLang: http://sglang:30000/v1  
+затем нажать `Save Changes`  
+
 Конфиги находятся в
 - `📁 ./data/vllm/configs/` для vLLM (параметр `Model context window` соответствует `max_model_len`, например 4096)
 - в файле `.env` для llama.cpp (параметр `Model context window` соответствует `LLAMA_ARG_CTX_SIZE`, например 4096)
@@ -789,7 +797,8 @@ model:
 Для llama.cpp можно указать любое название модели  
 Для SGLang достаточно указать только `Base URL`
 
-**2) Настройка рабочего пространства** (шестренка около названия рабочего пространства в левой верхней части экрана) - `Настройки чата` -> `Поставщик LLM` - указать нужный -> `Update Workspace`  
+**2) Настройка рабочего пространства**  
+Шестренка около названия рабочего пространства в левой верхней части экрана - `Настройки чата` -> `Поставщик LLM` - указать нужный -> `Update Workspace`  
 Для vLLM или llama.cpp нужно указать в `Chat Model Name` название текущей модели vLLM  
 Модели можно посмотреть в  
 - `📁 ./data/vllm/configs/` для vLLM
@@ -824,7 +833,8 @@ https://docs.openwebui.com/getting-started/env-configuration/
 - http://ollama:11434 для Ollama
 
 В интерфейсе чата тоже нужно выбрать модель где написано `Выберите Модель`  
-Отключить режим рассуждений - добавить `/no_think ` в начало запроса
+~Отключить режим рассуждений - добавить `/no_think ` в начало запроса~  
+Отключить режим рассуждений - справа вверху есть всплывающее меню `Управление` - там параметр `think`  
 
 По умолчанию Open WebUI доступен по адресу http://127.0.0.1:3000
 
@@ -1266,15 +1276,31 @@ Infinity API: http://127.0.0.1:7997/v1
 > [!NOTE]
 > У библиотек Open WebUI и AnythingLLM есть встроенная поддержка RAG, данный пример с каcтомным мини RAG сделан для демонcтрации MCP
 
-Подключение MCP сервера в AnythingLLM  
-https://docs.useanything.com/mcp-compatibility/overview  
+
+#### MCP + llama.cpp
+
+Запуск сервера llama.cpp + MCP сервера
+```powershell
+docker compose -f llm/compose.llamacpp.yml -f services/compose.mcp.yml up
+```
+
+Открыть llama.cpp WebUI по адресу http://127.0.0.1:8080  
+Для подключения MCP раскрыть панель слева - `MCP servers` - `Add New Server` и вписать адрес http://localhost:9000/mcp  
+(адрес http://mcp-server:9000/mcp не сработает так как браузер не видит DNS имена внутри Docker)  
+Для включения / отключения MCP в чате нажать на `➕` - `MCP Servers`  
+
+Проверочные промты
+```
+Какие MCP инструменты тебе доступны?
+Какая сегодня дата?
+```
+
+
+#### MCP + Open WebUI
 
 Подключение MCP сервера в Open WebUI  
 https://docs.openwebui.com/features/mcp/  
 https://docs.openwebui.com/features/plugin/tools/openapi-servers/mcp/  
-
-
-#### MCP + Open WebUI
 
 Запуск стека MCP + Open WebUI + Ollama + Qdrant + Infinity
 - Запуск с поддержкой CUDA
@@ -1286,55 +1312,7 @@ https://docs.openwebui.com/features/plugin/tools/openapi-servers/mcp/
   docker compose -f ui/compose.openwebui.yml -f llm/compose.ollama.cpu.yml -f services/compose.qdrant.yml -f services/compose.infinity.cpu.yml -f services/compose.mcp.yml up
   ```
 
----
-Вариант запуска с объединением compose файлов и запуск сервисоов
-
-<ins><i>Linux</i></ins>
- - CUDA
-  ```sh
-  export COMPOSE_FILE=\
-    ui/compose.openwebui.yml:\
-    llm/compose.ollama.yml:\
-    services/compose.qdrant.yml:\
-    services/compose.infinity.yml:\
-    services/compose.mcp.yml
-  ```
- - CPU
-  ```sh
-  export COMPOSE_FILE=\
-    ui/compose.openwebui.yml:\
-    llm/compose.ollama.cpu.yml:\
-    services/compose.qdrant.yml:\
-    services/compose.infinity.cpu.yml:\
-    services/compose.mcp.yml
-  ```
-
-<ins><i>Windows PowerShell</i></ins>
- - CUDA
-  ```ps1
-  $env:COMPOSE_FILE = `
-    "ui/compose.openwebui.yml;" + `
-    "llm/compose.ollama.yml;" + `
-    "services/compose.qdrant.yml;" + `
-    "services/compose.infinity.yml;" + `
-    "services/compose.mcp.yml"
-
-  ```
- - CPU
-  ```ps1
-  $env:COMPOSE_FILE = `
-    "ui/compose.openwebui.yml;" + `
-    "llm/compose.ollama.cpu.yml;" + `
-    "services/compose.qdrant.yml;" + `
-    "services/compose.infinity.cpu.yml;" + `
-    "services/compose.mcp.yml"
-
-  ```
-
-Запуск сервисов
-```ps1
-docker compose up
-```
+Вместо Ollama можно использовать любой другой LLM сервис
 
 По умолчанию сервисы доступны по адресам:
 - Open WebUI: http://127.0.0.1:3000
@@ -1353,6 +1331,7 @@ docker compose up
 
 Примеры промтов для проверки MCP
 ```
+Какие MCP инструменты тебе доступны?
 Скажи текущую дату
 Загрузи тексты в базу данных
 За какой год указаны прибыли компаний?
@@ -1364,6 +1343,9 @@ docker compose up
 
 #### MCP + AnythingLLM
 
+Подключение MCP сервера в AnythingLLM  
+https://docs.useanything.com/mcp-compatibility/overview  
+
 Запуск стека MCP + Open WebUI + Ollama + Qdrant + Infinity
 - Запуск с поддержкой CUDA
   ```ps1
@@ -1374,55 +1356,7 @@ docker compose up
   docker compose -f ui/compose.anythingllm.yml -f llm/compose.ollama.cpu.yml -f services/compose.qdrant.yml -f services/compose.infinity.cpu.yml -f services/compose.mcp.yml up
   ```
 
----
-Вариант запуска с объединением compose файлов и запуск сервисоов
-
-<ins><i>Linux</i></ins>
- - CUDA
-  ```sh
-  export COMPOSE_FILE=\
-    ui/compose.anythingllm.yml:\
-    llm/compose.ollama.yml:\
-    services/compose.qdrant.yml:\
-    services/compose.infinity.yml:\
-    services/compose.mcp.yml
-  ```
- - CPU
-  ```sh
-  export COMPOSE_FILE=\
-    ui/compose.anythingllm.yml:\
-    llm/compose.ollama.cpu.yml:\
-    services/compose.qdrant.yml:\
-    services/compose.infinity.cpu.yml:\
-    services/compose.mcp.yml
-  ```
-
-<ins><i>Windows PowerShell</i></ins>
- - CUDA
-  ```ps1
-  $env:COMPOSE_FILE = `
-    "ui/compose.anythingllm.yml;" + `
-    "llm/compose.ollama.yml;" + `
-    "services/compose.qdrant.yml;" + `
-    "services/compose.infinity.yml;" + `
-    "services/compose.mcp.yml"
-
-  ```
- - CPU
-  ```ps1
-  $env:COMPOSE_FILE = `
-    "ui/compose.anythingllm.yml;" + `
-    "llm/compose.ollama.cpu.yml;" + `
-    "services/compose.qdrant.yml;" + `
-    "services/compose.infinity.cpu.yml;" + `
-    "services/compose.mcp.yml"
-
-  ```
-
-Запуск сервисов
-```ps1
-docker compose up
-```
+Вместо Ollama можно использовать любой другой LLM сервис
 
 По умолчанию сервисы доступны по адресам:
 - AnythingLLM WebUI: http://127.0.0.1:3001
@@ -1436,7 +1370,7 @@ docker compose up
 Конфигурация MCP сервера в AnythingLLM  
 https://docs.useanything.com/mcp-compatibility/overview
 
-Редактировать файл конфигурация MCP для AnythingLLM  
+Редактировать файл конфигурация MCP для AnythingLLM 
 `./data/anythingllm/plugins/anythingllm_mcp_servers.json`  
 ```json
 {
@@ -1452,15 +1386,17 @@ https://docs.useanything.com/mcp-compatibility/overview
   }
 }
 ```
+Если файла `anythingllm_mcp_servers.json` нет - зайти в настройки и обновить страницу  
 В этом файле хранится конфигурация MCP для AnythingLLM, и он пробрасывается внутрь сервиса при запуске  
 В url вписать актуальный адрес MCP сервера, при необходимости добавить нескоклько серверов  
 
 Активация MCP в веб-интерфейсе AnythingLLM:  
 `Настройки` -> `Навыки агента` - в разделе `MCP серверы` нажать `Refresh` и сервер должен появится, там же можно активировать/деактивировать его и другие инструменты, которые включены по умолчаню  
-Писать промт в чате нужно начиная с `@agent `
+Писать промт в чате нужно начиная с `@agent ` (в новых версиях это не всегда обязательно, так как в настройках рабочего пространства по умолчанию стоит `Режим чата` - `Агент` вместо `Чат`)
 
 Примеры промтов для проверки MCP для AnythingLLM
 ```
+@agent Какие MCP инструменты тебе доступны?
 @agent Скажи текущую дату
 @agent Загрузи тексты в базу данных
 @agent За какой год указаны прибыли компаний в текстах базы данных?
@@ -1472,6 +1408,37 @@ https://docs.useanything.com/mcp-compatibility/overview
 > [!NOTE]
 > Если в чате ошибка `Could not respond to message` - зайти в `Настройки` -> `Навыки агента` и в разделе `MCP серверы` нажать `Refresh'  
 > Такое происходит после перезапуска MCP сервера вручную
+
+
+#### MCP + Hermes
+
+Запуск стека MCP + Hermes + Ollama + Qdrant + Infinity
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.ollama.yml -f services/compose.qdrant.yml -f services/compose.infinity.yml -f services/compose.mcp.yml up
+  ```
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.hermes.yml -f llm/compose.ollama.cpu.yml -f services/compose.qdrant.yml -f services/compose.infinity.cpu.yml -f services/compose.mcp.yml up
+  ```
+
+Вместо Ollama можно использовать любой другой LLM сервис
+
+По умолчанию сервисы доступны по адресам:
+- Hermes WebUI: http://127.0.0.1:9119
+- Ollama API: http://127.0.0.1:11434
+- Qdrant Dashboard: http://127.0.0.1:6333/dashboard
+- Infinity Embeddings Swagger: http://127.0.0.1:7997/docs
+- MCP Server API: http://127.0.0.1:9000/v1
+
+Активация MCP в веб-интерфейсе Hermes: 
+Перейти в `MCP` - `ADD SERVER` - ввести любой `Name` - ввести `URL` http://mcp-server:9000/mcp - `ADD`
+
+Примеры промтов для проверки MCP для AnythingLLM
+```
+Какие MCP инструменты тебе доступны?
+Скажи текущую дату
+```
 
 
 #### Скрипты для проверки MCP сервера

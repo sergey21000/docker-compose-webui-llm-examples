@@ -65,6 +65,7 @@
   - [SGLang](#sglang-1)
   - [Qdrant](#qdrant-1)
   - [Infinity](#infinity-1)
+  - [Hermes](#hermes-1)
   - [MCP](#mcp)
 
 
@@ -845,11 +846,6 @@ https://docs.openwebui.com/getting-started/env-configuration/
 
 Документация по запуску Hermes через Docker  
 https://hermes-agent.nousresearch.com/docs/user-guide/docker  
-Переменные окружения Hermes  
-https://hermes-agent.nousresearch.com/docs/reference/environment-variables  
-https://github.com/NousResearch/hermes-agent/blob/main/.env.example  
-Настройка Hermes Agent Desktop  
-https://habr.com/ru/articles/1044270/  
 
 При первом запуске сервис стартует не сразу - необходимо дождаться надписи `⚕ Hermes Gateway Starting...` в терминале  
 Все настройки хранятся в файле `data/hermes/config.yaml`, который автоматически создается при первом запуске, и который можно редактировать как вручную, так и в интерфейсе Hermes  
@@ -1797,6 +1793,19 @@ https://michaelfeil.eu/infinity/main/swagger_ui/
 https://michaelfeil-infinity.hf.space/docs  
 Как обновить библиотеки в Docker образе для поддержки новых моделей  
 https://github.com/michaelfeil/infinity/issues/611#issuecomment-3038886633  
+
+
+### Hermes
+
+Документация по запуску Hermes через Docker  
+https://hermes-agent.nousresearch.com/docs/user-guide/docker  
+Переменные окружения Hermes  
+https://hermes-agent.nousresearch.com/docs/reference/environment-variables  
+https://github.com/NousResearch/hermes-agent/blob/main/.env.example  
+Настройка Hermes Agent Desktop  
+https://habr.com/ru/articles/1044270/  
+Документация по API Hermes (можно отправлять API запросы к агенту)  
+https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server  
 
 
 ### MCP

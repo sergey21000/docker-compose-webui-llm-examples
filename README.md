@@ -40,6 +40,7 @@
   - [Hermes + Ollama](#hermes--ollama)
   - [Hermes + vLLM](#hermes--vllm)
   - [Hermes + SGLang](#hermes--sglang)
+  - [Prometheus + Grafana + Loki + Node Exporter + Alertmanager ](#prometheus--grafana--loki--node-exporter--alertmanager)
 - 🛠 [Конфигурация библиотек](#-конфигурация-библиотек)
   - [AnythingLLM](#anythingllm)
   - [Open WebUI](#open-webui)
@@ -48,7 +49,6 @@
   - [Ollama](#ollama)
   - [vLLM](#vllm)
   - [SGLang](#sglang)
-  - [Prometheus + Grafana + Node Exporter + Alertmanager ](#prometheus--grafana--node-exporter--alertmanager)
   - [Qdrant](#qdrant)
   - [Infinity](#infinity)
 - 🤖 [MCP](#-mcp)
@@ -88,6 +88,8 @@
 - [**Grafana**](https://github.com/grafana/grafana) - визуализация метрик
 - [**Node exporter**](https://github.com/prometheus/node_exporter) - сбор метрик ОС
 - [**Alertmanager**](https://github.com/prometheus/alertmanager) - оповещения
+- [Loki](https://github.com/grafana/loki) - сервер хранения и обработки логов
+- [Alloy](https://github.com/grafana/alloy) - агент сбора логов
 
 LLM модели:
 - [bartowski/google_gemma-3-4b-it-GGUF](https://huggingface.co/bartowski/google_gemma-3-4b-it-GGUF)  
@@ -322,6 +324,8 @@ docker compose up
 - Alertmanager: http://127.0.0.1:9093
 - Prometheus Alertmanager Alerts http://127.0.0.1:9090/alerts
 - Node Exporter: http://127.0.0.1:9100
+- Loki: http://127.0.0.1:3100
+- Alloy UI: http://127.0.0.1:12345
 
 Порты настраиваются в конце файла `.env`
 
@@ -765,6 +769,111 @@ model:
 - SGLang Server Info: http://127.0.0.1:30000/get_server_info
 
 
+### Prometheus + Grafana + Loki + Node Exporter + Alertmanager 
+
+Запуск библиотеки для инференса LLM + сбор и визуализация метрик и логов через Prometheus + Grafana + Loki + Node Exporter + уведомления через  Alertmanager 
+- *Запуск SGLang + Prometeus + Grafana + Node Exporter + Alertmanager*  
+  https://docs.sglang.io/references/production_metrics.html  
+  https://github.com/sgl-project/sglang/tree/main/examples/monitoring  
+  ```ps1
+  docker compose -f llm/compose.sglang.yml -f services/compose.monitoring.yml --env-file .env --env-file configs/env/.sglang.env up
+  ```
+- *Запуск vLLM + Prometeus + Grafana + Node Exporter + Alertmanager**  
+  https://docs.vllm.ai/en/latest/design/metrics/  
+  https://github.com/vllm-project/vllm/tree/main/examples/online_serving/prometheus_grafana  
+  ```ps1
+  docker compose -f llm/compose.vllm.yml -f services/compose.monitoring.yml --env-file .env --env-file configs/env/.vllm.env up
+  ```
+- *Запуск llama.cpp + Prometeus + Grafana + Node Exporter + Alertmanager**  
+  https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md#get-metrics-prometheus-compatible-metrics-exporter  
+  https://github.com/art-vish/llamacpp-llm-observer  
+  ```ps1
+  docker compose -f llm/compose.llamacpp.yml -f services/compose.monitoring.yml --env-file .env --env-file configs/env/.llamacpp.env up
+  ```
+
+Чтобы llama.cpp отдавала метрики, нужно чтобы в файле `.env` была прописана переменная окружения `LLAMA_ARG_ENDPOINT_METRICS=1` (прописано по умолчанию)  
+Чтобы SGLang отдавал метрики, нужно чтобы в конфиге `configs/sglang/cuda.yml` было прописано `enable-metrics: true` (прописано по умолчанию)
+
+По умолчанию сервисы доступны по адресам:
+- SGLang Swagger http://127.0.0.1:30000/docs
+- vLLM Swagger http://127.0.0.1:8000/docs
+- llama.cpp WebUI: http://127.0.0.1:8080
+- Prometheus: http://127.0.0.1:9090
+- Grafana: http://localhost:3000
+- Alertmanager: http://127.0.0.1:9093
+- Prometheus Alertmanager Alerts http://127.0.0.1:9090/alerts
+- Node Exporter: http://127.0.0.1:9100
+- Loki: http://127.0.0.1:3100/ready
+- Alloy UI: http://127.0.0.1:12345
+
+После запуска Prometheus перейти на http://127.0.0.1:9090 -> убедиться что в `Status` -> `Target health` есть Endpoint, например http://sglang:30000/metrics и он имеет статус Up
+
+> [!NOTE]
+> Open WebUI и Grafana по умолчанию запускаются на порту 3000 - при совместном использовании нужно изменить переменную окружения `OPENWEBUI_PORT` или `GRAFANA_PORT` в файле `.env`
+
+В файлах `.sglang.env`, `.vllm.env`, `.llamacpp.env` прописано название текущего сервиса - чтобы нужная переменная оружения подставилась в compose файл
+
+---
+<ins><i>Как открыть/добавить график метрики в Grafana</i></ins>
+- перейти в Grafana UI по адресу http://localhost:3000
+- если в правом верхнем углу нет кнопки `Edit` - нажать `Sign in` - ввести логин и пароль `admin`
+
+*Далее два варианта - открыть существующий дашборд или создать новый*  
+
+**1) Открыть существующий дашборд**
+- открыть дашборд если он еще не открыт, слева для этого есть меню `Dashboards`
+- добавление графика - в правом верхнем углу нажать `Edit` -> `Add` -> `Visualization` -> выбрать метрику из списка `Metric` -> `Run queries` -> далее или просто `Back to dashboard` чтобы посмотреть дашборд с новым графиком, или сохранить справа вверху через `Save dashboard`  
+
+Если после открытия дашборда в графиках написано `No data`
+- сделать запрос на модель / обновить страницу / немного подождать
+- в поле `model_name` над графиками выбрать модель
+
+**2) Создать новый дашборд**
+- нажать слева на `Dashboards` -> справа вверху `New` -> `New Dashboard` -> `Add Visualization`, добавить метрики внизу в меню `Metric` -> `Run queries` -> далее или просто `Back to dashboard` чтобы посмотреть дашборд с новым графиком, или сохранить справа вверху через `Save dashboard`
+
+Документация Grafana  
+https://grafana.com/docs/grafana/latest/fundamentals/getting-started/first-dashboards/  
+
+---
+<ins><i>Как отправить тестовый Alert на сервис Alertmanager</i></ins>
+
+**Linux**
+```sh
+curl -X POST -H "Content-Type: application/json" -d '[{
+  "labels": {
+    "alertname": "DirectTest",
+    "severity": "test"
+  },
+  "annotations": {
+    "summary": "Direct API test",
+    "description": "This alert was sent directly to Alertmanager"
+  }
+}]' http://localhost:9093/api/v2/alerts
+```
+
+**Windows**
+```powershell
+Invoke-RestMethod -Uri "http://localhost:9093/api/v2/alerts" -Method Post -ContentType "application/json" -Body '[{"labels": {"alertname": "DirectTest", "severity": "test"}, "annotations": {"summary": "Direct API test", "description": "This alert was sent directly to Alertmanager"}}]'
+```
+
+Код для интеграции Node Exporter + Alertmanager взят отсюда  
+https://github.com/art-vish/llamacpp-llm-observer
+
+---
+<ins><i>Посмотреть логи Loki</i></ins>
+
+Для просмотра логов Loki:
+- перейти в Grafana UI по адресу http://localhost:3000
+- выбрать `Explore` на панели слева
+- выбрать `Loki` вместо `Prometheus`
+- выбрать необходимые поля в `Label filters` и нажать `Run query`
+
+Проверка статуса Loki  
+http://127.0.0.1:3100/ready  
+Метрики Loki  
+http://127.0.0.1:3100/metrics  
+
+
 ## 🛠 Конфигурация библиотек
 
 Настройка биллиотек до и после запуска сответствующих сервисов, а так же запуск этих библиотек отдельно
@@ -1149,95 +1258,6 @@ https://docs.sglang.io/advanced_features/server_arguments.html
 По умолчанию сервисы доступны по адресам:
 - SGLang API: http://127.0.0.1:30000/v1
 - SGLang Swagger http://127.0.0.1:30000/docs
-
-
-### Prometheus + Grafana + Node Exporter + Alertmanager 
-
-Запуск библиотеки для инференса LLM + сбор и визуализация метрик через Prometheus + Grafana + Node Exporter + уведомления через  Alertmanager 
-- *Запуск SGLang + Prometeus + Grafana + Node Exporter + Alertmanager*  
-  https://docs.sglang.io/references/production_metrics.html  
-  https://github.com/sgl-project/sglang/tree/main/examples/monitoring  
-  ```ps1
-  docker compose -f llm/compose.sglang.yml -f services/compose.monitoring.yml --env-file configs/env/.sglang.env up
-  ```
-- *Запуск vLLM + Prometeus + Grafana + Node Exporter + Alertmanager**  
-  https://docs.vllm.ai/en/latest/design/metrics/  
-  https://github.com/vllm-project/vllm/tree/main/examples/online_serving/prometheus_grafana  
-  ```ps1
-  docker compose -f llm/compose.vllm.yml -f services/compose.monitoring.yml --env-file configs/env/.vllm.env up
-  ```
-- *Запуск llama.cpp + Prometeus + Grafana + Node Exporter + Alertmanager**  
-  https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md#get-metrics-prometheus-compatible-metrics-exporter  
-  https://github.com/art-vish/llamacpp-llm-observer  
-  ```ps1
-  docker compose -f llm/compose.llamacpp.yml -f services/compose.monitoring.yml --env-file configs/env/.llamacpp.env up
-  ```
-
-Чтобы llama.cpp отдавала метрики, нужно чтобы в файле `.env` была прописана переменная окружения `LLAMA_ARG_ENDPOINT_METRICS=1` (прописано по умолчанию)  
-Чтобы SGLang отдавал метрики, нужно чтобы в конфиге `configs/sglang/cuda.yml` было прописано `enable-metrics: true` (прописано по умолчанию)
-
-По умолчанию сервисы доступны по адресам:
-- SGLang Swagger http://127.0.0.1:30000/docs
-- vLLM Swagger http://127.0.0.1:8000/docs
-- llama.cpp WebUI: http://127.0.0.1:8080
-- Prometheus: http://127.0.0.1:9090
-- Grafana: http://localhost:3000
-- Alertmanager: http://127.0.0.1:9093
-- Prometheus Alertmanager Alerts http://127.0.0.1:9090/alerts
-- Node Exporter: http://127.0.0.1:9100
-
-После запуска Prometheus перейти на http://127.0.0.1:9090 -> убедиться что в `Status` -> `Target health` есть Endpoint, например http://sglang:30000/metrics и он имеет статус Up
-
-> [!NOTE]
-> Open WebUI и Grafana по умолчанию запускаются на порту 3000 - при совместном использовании нужно изменить переменную окружения `OPENWEBUI_PORT` или `GRAFANA_PORT` в файле `.env`
-
-В файлах `.sglang.env`, `.vllm.env`, `.llamacpp.env` прописано название текущего сервиса - чтобы нужная переменная оружения подставилась в compose файл
-
----
-<ins><i>Как открыть/добавить график метрики в Grafana</i></ins>
-- перейти в Grafana UI по адресу http://localhost:3000
-- если в правом верхнем углу нет кнопки `Edit` - нажать `Sign in` - ввести логин и пароль `admin`
-
-*Далее два варианта - открыть существующий дашборд или создать новый*  
-
-**1) Открыть существующий дашборд**
-- открыть дашборд если он еще не открыт, слева для этого есть меню `Dashboards`
-- добавление графика - в правом верхнем углу нажать `Edit` -> `Add` -> `Visualization` -> выбрать метрику из списка `Metric` -> `Run queries` -> далее или просто `Back to dashboard` чтобы посмотреть дашборд с новым графиком, или сохранить справа вверху через `Save dashboard`  
-
-Если после открытия дашборда в графиках написано `No data`
-- сделать запрос на модель / обновить страницу / немного подождать
-- в поле `model_name` над графиками выбрать модель
-
-**2) Создать новый дашборд**
-- нажать слева на `Dashboards` -> справа вверху `New` -> `New Dashboard` -> `Add Visualization`, добавить метрики внизу в меню `Metric` -> `Run queries` -> далее или просто `Back to dashboard` чтобы посмотреть дашборд с новым графиком, или сохранить справа вверху через `Save dashboard`
-
-Документация Grafana  
-https://grafana.com/docs/grafana/latest/fundamentals/getting-started/first-dashboards/  
-
----
-<ins><i>Как отправить тестовый Alert на сервис Alertmanager</i></ins>
-
-**Linux**
-```sh
-curl -X POST -H "Content-Type: application/json" -d '[{
-  "labels": {
-    "alertname": "DirectTest",
-    "severity": "test"
-  },
-  "annotations": {
-    "summary": "Direct API test",
-    "description": "This alert was sent directly to Alertmanager"
-  }
-}]' http://localhost:9093/api/v2/alerts
-```
-
-**Windows**
-```powershell
-Invoke-RestMethod -Uri "http://localhost:9093/api/v2/alerts" -Method Post -ContentType "application/json" -Body '[{"labels": {"alertname": "DirectTest", "severity": "test"}, "annotations": {"summary": "Direct API test", "description": "This alert was sent directly to Alertmanager"}}]'
-```
-
-Код для интеграции Node Exporter + Alertmanager взят отсюда  
-https://github.com/art-vish/llamacpp-llm-observer
 
 
 ### Qdrant

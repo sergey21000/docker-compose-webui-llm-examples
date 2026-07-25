@@ -1,4 +1,5 @@
 services:
+  # https://prometheus.io/docs/prometheus/latest/installation/#using-docker
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -17,7 +18,8 @@ services:
       - node-exporter
       - alertmanager
     restart: unless-stopped
-    
+  
+  # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/#run-grafana-via-docker-compose
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -40,7 +42,8 @@ services:
       - path: ../.env
         required: false
     restart: unless-stopped
-    
+  
+  # https://prometheus.io/docs/guides/node-exporter/
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
@@ -56,6 +59,7 @@ services:
       - '--path.rootfs=/rootfs'
     restart: unless-stopped
   
+  # https://prometheus.io/docs/alerting/latest/overview/
   alertmanager:
     image: prom/alertmanager:latest
     container_name: alertmanager
@@ -70,7 +74,38 @@ services:
       - '--web.external-url=http://localhost:${ALERTMANAGER_PORT:-9093}'
     restart: unless-stopped
 
+  # https://github.com/grafana/loki/tree/main/examples/getting-started
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    ports:
+      - ${LOKI_PORT:-3100}:3100
+    volumes:
+      - ${CONFIG_DIR:-../configs}/loki:/etc/loki
+      - loki-storage:/loki
+    command:
+      - '-config.file=/etc/loki/config.yml'
+    restart: unless-stopped
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    ports:
+      - ${ALLOY_UI_PORT:-12345}:12345
+    volumes:
+      - ${CONFIG_DIR:-../configs}/alloy:/etc/alloy
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
+
 volumes:
   prometheus-storage:
   grafana-storage:
   alertmanager-storage:
+  loki-storage:

@@ -79,6 +79,7 @@
 - [**AnythingLLM**](https://github.com/Mintplex-Labs/anything-llm) - веб-интерфейс для работы с LLM
 - [**Open WebUI**](https://github.com/open-webui/open-webui) - веб-интерфейс для работы с LLM
 - [**Hermes Agent**](https://github.com/NousResearch/hermes-agent) - веб-интерфейс / агент для работы с LLM
+- [**Langflow**](https://github.com/langflow-ai/langflow) - веб-интерфейс / агент для работы с LLM
 - [**llama.cpp**](https://github.com/ggml-org/llama.cpp) - инференс LLM моделей
 - [**Ollama**](https://github.com/ollama/ollama) - инференс LLM моделей
 - [**vLLM**](https://github.com/vllm-project/vllm) - инференс LLM моделей
@@ -92,8 +93,8 @@
 - [**Grafana**](https://github.com/grafana/grafana) - визуализация метрик
 - [**Node exporter**](https://github.com/prometheus/node_exporter) - сбор метрик ОС
 - [**Alertmanager**](https://github.com/prometheus/alertmanager) - оповещения
-- [Loki](https://github.com/grafana/loki) - сервер хранения и обработки логов
-- [Alloy](https://github.com/grafana/alloy) - агент сбора логов
+- [**Loki**](https://github.com/grafana/loki) - сервер хранения и обработки логов
+- [**Alloy**](https://github.com/grafana/alloy) - агент сбора логов
 
 LLM модели:
 - [bartowski/google_gemma-3-4b-it-GGUF](https://huggingface.co/bartowski/google_gemma-3-4b-it-GGUF)  
@@ -312,6 +313,7 @@ docker compose up
 - Open WebUI: http://127.0.0.1:3000
 - Hermes WebUI: http://127.0.0.1:9119
 - Hermes API: http://127.0.0.1:8642
+- Langflow WebUI: http://127.0.0.1:7860
 - llama.cpp API: http://127.0.0.1:8080/v1
 - llama.cpp WebUI: http://127.0.0.1:8080
 - Ollama BASE URL: http://127.0.0.1:11434 или http://127.0.0.1:11434/v1

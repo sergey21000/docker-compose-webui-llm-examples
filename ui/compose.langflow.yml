@@ -1,0 +1,15 @@
+# https://docs.langflow.org/deployment-docker
+# https://github.com/langflow-ai/langflow/tree/main/docker_example
+
+services:
+  langflow:
+    image: langflowai/langflow:latest
+    container_name: langflow
+    restart: unless-stopped
+    ports:
+      - ${LANGFLOW_PORT:-7860}:${LANGFLOW_PORT:-7860}
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-../data}/langflow:/app/langflow
+    env_file:
+      - path: ../.env
+        required: false

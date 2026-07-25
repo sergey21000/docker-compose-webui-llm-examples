@@ -40,6 +40,10 @@
   - [Hermes + Ollama](#hermes--ollama)
   - [Hermes + vLLM](#hermes--vllm)
   - [Hermes + SGLang](#hermes--sglang)
+  - [Langflow + llama.cpp](#langflow--llamacpp)
+  - [Langflow + Ollama](#langflow--ollama)
+  - [Langflow + vLLM](#langflow--vllm)
+  - [Langflow + SGLang](#langflow--sglang)
   - [Prometheus + Grafana + Loki + Node Exporter + Alertmanager ](#prometheus--grafana--loki--node-exporter--alertmanager)
 - 🛠 [Конфигурация библиотек](#-конфигурация-библиотек)
   - [AnythingLLM](#anythingllm)
@@ -764,6 +768,117 @@ model:
 По умолчанию сервисы доступны по адресам:
 - Hermes WebUI: http://127.0.0.1:9119
 - Hermes API: http://127.0.0.1:8642
+- SGLang API: http://127.0.0.1:30000/v1
+- SGLang Swagger http://127.0.0.1:30000/docs
+- SGLang Server Info: http://127.0.0.1:30000/get_server_info
+
+
+### Langflow + llama.cpp
+
+Запуск сервисов
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.langflow.yml -f llm/compose.llamacpp.yml up
+  ```
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.langflow.yml -f llm/compose.llamacpp.cpu.yml up
+  ```
+
+Для установки модели в интерфейсе Langflow (http://127.0.0.1:7860) перейти в `Settings` (справа вверху на значке аккаунта) - `Model Providers` - выбрать `OpenAI` и вписать:
+- `OpenAI API Key` - любой, например `-`
+- `OpenAI Base URL` - http://llamacpp:8080/v1
+
+Установить модель для для llama.cpp можно в файле `.env`  
+(подробности в разделе конфигурации [llama.cpp](#llamacpp))
+
+По умолчанию сервисы доступны по адресам:
+- Langflow WebUI: http://127.0.0.1:7860
+- llama.cpp WebUI: http://127.0.0.1:8080
+- llama.cpp API: http://127.0.0.1:8080/v1
+
+
+### Langflow + Ollama
+
+Запуск сервисов
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.langflow.yml -f llm/compose.ollama.yml up
+  ```
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.langflow.yml -f llm/compose.ollama.cpu.yml up
+  ```
+
+Для установки модели в интерфейсе Langflow (http://127.0.0.1:7860) перейти в `Settings` (справа вверху на значке аккаунта) - `Model Providers` - выбрать `Ollama` и вписать:
+- `Ollama Base URL` - http://ollama:11434
+
+Загрузка [моделей](https://ollama.com/search) для Ollama  
+```ps1
+docker exec -it ollama ollama pull qwen3.5:4b
+```
+Список загруженных моделей
+```ps1
+docker exec ollama ollama list
+```
+
+По умолчанию сервисы доступны по адресам:
+- Langflow WebUI: http://127.0.0.1:7860
+- Hermes API: http://127.0.0.1:8642
+- Ollama API: http://127.0.0.1:11434/v1
+
+
+### Langflow + vLLM
+
+Запуск сервисов
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.langflow.yml -f llm/compose.vllm.yml up
+  ```
+- Запуск с поддержкой CPU
+  ```ps1
+  docker compose -f ui/compose.langflow.yml -f llm/compose.vllm.cpu.yml up
+  ```
+
+Для установки модели в интерфейсе Langflow (http://127.0.0.1:7860) перейти в `Settings` (справа вверху на значке аккаунта) - `Model Providers` - выбрать `OpenAI` и вписать:
+- `OpenAI API Key` - любой, например `-`
+- `OpenAI Base URL` - http://vllm:8000/v1
+
+Установить модель для для vLLM можно в файле `configs/vllm/<DEVICE>.yml`  
+(подробности в разделе конфигурации [vllm](#vllm))
+
+По умолчанию сервисы доступны по адресам:
+- Langflow WebUI: http://127.0.0.1:7860
+- vLLM API: http://127.0.0.1:8000/v1
+- vLLM Swagger http://127.0.0.1:8000/docs
+
+
+### Langflow + SGLang
+
+Запуск сервисов
+- Запуск с поддержкой CUDA
+  ```ps1
+  docker compose -f ui/compose.langflow.yml -f llm/compose.sglang.yml up
+  ```
+- Запуск с поддержкой CPU (только процессоры с поддержкой инструкций AVX512)  
+  ```ps1
+  docker compose -f ui/compose.langflow.yml -f llm/compose.sglang.cpu.yml up
+  ```
+  Узнать какие инструкции AVX поддерживает процессор можно через [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html) (Windows) или  
+  ```sh
+  lscpu | grep -E "avx" | grep -oE '\bavx[^ ]*'
+  ```
+  (Linux)
+
+Для установки модели в интерфейсе Langflow (http://127.0.0.1:7860) перейти в `Settings` (справа вверху на значке аккаунта) - `Model Providers` - выбрать `OpenAI` и вписать:
+- `OpenAI API Key` - любой, например `-`
+- `OpenAI Base URL` - http://sglang:30000/v1
+
+Установить модель для для SGLang можно в файле `configs/sglang/<DEVICE>.yml`  
+(подробности в разделе конфигурации [SGLang](#sglang))
+
+По умолчанию сервисы доступны по адресам:
+- Langflow WebUI: http://127.0.0.1:7860
 - SGLang API: http://127.0.0.1:30000/v1
 - SGLang Swagger http://127.0.0.1:30000/docs
 - SGLang Server Info: http://127.0.0.1:30000/get_server_info

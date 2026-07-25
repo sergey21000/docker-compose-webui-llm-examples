@@ -772,19 +772,19 @@ model:
 ### Prometheus + Grafana + Loki + Node Exporter + Alertmanager 
 
 Запуск библиотеки для инференса LLM + сбор и визуализация метрик и логов через Prometheus + Grafana + Loki + Node Exporter + уведомления через  Alertmanager 
-- *Запуск SGLang + Prometeus + Grafana + Node Exporter + Alertmanager*  
+- *Запуск SGLang + Prometeus + Grafana + Loki + Node Exporter + Alertmanager*  
   https://docs.sglang.io/references/production_metrics.html  
   https://github.com/sgl-project/sglang/tree/main/examples/monitoring  
   ```ps1
   docker compose -f llm/compose.sglang.yml -f services/compose.monitoring.yml --env-file .env --env-file configs/env/.sglang.env up
   ```
-- *Запуск vLLM + Prometeus + Grafana + Node Exporter + Alertmanager**  
+- *Запуск vLLM + Prometeus + Grafana + Loki + Node Exporter + Alertmanager**  
   https://docs.vllm.ai/en/latest/design/metrics/  
   https://github.com/vllm-project/vllm/tree/main/examples/online_serving/prometheus_grafana  
   ```ps1
   docker compose -f llm/compose.vllm.yml -f services/compose.monitoring.yml --env-file .env --env-file configs/env/.vllm.env up
   ```
-- *Запуск llama.cpp + Prometeus + Grafana + Node Exporter + Alertmanager**  
+- *Запуск llama.cpp + Prometeus + Grafana + Loki + Node Exporter + Alertmanager**  
   https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md#get-metrics-prometheus-compatible-metrics-exporter  
   https://github.com/art-vish/llamacpp-llm-observer  
   ```ps1
@@ -803,7 +803,7 @@ model:
 - Alertmanager: http://127.0.0.1:9093
 - Prometheus Alertmanager Alerts http://127.0.0.1:9090/alerts
 - Node Exporter: http://127.0.0.1:9100
-- Loki: http://127.0.0.1:3100/ready
+- Loki: http://127.0.0.1:3100
 - Alloy UI: http://127.0.0.1:12345
 
 После запуска Prometheus перейти на http://127.0.0.1:9090 -> убедиться что в `Status` -> `Target health` есть Endpoint, например http://sglang:30000/metrics и он имеет статус Up
